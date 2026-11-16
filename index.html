@@ -459,7 +459,7 @@ body.stn .tp{right:calc(var(--railw,196px) + 26px);bottom:14px}
 </div>
 <main id="app"></main>
 <div class="wrap"><div class="foot">
- 新北市永平國民小學 ・ 六年級彈性學習課程（校訂）<br>
+ 新北市永平國民小學 ・ 六年級彈性學習課程（校訂）　・　課程設計 Tenny<br>
  各組坐在座位上用紙筆解題，派一位信使到前面看題目。學生不需要操作這臺電腦。
 </div></div>
 <details class="tp"><summary>教師控制臺</summary><div id="tpb"></div></details>
@@ -529,6 +529,18 @@ function sh(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r(
 const SYM=[["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#0A5FAF\"/><circle cx=\"32\" cy=\"32\" r=\"21\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"4.4\"/><path d=\"M25.4 25.6c0-4 3-6.6 6.9-6.6 3.8 0 6.7 2.4 6.7 6 0 3.1-1.8 4.5-3.7 5.9-1.8 1.3-2.6 2.2-2.6 4.3v1.2\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"4.2\" stroke-linecap=\"round\"/><circle cx=\"32.3\" cy=\"44.2\" r=\"2.9\" fill=\"#FFFFFF\"/></svg>","詢問處"],["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#0A5FAF\"/><g stroke=\"#FFFFFF\" stroke-width=\"3.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M14 26V12m0 0-4.6 4.8M14 12l4.6 4.8\"/><path d=\"M25 12v14m0 0-4.6-4.8M25 26l4.6-4.8\"/></g><g transform=\"translate(27,44) scale(0.86)\" fill=\"#FFFFFF\"><circle cx=\"0\" cy=\"-13\" r=\"4.4\"/><path d=\"M-5.2 -7.6h10.4l2.8 11.4h-3.9l-.9-4.2V17h-3.5V6.2h-1.6V17H-6.4V-.4l-.9 4.2h-3.9z\"/></g><g transform=\"translate(47,40) scale(0.84)\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"2.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"0\" cy=\"-14\" r=\"4.1\" fill=\"#FFFFFF\" stroke=\"none\"/><path d=\"M-4.4 -7.2 L-4.4 3.4 L5.6 3.4\"/><circle cx=\"1.4\" cy=\"9.6\" r=\"8.4\"/><path d=\"M5.6 3.4 L10.4 12.6\"/></g></svg>","無障礙電梯"],["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#0A5FAF\"/><g transform=\"translate(16,36) scale(0.82)\" fill=\"#FFFFFF\"><circle cx=\"0\" cy=\"-13\" r=\"4.4\"/><path d=\"M-5.2 -7.6h10.4l2.8 11.4h-3.9l-.9-4.2V17h-3.5V6.2h-1.6V17H-6.4V-.4l-.9 4.2h-3.9z\"/></g><g transform=\"translate(30,41) scale(0.52)\" fill=\"#FFFFFF\"><circle cx=\"0\" cy=\"-13\" r=\"4.4\"/><path d=\"M-5.2 -7.6h10.4l2.8 11.4h-3.9l-.9-4.2V17h-3.5V6.2h-1.6V17H-6.4V-.4l-.9 4.2h-3.9z\"/></g><g transform=\"translate(46,36) scale(0.82)\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"2.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"0\" cy=\"-14\" r=\"4.1\" fill=\"#FFFFFF\" stroke=\"none\"/><path d=\"M-4.4 -7.2 L-4.4 3.4 L5.6 3.4\"/><circle cx=\"1.4\" cy=\"9.6\" r=\"8.4\"/><path d=\"M5.6 3.4 L10.4 12.6\"/></g></svg>","親子無障礙廁所"],["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#0A5FAF\"/><g fill=\"#FFFFFF\"><circle cx=\"25\" cy=\"17\" r=\"6\"/><path d=\"M17.4 25.6c-3.4 1.5-5.6 4.8-5.6 8.8V46h6.4v10h18.6V46h4.2c2.4 0 4-1.8 4-4 0-2.2-1.6-3.9-3.8-4l-8.4-.6-5.6-9c-1.4-2.3-3.6-3.4-6.2-3.4-1.4 0-2.6.2-3.6.6z\"/><circle cx=\"43\" cy=\"30\" r=\"5.2\"/><path d=\"M38.6 36.4c2.8-1.1 6-1 8.8.3l-1 4.9-8.6-.6z\"/></g></svg>","哺集乳室"],["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#F2F6F8\"/><g transform=\"translate(22,40) scale(1.0)\" fill=\"#1667B8\"><circle cx=\"0\" cy=\"-13\" r=\"4.4\"/><path d=\"M-5.2 -7.6h10.4l2.8 11.4h-3.9l-.9-4.2V17h-3.5V6.2h-1.6V17H-6.4V-.4l-.9 4.2h-3.9z\"/></g><g transform=\"translate(42,40)\" fill=\"#D8363C\"><circle cx=\"0\" cy=\"-13\" r=\"4.4\"/><path d=\"M0 -8.2c-4.2 0-6.6 2.6-7.4 6.4L-9.6 3.4h4.1L-6.8 17h4.3l.6-10.2h1.8L.5 17h4.3L3.5 3.4h4.1L5.4 -1.8C4.6 -5.6 2.2 -8.2 0 -8.2z\"/></g></svg>","廁所"],["<svg viewBox=\"0 0 64 64\" width=\"1em\" height=\"1em\" style=\"display:block;margin:0 auto\"><rect x=\"2\" y=\"2\" width=\"60\" height=\"60\" rx=\"9\" fill=\"#12824A\"/><rect x=\"38\" y=\"13\" width=\"15\" height=\"38\" rx=\"2\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"3.6\"/><g fill=\"#FFFFFF\"><circle cx=\"17.6\" cy=\"16.4\" r=\"4.4\"/><path d=\"M20.6 22.4c-2.6-.7-5 .2-6.5 2.3l-5.4 7.5 3.6 2.6 3.3-4.4 1.9 5.2-6.2 6.6 2.9 8.9 4-1.3-2.2-6.8 6.1-6.1 2.4 6.4 7.8 2.1 1.1-4-6.2-1.7-3.3-9.4c-.6-1.7-1.7-2.9-3.3-3.9z\"/><path d=\"M30.4 32h5.8m-2.4-3.4L37.6 32l-3.8 3.4\" stroke=\"#FFFFFF\" stroke-width=\"2.6\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>","出口"]];
 const FLOW=[["詢問處","迷路了，先找人問方向"],["驗票閘門","確認路線，完成驗票進站"],
  ["無障礙電梯","要去地下另一層，走無階梯通道"],["月台","到列車停靠的地方等車"]];
+/* ===== 02 轉乘灣 ・ 景安站 Y11 / O02（依官方車站資訊圖） ===== */
+const JA=[                                   // 由上到下，景安站實際樓層
+ ["6F","天橋層","往安樂路、中興街方向的人行天橋",0],
+ ["5F","環狀線大廳／月台層","1月台 往新北產業園區　2月台 往大坪林",1],
+ ["3F","連通道層","廁所、親子無障礙廁所、哺集乳室",0],
+ ["1F","中和新蘆線大廳層","詢問處、飲水台、全站唯一出口（景平路）",0],
+ ["B4","中和新蘆線上層月台層","2月台 往蘆洲・迴龍",1],
+ ["B6","中和新蘆線下層月台層","1月台 往南勢角",1]];
+const JPATH=[["B4","從南勢角來的車停這裡（往蘆洲方向月台）"],
+ ["1F","中和新蘆線大廳，出站的人從這裡走"],
+ ["3F","連通道層，兩條線在這裡接起來"],
+ ["5F","環狀線月台，往板橋的車在這裡"]];
 function build(k){
  const r=rng(4211+k*6367);
  const nums=sh([1,2,3,4,5,6,7,8,9],r).slice(0,6);
@@ -538,11 +550,21 @@ function build(k){
  const hd=sh([1,2,3,4,5,6,7,8,9],r).slice(0,2);
  const td=sh([1,2,3,4,5,6,7,8,9],r).slice(0,4);
  const ord=sh([0,1,2,3],r);
+ const fd=sh([1,2,3,4,5,6,7,8,9],r).slice(0,4);
+ const ord2=sh([0,1,2,3],r);
+ const ftags=JPATH.map((f,i)=>({name:f[0],why:f[1],digit:fd[i],level:ord2[i]}));
  const tags=FLOW.map((f,i)=>({name:f[0],digit:td[i],level:ord[i]}));
  return {map,pick,cipher,tags,boss:tags.map(t=>t.digit).join(""),
-  hdg:hd,hcode:hd.join("")};
+  hdg:hd,hcode:hd.join(""),
+  ftags,boss2:ftags.map(t=>t.digit).join("")};
 }
 let D=build(0);
+const L2=[
+ {n:"關卡一　讀懂剖面圖",tip:"景安站有幾層？各層是什麼",m:4,ans:"環狀線 5F／中和新蘆線 B4、B6／出口 1F 景平路"},
+ {n:"關卡二　垂直的轉乘",tip:"從南勢角來的車停哪一層",m:5,ans:"停 B4（往蘆洲方向月台）→ 1F → 3F → 5F，跨 9 層樓"},
+ {n:"關卡三　最快 vs 走得到",tip:"推嬰兒車的爸爸要怎麼走",m:6,ans:"他沒得選，只能走電梯；任何一部維修，整條路就斷了"},
+ {n:"關卡四　只有一個出口",tip:"全站唯一出口在 1F 景平路",m:5,ans:"住天橋另一側、行動不便、推車、提重物、趕時間的人"},
+ {n:"FINAL　點亮轉乘灣",tip:"依乘客經過的樓層順序輸入",m:6,ans:"B4 → 1F → 3F → 5F"}];
 const L1=[
  {n:"關卡一　車站搜查",tip:"三段訊號，各指一個設施",m:3,ans:"詢問處、驗票閘門、無障礙電梯"},
  {n:"關卡二　圖示解碼",tip:"換成數字，由右往左讀",m:4,ans:""},
@@ -908,6 +930,166 @@ function soon(i){const s=S[i];return `<div class="two"><div class="card">
   <path d="M7.5 10V7a4.5 4.5 0 0 1 9 0v3" stroke="#44645B" stroke-width="2"/></svg></div>
  <h2 class="t" style="font-size:clamp(19px,2.4vw,27px)">這一站還沒開放</h2>
  <p class="lead" style="margin:0 auto;font-size:clamp(14px,1.7vw,20px)">關卡內容還在製作中。<br>老師可以在控制臺先解鎖來看架構。</p></div></div>`}
+/* ===================== 02 轉乘灣 ・ 景安站 ===================== */
+
+/* 景安站剖面圖（依官方車站資訊圖重畫，課堂投影用） */
+function jaSVG(hi, mark) {
+  const W = 760, TOP = 40, H = 56, GAP = 15;
+  const y = i => TOP + i * (H + GAP);
+  const COL = { "5F": "#F2C14E", "B4": "#F0A450", "B6": "#F0A450" };
+  const rows = JA.map((f, i) => {
+    const [no, nm, sub, isP] = f;
+    const on = hi && hi.includes(no);
+    const c = COL[no] || "#4E7A6C";
+    const bg = isP ? (COL[no] || "#2E6B53") : "#1C3A32";
+    return `<g>
+   <rect x="96" y="${y(i)}" width="620" height="${H}" rx="9"
+     fill="${on ? c + "26" : "#0C2119"}" stroke="${on ? c : "#24463C"}" stroke-width="${on ? 2.6 : 1.6}"/>
+   ${isP ? `<rect x="96" y="${y(i) + H - 5}" width="620" height="5" rx="2.5" fill="${bg}"/>` : ""}
+   <rect x="22" y="${y(i) + 11}" width="62" height="34" rx="8"
+     fill="${on ? c + "22" : "#0C2119"}" stroke="${on ? c : "#2A4F43"}" stroke-width="1.8"/>
+   <text x="53" y="${y(i) + 35}" text-anchor="middle" font-size="20" font-weight="800"
+     fill="${on ? c : "#7FA093"}" font-family="ui-monospace,Menlo,monospace">${no}</text>
+   <text x="116" y="${y(i) + 26}" font-size="18.5" font-weight="800"
+     fill="${on ? "#EAF6F0" : "#9FBCB1"}">${esc(nm)}</text>
+   <text x="116" y="${y(i) + 44}" font-size="14" fill="${on ? "#AECBC0" : "#688A7E"}">${esc(sub)}</text>
+  </g>`;
+  }).join("");
+  // 轉乘動線箭頭
+  const path = mark ? `<g stroke="#6FDCA0" stroke-width="3.4" fill="none" stroke-linecap="round">
+   <path d="M736 ${y(4) + 26} L736 ${y(1) + 26}" stroke-dasharray="8 7"/>
+   <path d="M736 ${y(1) + 26} l-7 9 M736 ${y(1) + 26} l7 9"/></g>
+   <text x="748" y="${y(2) + 30}" font-size="14" font-weight="800" fill="#6FDCA0"
+    transform="rotate(90 748 ${y(2) + 30})">轉乘動線</text>` : "";
+  return `<svg viewBox="0 0 ${W} ${TOP + JA.length * (H + GAP) + 16}" role="img"
+   aria-label="景安站剖面圖">
+  <text x="22" y="24" font-size="17" font-weight="800" fill="#CFE6DD">景安站　車站剖面圖</text>
+  <text x="212" y="24" font-size="13.5" fill="#6D8E82">Y11 環狀線　・　O02 中和新蘆線</text>
+  ${rows}${path}</svg>`;
+}
+
+function fstamp(k) {
+  const t = D.ftags[k];
+  return rev ? `<div class="stamp" style="margin-top:14px"><div class="n">驗收章 ・ ${esc(t.name)}</div>
+   <div class="d">${t.digit}</div></div>`
+    : `<div class="warn" style="margin-top:14px">老師按「公布答案」才會出現驗收章。</div>`;
+}
+
+/* ---- 關卡一 讀懂剖面圖 ---- */
+function x0() {
+  return `<div class="two"><div class="card" style="padding:12px">
+  <div class="board">${jaSVG(null, false)}</div></div>
+ <div class="card"><div class="eyebrow">轉乘灣 / 01 ・ 讀圖</div><h2 class="t">景安站長什麼樣子</h2>
+  <p class="lead">這是你們每天經過的景安站。兩條線在同一座站裡，但不在同一層。</p>
+  <div class="clues" style="margin-top:14px">
+   <div class="clue"><span class="k">A</span><span class="v">環狀線的月台在<b>幾樓</b>？</span></div>
+   <div class="clue"><span class="k">B</span><span class="v">中和新蘆線的月台在<b>哪兩層</b>？</span></div>
+   <div class="clue"><span class="k">C</span><span class="v">出站的<b>出口</b>在幾樓？通到哪一條路？</span></div></div>
+  <div class="ask" style="margin-top:13px">三題都寫在任務紙上。</div>
+  ${rev ? `<div class="rev" style="margin-top:13px"><div class="lab">答案</div>
+   <div class="v" style="font-size:clamp(15px,1.8vw,21px);line-height:1.65">
+   A　<b style="color:#F2C14E">5F</b> 環狀線大廳／月台層<br>
+   B　<b style="color:#F0A450">B4</b> 上層月台（往蘆洲・迴龍）、<b style="color:#F0A450">B6</b> 下層月台（往南勢角）<br>
+   C　<b style="color:var(--mint)">1F</b>，景平路。<b>而且全站只有這一個出口。</b></div></div>` : ""}
+  ${fstamp(0)}</div></div>`;
+}
+
+/* ---- 關卡二 垂直的轉乘 ---- */
+function x1() {
+  return `<div class="two"><div class="card" style="padding:12px">
+  <div class="board">${jaSVG(rev ? ["B4", "1F", "3F", "5F"] : null, rev)}</div></div>
+ <div class="card"><div class="eyebrow">轉乘灣 / 02 ・ 動線推理</div><h2 class="t">垂直的轉乘</h2>
+  <div class="warn" style="margin-top:12px">一位乘客從<b style="color:var(--gold)">南勢角</b>上車，要在景安轉<b style="color:var(--gold)">環狀線</b>去板橋。</div>
+  <div class="clues" style="margin-top:13px">
+   <div class="clue"><span class="k">A</span><span class="v">他的車會停在 <b>B4 還是 B6</b>？為什麼？</span></div>
+   <div class="clue"><span class="k">B</span><span class="v">從那一層到環狀線月台，中間會經過<b>哪些有名字的樓層</b>？照順序寫。</span></div>
+   <div class="clue"><span class="k">C</span><span class="v">這一段總共跨了<b>幾層樓</b>？</span></div></div>
+  ${rev ? `<div class="rev" style="margin-top:13px"><div class="lab">答案</div>
+   <div class="v" style="font-size:clamp(15px,1.8vw,21px);line-height:1.65">
+   A　停 <b style="color:#F0A450">B4</b>。B6 是<b>往</b>南勢角的月台，從南勢角來的車是往蘆洲方向，停 B4。<br>
+   B　<b style="color:var(--mint)">B4 → 1F → 3F → 5F</b><br>
+   C　B4 到 5F，<b style="color:var(--gold)">跨 9 層樓</b>。</div></div>` : ""}
+  ${fstamp(1)}</div></div>`;
+}
+
+/* ---- 關卡三 最快 vs 走得到 ---- */
+function x2() {
+  const R = [["走樓梯和電扶梯", "#5FD6A0", ["B4 月台 搭電扶梯上樓", "1F 大廳 穿過閘門區", "3F 連通道 走樓梯",
+    "5F 環狀線月台"], "快", "全程有 2 段樓梯"],
+  ["全程搭無障礙電梯", "#5FA8E8", ["B4 → 1F 電梯", "1F → 3F 電梯", "3F → 5F 電梯",
+    "每一部都要等、都要找"], "慢", "一部維修，整條路就斷了"]];
+  return `<div class="two"><div class="card">
+  <div class="eyebrow">轉乘灣 / 03 ・ 兩難</div><h2 class="t">最快的路，他走不了</h2>
+  <div class="warn" style="margin-top:12px">同一位乘客 —— 這次他<b style="color:var(--gold)">推著嬰兒車</b>，懷裡還有一個三歲的。</div>
+  <div class="sp2" style="margin-top:14px">
+  ${R.map(([t, c, steps, tag, note]) => `<div class="card" style="border-left:4px solid ${c};padding:13px 15px">
+    <div style="color:${c};font-weight:900;font-size:clamp(14px,1.6vw,18px);margin-bottom:7px">
+     ${esc(t)}　<span style="opacity:.75">（${esc(tag)}）</span></div>
+    ${steps.map(s => `<div style="font-size:clamp(12.5px,1.45vw,16px);color:#BCD2CA;line-height:1.75">・${esc(s)}</div>`).join("")}
+    <div style="margin-top:7px;font-size:clamp(12px,1.4vw,15px);color:#E8685A">${esc(note)}</div></div>`).join("")}
+  </div></div>
+ <div class="card"><div class="eyebrow">任務紙要寫的</div>
+  <div class="clues" style="margin-top:13px">
+   <div class="clue"><span class="k">1</span><span class="v">他<b>可以</b>選上面那條嗎？為什麼？</span></div>
+   <div class="clue"><span class="k">2</span><span class="v">如果 3F→5F 那部電梯今天在維修，他要怎麼辦？</span></div>
+   <div class="clue"><span class="k">3</span><span class="v">除了推嬰兒車的人，還有誰<b>也只能走電梯</b>？寫三種。</span></div></div>
+  <div class="ask" style="margin-top:14px">這一關沒有標準答案，但每一組都要寫出理由。</div>
+  ${rev ? `<div class="rev" style="margin-top:13px"><div class="lab">老師收尾</div>
+   <div class="v" style="font-size:clamp(14.5px,1.7vw,20px);line-height:1.7">
+   他沒得選。對我們是「比較慢的那條」，對他是<b style="color:var(--mint)">唯一的那條</b>。<br>
+   電梯壞一部，對我們是多走幾步；對他是<b style="color:#E8685A">今天到不了板橋</b>。</div></div>` : ""}
+  ${fstamp(2)}</div></div>`;
+}
+
+/* ---- 關卡四 只有一個出口 ---- */
+function x3() {
+  return `<div class="two"><div class="card">
+  <div class="eyebrow">轉乘灣 / 04 ・ 設計問題</div><h2 class="t">全站只有一個出口</h2>
+  <div class="board" style="padding:14px 10px;margin-top:12px">
+   <svg viewBox="0 0 700 260" role="img" aria-label="景安站出口示意">
+    <rect width="700" height="260" fill="#07161A" rx="10"/>
+    <rect x="40" y="150" width="620" height="18" fill="#2A4A42"/>
+    <text x="350" y="188" text-anchor="middle" font-size="16" fill="#8FB0A6">景平路</text>
+    <rect x="250" y="96" width="200" height="54" rx="8" fill="#123328" stroke="#6FDCA0" stroke-width="2.4"/>
+    <text x="350" y="130" text-anchor="middle" font-size="21" font-weight="800" fill="#6FDCA0">唯一出口</text>
+    <path d="M70 150 v-52 h150" stroke="#4E7A6C" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
+    <text x="78" y="84" font-size="15" fill="#9FBCB1">中興街方向</text>
+    <path d="M630 150 v-52 h-150" stroke="#4E7A6C" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
+    <text x="622" y="84" font-size="15" text-anchor="end" fill="#9FBCB1">安樂路方向</text>
+    <text x="350" y="42" text-anchor="middle" font-size="15" fill="#F2C14E">6F 天橋　・　要過馬路的人得先上天橋再下來</text>
+    <text x="350" y="228" text-anchor="middle" font-size="14.5" fill="#688A7E">住在路的另一邊，進站之前要先繞一段</text>
+   </svg></div></div>
+ <div class="card"><div class="eyebrow">任務紙要寫的</div>
+  <p class="lead" style="margin-top:6px">景安站每天進出好幾萬人，但從街上進到站裡，只有 1F 景平路那一個口。</p>
+  <div class="clues" style="margin-top:13px">
+   <div class="clue"><span class="k">1</span><span class="v">只有一個出口，對<b>哪三種人</b>最不方便？</span></div>
+   <div class="clue"><span class="k">2</span><span class="v">放學時間大家一起出站，會發生什麼事？</span></div>
+   <div class="clue"><span class="k">3</span><span class="v">如果你是設計師，<b>第二個出口</b>你會放在哪一邊？說出理由。</span></div></div>
+  ${rev ? `<div class="rev" style="margin-top:13px"><div class="lab">可以接受的答案</div>
+   <div class="v" style="font-size:clamp(14.5px,1.7vw,20px);line-height:1.7">
+   住在路另一側的人、行動不便的人、推車或提重物的人、趕時間的人、不熟路的人。<br>
+   <b style="color:var(--mint)">只要說得出「為什麼是這種人」，就算對。</b></div></div>` : ""}
+  ${fstamp(3)}</div></div>`;
+}
+
+/* ---- FINAL 密碼門 ---- */
+function x4() {
+  const sw = D.ftags.slice().sort((a, b) => a.level - b.level);
+  return `<div class="two"><div class="card"><div class="eyebrow">轉乘灣 ・ FINAL</div>
+  <h2 class="t">點亮轉乘灣</h2>
+  <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。<br>
+   請依<b>那位乘客從南勢角來、要轉環狀線</b>實際經過的樓層順序重新排列。</p>
+  <div class="stamps" style="margin:17px 0">${sw.map(t => `<div class="stamp">
+   <div class="n">${esc(t.name)}</div><div class="d">${t.digit}</div></div>`).join("")}</div>
+  <div class="clues">${JPATH.map((f, k) => `<div class="clue">
+   <span class="k">${k + 1}</span><span class="v">${esc(f[1])}</span></div>`).join("")}</div></div>
+ <div class="card"><div class="eyebrow">輸入密碼</div>
+  <div class="lk" id="lk">${(code + "____").slice(0, 4).split("").join(" ")}</div>
+  <div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "清除", 0, "輸入"].map(k =>
+    `<button data-k="${k}" ${k === "輸入" ? 'class="pri"' : ""}>${k}</button>`).join("")}</div>
+  <div id="bm" class="warn" style="margin-top:12px;display:none"></div>
+  ${rev ? `<div class="rev"><div class="lab">答案</div><div class="v">${D.boss2}</div></div>` : ""}</div></div>`;
+}
 /* ===================== 雲端同步 ＋ 成果照片 ===================== */
 const AKEY = "mrtisland_api", KKEY = "mrtisland_key";
 let API = "", AKY = "";
@@ -1140,7 +1322,7 @@ function invite(){
   <div class="quote">「驗收小隊，準備出發了嗎？」</div>
   <div class="btns"><button class="pri" id="accept">接受邀請</button></div>
   <div class="rule"></div>
-  <div class="fine">新北市永平國民小學 ・ 六年級彈性學習課程（校訂）</div>
+  <div class="fine">新北市永平國民小學 ・ 六年級彈性學習課程（校訂）<br>課程設計　Tenny</div>
  </div></div>`}
 
 /* ===== 流程 ===== */
@@ -1150,7 +1332,7 @@ function goStation(i){if(i>=unlockedN())return;
  view="stn";si=i;li=0;rev=false;code="";shown=false;setT();render();window.scrollTo(0,0)}
 window.goStation=goStation;
 window.on3DReady=()=>{if(view==="map"&&use3d)render()};
-function pages(){return si===0?PRE:si===1?L1:[{n:S[si].t,tip:S[si].sub,m:0}]}
+function pages(){return si===0?PRE:si===1?L1:si===2?L2:[{n:S[si].t,tip:S[si].sub,m:0}]}
 function render(){
  const map=view==="map"||view==="wall";
  const wall=view==="wall";
@@ -1158,7 +1340,7 @@ function render(){
  ["clk","go"].forEach(k=>{const e=$("#"+k);if(e)e.hidden=map});
  $("#nav").hidden=map;
  document.body.classList.toggle("stn",!map);
- $("#rev").hidden=map||si>1;
+ $("#rev").hidden=map||si>2;
  $("#lite").innerHTML=`<span class="dot"></span>點亮 <b>${lit()}</b> / 6`;
  $("#star").innerHTML=`<span class="g">★</span> <b>${stars()}</b> / ${STOT}`;
  $("#pts").innerHTML=`本班 <b>${score()}</b> 分`;
@@ -1179,11 +1361,12 @@ function render(){
   const hm=$("#vhome"); if(hm)hm.onclick=()=>{window.ISL3D&&ISL3D.home()};
  }else{
   const P=pages(),last=li>=P.length,s=S[si];
-  const veil=!last&&!shown&&(si===0?(li===1||li===2||li===4):si===1);
+  const veil=!last&&!shown&&(si===0?(li===1||li===2||li===4):si<=2);
   let body;
   if(last){ body=doneView(si)+photoRow(si); }
   else if(si===0)body=pre(li);
   else if(si===1)body=[w0,w1,w2,w3,w4][li]();
+  else if(si===2)body=[x0,x1,x2,x3,x4][li]();
   else body=soon(si);
   const hd=last?(si===0?{n:"登島完成",tip:"前傳結束，下週正式開始"}:{n:"點亮完成",tip:"這一站結束"})
    :P[Math.min(li,P.length-1)];
@@ -1219,15 +1402,16 @@ function render(){
 function setT(){const P=pages();const m=(li<P.length)?(P[li].m||0):0;stop();T.set=m*60;T.left=T.set;if(m)start()}
 function page(n){const P=pages();li=Math.max(0,Math.min(P.length,n));rev=false;code="";shown=false;setT();render();window.scrollTo(0,0)}
 function key(k){
- const H=si===0, TGT=H?D.hcode:D.boss, LEN=H?2:4;
+ const H=si===0, TGT=H?D.hcode:si===2?D.boss2:D.boss, LEN=H?2:4;
  if(k==="清除")code="";
  else if(k==="輸入"){
   if(code===TGT){
    if(H){if(!me().h){CL[cur].h=1;CL[cur].b+=50;CL[cur].st=Math.max(me().st,2);save()}}
-   else if(me().p<1){CL[cur].p=1;CL[cur].b+=100;CL[cur].st=Math.max(me().st,stBase(1)+4);save()}
+   else if(me().p<si){CL[cur].p=si;CL[cur].b+=100;CL[cur].st=Math.max(me().st,stBase(si)+4);save()}
    page(H?5:5);return}
   const b=$("#bm");if(b){b.style.display="";
-   b.textContent=H?"密碼不對。兩枚驗收章的數字，照拿到的順序。":"密碼不對。再看一次旅客動線的順序。"}code=""}
+   b.textContent=H?"密碼不對。兩枚驗收章的數字，照拿到的順序。"
+    :si===2?"密碼不對。再看一次那位乘客經過的樓層順序。":"密碼不對。再看一次旅客動線的順序。"}code=""}
  else if(code.length<LEN)code+=k;
  const l=$("#lk");if(l)l.textContent=(code+"______").slice(0,LEN).split("").join(" ")}
 let showAns=false, shown=false;
@@ -1241,7 +1425,7 @@ function stageDone(i,k){
  return k<=3 ? me().st>=stBase(i)+k+1 : me().p>=i;
 }
 function strip(){
- const P=pages(); if(si>1)return "";
+ const P=pages(); if(si>2)return "";
  const nm=si===0?["登島","試玩一","試玩二","組隊","密碼門"]
                 :["關一","關二","關三","關四","FINAL"];
  return `<div class="strip">${P.map((_,k)=>{
@@ -1260,6 +1444,11 @@ function tp(){
   <p style="margin:6px 0 0;color:#C9E6D8">登島密碼　<b>${D.hcode}</b>（旅客 ${D.hdg[0]}　符號 ${D.hdg[1]}）</p>
   <p style="margin:6px 0 0;color:#C9E6D8">關卡一　詢問處、驗票閘門、無障礙電梯<br>關卡二　<b>${D.cipher}</b><br>
   關卡三　入口 → 大廳 → 詢問處 → 無障礙電梯 → 月台<br>關卡四　無障礙電梯→樓梯、詢問處→販賣機、出口箭頭反向<br>
+  FINAL　<b>${D.boss}</b></p>
+  <p style="margin:8px 0 0;color:#C9E6D8"><b>轉乘灣・景安站</b><br>
+  ${L2.slice(0,4).map((q,i)=>`關卡${"一二三四"[i]}　${esc(q.ans)}`).join("<br>")}<br>
+  FINAL　<b>${D.boss2}</b>（B4 ${D.ftags[0].digit} → 1F ${D.ftags[1].digit} → 3F ${D.ftags[2].digit} → 5F ${D.ftags[3].digit}）</p>
+  <p style="display:none">
   最後一關　<b>${D.boss}</b></p>
   <p style="margin:7px 0 0;color:#9FC4B4">驗收章：${D.tags.slice().sort((a,b)=>a.level-b.level).map(t=>`${t.level+1}關→<b>${esc(t.name)} ${t.digit}</b>`).join("　")}</p></div>
  <p style="margin-top:12px"><b style="color:#E9F4EF">${cur} ・ 各組加分</b>
