@@ -463,6 +463,69 @@ body.stn .tp{right:calc(var(--railw,196px) + 26px);bottom:14px}
 .sg1{padding:13px 8px;border-radius:12px;font-size:16px;font-weight:800;
  background:#11261F;border:1px solid var(--edge);color:#CFEBDD}
 .sg1:hover{background:#17352B;border-color:#2F6354}
+.grade{margin-top:14px}
+.glbl{font-size:clamp(14px,1.6vw,19px);font-weight:900;color:#DCEDE5;display:flex;
+ align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.glbl .gh{font-size:clamp(11.5px,1.25vw,14.5px);font-weight:500;color:var(--dim)}
+.glbl .gdone{margin-left:auto;font-size:clamp(11.5px,1.25vw,14.5px);font-weight:800;color:#6FDCA0}
+.ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:980px){.ggrid{grid-template-columns:repeat(2,1fr)}}
+.gcell{background:#0C1F1A;border:1px solid var(--edge);border-radius:13px;padding:10px 11px}
+.gn{font-size:clamp(12.5px,1.35vw,16px);font-weight:900;color:#9FC9B6;margin-bottom:7px}
+.gbtns{display:flex;gap:5px}
+.gb{flex:1;padding:9px 4px;border-radius:9px;font-size:clamp(11px,1.15vw,13.5px);
+ font-weight:800;background:#11261F;border:1px solid var(--edge);color:#8FBCA6;line-height:1.3}
+.gb i{display:block;font-style:normal;font-size:.92em;opacity:.7}
+.gb:hover{background:#17352B;border-color:#2F6354;color:#CFEBDD}
+.gb.on{background:#1C5E42;border-color:#6FDCA0;color:#EAFBF2}
+.gb.z{flex:0 0 34px}
+.gb.z.on{background:#3A2320;border-color:#A8564C;color:#F2CFC9}
+/* 計時器時間預設 */
+.tset{display:inline-flex;gap:5px;margin-left:4px}
+.tset button{padding:7px 11px;border-radius:9px;font-size:13px;font-weight:800;
+ background:#11261F;border:1px solid var(--edge);color:#8FBCA6}
+.tset button:hover{background:#17352B;border-color:#2F6354;color:#CFEBDD}
+/* 時間到：整個畫面提示 */
+.tover{position:fixed;inset:0;z-index:999;display:grid;place-items:center;
+ background:rgba(6,20,16,.55);animation:tfade .25s ease}
+.tover.out{opacity:0;transition:opacity .55s ease}
+.tover .tbox{display:grid;gap:8px;justify-items:center;padding:44px 70px;border-radius:26px;
+ background:#1B0E0C;border:4px solid #E8685A;box-shadow:0 0 0 10px rgba(232,104,90,.18);
+ animation:tpulse .62s ease-in-out 0s 6 alternate}
+.tover .tbox b{font-size:clamp(44px,8vw,96px);font-weight:900;color:#FFD9D3;letter-spacing:.06em;line-height:1}
+.tover .tbox span{font-size:clamp(16px,2.2vw,26px);font-weight:700;color:#F2A79C}
+@keyframes tfade{from{opacity:0}to{opacity:1}}
+@keyframes tpulse{from{transform:scale(1);border-color:#E8685A}
+ to{transform:scale(1.045);border-color:#F2C14E}}
+/* 右側計時器 */
+.rtime{background:#0B1F1A;border:1px solid var(--edge);border-radius:14px;
+ padding:10px 11px;margin-bottom:11px}
+.rclock{font-size:clamp(26px,3.1vw,40px);font-weight:800;text-align:center;
+ letter-spacing:.06em;color:#CFEBDD;line-height:1.1}
+.rclock.run{color:#6FDCA0}
+.rclock.done{color:#F2C14E}
+.rtbtn{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}
+.rtbtn button{padding:8px 2px;border-radius:9px;font-size:clamp(11px,1.2vw,13.5px);
+ font-weight:800;background:#11261F;border:1px solid var(--edge);color:#8FBCA6}
+.rtbtn button:hover{background:#17352B;border-color:#2F6354;color:#CFEBDD}
+.rtbtn button.on{background:#1C5E42;border-color:#6FDCA0;color:#EAFBF2}
+.rtbtn .rgo{grid-column:1 / -1;margin-top:3px;padding:10px 2px;
+ font-size:clamp(12.5px,1.35vw,15px);background:#16342B;color:#CFEBDD}
+.rtbtn .rgo.on{background:#4A3410;border-color:#A8842A;color:#F6DFA4}
+/* 評分列的拍照鍵 */
+.gshot{width:100%;margin-top:7px;padding:8px 4px;border-radius:9px;
+ font-size:clamp(11px,1.15vw,13.5px);font-weight:800;
+ background:#101F2B;border:1px solid #2A4A5E;color:#8FB6CE}
+.gshot:hover{background:#15293A;border-color:#3E6E8C;color:#CFE6F4}
+.gshot.on{background:#17402F;border-color:#4E9C76;color:#BCEBD2}
+.gnote{margin-top:11px;font-size:clamp(11px,1.2vw,14px);color:var(--dim)}
+.gnote b{color:#E8B0A6}
+/* 音量 */
+.volrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vollbl{color:var(--dim);font-size:13px;margin-left:6px}
+.volb{padding:7px 12px;border-radius:9px;font-size:13px;font-weight:800;
+ background:#11261F;border:1px solid var(--edge);color:#8FBCA6}
+.volb.on{background:#1C5E42;border-color:#6FDCA0;color:#EAFBF2}
 </style>
 </head>
 <body>
@@ -481,7 +544,6 @@ body.stn .tp{right:calc(var(--railw,196px) + 26px);bottom:14px}
  <span class="chip pts" id="pts"></span>
  <button id="wall">成果牆</button>
  <span class="chip sy off" id="syc">未連線</span>
- <button id="go" hidden>開始</button>
  <button id="fs">全螢幕</button>
 </div></div>
 <div class="nav" id="nav" hidden>
@@ -706,7 +768,7 @@ function mapSVG(){
 
 /* ===== 地圖畫面 ===== */
 function board(){
- const rows=CLASSES.map(c=>({c,...CL[c]})).sort((a,b)=>b.s-a.s||b.p-a.p||a.c.localeCompare(b.c));
+ const rows=CLASSES.map(c=>({c,...CL[c]})).sort((a,b)=>score(b)-score(a)||b.st-a.st||b.p-a.p||a.c.localeCompare(b.c));
  return `<div class="card">
   <div class="lbl" style="margin-bottom:10px">班級榜 ・ 16 班</div>
   <div class="rank">${rows.map((r,i)=>`<div class="rk ${r.c===cur?"me":""}">
@@ -715,7 +777,7 @@ function board(){
    <span class="pb"><i style="width:${r.p/6*100}%"></i></span>
    <span class="pp mono">${r.p}/6</span>
    <span class="sc mono">${score(r)}</span></div>`).join("")}</div>
-  <div class="rkfoot"><span>名次依積分排序</span><span class="sp"></span><span>進度 ・ 積分</span></div>
+  <div class="rkfoot"><span>名次依<b>班級積分</b>排序（各組分數總和＋闖關獎勵）</span><span class="sp"></span><span>進度 ・ 積分</span></div>
  </div>`}
 function mapView(){
  return `<div class="wrap shell">
@@ -828,6 +890,59 @@ function orderList(items, i) {
   return `<div class="clues" style="margin-top:13px">${shufBy(items, "o" + setI + "-" + i).map(t =>
     `<div class="clue"><span class="k">・</span><span class="v">${t}</span></div>`).join("")}</div>
   <div class="warn" style="margin-top:12px">上面四項是打散的。<b>排列不是順序</b> —— 順序要你們自己想出來。</div>`;
+}
+
+/* ===== 各組評分（看正確性，不看快慢） ===== */
+let AW = {};
+try { AW = JSON.parse(localStorage.getItem("mrtisland_aw") || "{}") } catch (e) { }
+const GRADES = [[3, "全對"], [2, "對一半"], [1, "有寫"]];
+function awKey() { return cur + "-" + si + "-" + li }
+function clearAW(cls) {
+  Object.keys(AW).forEach(k => { if (!cls || k.indexOf(cls + "-") === 0) delete AW[k] });
+  try { localStorage.setItem("mrtisland_aw", JSON.stringify(AW)) } catch (e) { }
+}
+function setAward(g, n) {
+  const k = awKey(); AW[k] = AW[k] || {};
+  const old = +AW[k][g] || 0;
+  CL[cur].g[g - 1] = Math.max(0, (+CL[cur].g[g - 1] || 0) - old + n);
+  AW[k][g] = n;
+  try { localStorage.setItem("mrtisland_aw", JSON.stringify(AW)) } catch (e) { }
+  save(); render();
+}
+let PAW = {};
+try { PAW = JSON.parse(localStorage.getItem("mrtisland_paw") || "{}") } catch (e) { }
+function pawKey() { return cur + "-" + si }
+function shotDone(g) { return !!((PAW[pawKey()] || {})[g]) }
+function photoAward(g) {
+  const k = pawKey(); PAW[k] = PAW[k] || {};
+  if (PAW[k][g]) return;
+  PAW[k][g] = 1; CL[cur].g[g - 1] = (+CL[cur].g[g - 1] || 0) + 1;
+  try { localStorage.setItem("mrtisland_paw", JSON.stringify(PAW)) } catch (e) { }
+  save();
+}
+function clearPAW(cls) {
+  Object.keys(PAW).forEach(k => { if (!cls || k.indexOf(cls + "-") === 0) delete PAW[k] });
+  try { localStorage.setItem("mrtisland_paw", JSON.stringify(PAW)) } catch (e) { }
+}
+function gradeRow() {
+  const got = AW[awKey()] || {};
+  const done = Array.from({ length: NG }, (_, i) => got[i + 1] !== undefined).filter(Boolean).length;
+  const shots = Array.from({ length: NG }, (_, i) => shotDone(i + 1)).filter(Boolean).length;
+  return `<div class="card grade"><div class="glbl">各組評分
+   <span class="gh">看<b>正確性</b>，不看快慢。點一下就加分，點錯再點別顆會換掉。</span>
+   <span class="gdone">評分 ${done}/${NG}　・　照片 ${shots}/${NG}</span></div>
+  <div class="ggrid">${Array.from({ length: NG }, (_, i) => {
+    const g = i + 1, v = got[g];
+    return `<div class="gcell"><div class="gn">第 ${g} 組</div>
+     <div class="gbtns">${GRADES.map(([n, t]) =>
+      `<button class="gb${v === n ? " on" : ""}" data-aw="${g}|${n}">${t} <i>+${n}</i></button>`).join("")}
+      <button class="gb z${v === 0 ? " on" : ""}" data-aw="${g}|0" title="沒寫／不給分">—</button>
+     </div>
+     <button class="gshot${shotDone(g) ? " on" : ""}" data-shot="${si}|${g}"
+      ${PHbusy[si + "-" + g] ? "disabled" : ""}>${PHbusy[si + "-" + g] ? "上傳中…"
+        : shotDone(g) ? "✓ 已拍任務紙" : "◉ 拍任務紙 ＋1"}</button>
+     </div>`}).join("")}</div>
+   <div class="gnote">只拍任務紙和筆記本，<b>不要拍到學生的臉、姓名或座號</b>。每一站每組拍一次 ＋1 分。</div></div>`;
 }
 
 /* ===== 前傳 ===== */
@@ -1007,7 +1122,9 @@ function doneView(i){
    <span class="nn" style="color:${S[1].c}">01 ${esc(S[1].t)}</span>
    <span class="ns">${esc(S[1].sub)}</span></div>
   <div class="ask" style="max-width:40em;margin:18px auto 0">
-   信封和信使都已經練過一趟了。回地圖 → 點「01 指標村」，下一站開始收驗收章。</div></div>`;
+   信封和信使都已經練過一趟了。回地圖 → 點「01 指標村」，下一站開始收驗收章。</div>
+  <div class="warn" style="max-width:40em;margin:14px auto 0;text-align:center">
+   ↓ 往下捲，可以<b>拍各組的任務紙</b>存起來（給主任看成果用）</div></div>`;
  const s=S[i],n=i,nx=S[i+1];
  return `<div class="card win"><div class="burst" style="filter:drop-shadow(0 0 40px ${s.c}66)">✦</div>
   <h2 class="t" style="margin-top:10px">${esc(s.t)}　點亮了</h2>
@@ -1743,6 +1860,7 @@ async function pickPhoto(stn, grp) {
       });
       if (!j.ok) throw new Error(j.err || "上傳失敗");
       PH.push({ id: j.id, cls: cur, st: stn, g: grp, ts: "剛剛", note: "", thumb: sml });
+      if (typeof photoAward === "function") photoAward(grp);
     } catch (e) { alert("上傳失敗：" + (e.message || e)) }
     delete PHbusy[k]; render();
   };
@@ -1894,7 +2012,7 @@ function render(){
  const map=view==="map"||view==="wall";
  const wall=view==="wall";
  const sel=$("#cls"); if(sel&&sel.value!==cur)sel.value=cur;
- ["clk","go"].forEach(k=>{const e=$("#"+k);if(e)e.hidden=map});
+ {const e=$("#clk"); if(e)e.hidden=map;}
  $("#nav").hidden=map;
  document.body.classList.toggle("stn",!map);
  $("#rev").hidden=map;
@@ -1929,6 +2047,7 @@ function render(){
   const hd=last?(si===0?{n:"登島完成",tip:"前傳結束，下週正式開始"}:{n:"點亮完成",tip:"這一站結束"})
    :P[Math.min(li,P.length-1)];
   let pbar=""; body=body.replace(/<div class="prop">[\s\S]*?<\/div>/, m=>{pbar=m;return ""});
+  if(!last&&rev) body+=gradeRow();
   $("#app").innerHTML=`${gscore()}<div class="wrap mis railed"><div class="mhead">
    <span class="mbadge" style="color:${s.c};border-color:${s.c}66;background:${s.c}14">${String(si).padStart(2,"0")}</span>
    <span class="tt"><h1>${esc(hd.n)}</h1><span class="sub">${esc(s.t)}　・　${esc(hd.tip)}</span></span></div>
@@ -1954,6 +2073,8 @@ function render(){
    const k=+b.dataset.gp; CL[cur].g[k]+=1; save(); render()});
   document.querySelectorAll("[data-g5]").forEach(b=>b.onclick=e=>{
    e.stopPropagation(); const k=+b.dataset.g5; CL[cur].g[k]+=5; save(); render()});
+  document.querySelectorAll("[data-aw]").forEach(b=>b.onclick=()=>{
+   const [g,n]=b.dataset.aw.split("|").map(Number); setAward(g,n)});
   const nx=$("#next"), pv=$("#prev");
   if(pv)pv.disabled=li<=0;
   if(nx){
@@ -1965,7 +2086,7 @@ function render(){
      const P=pages(); if(si===0&&li+1>=P.length&&!me().h){CL[cur].h=1;save()} page(li+1)} }
   }
  }
- tp(); paint(); bindPhotos();
+ tp(); bindTimer(); paint(); bindPhotos();
  const wb=$("#wall"); if(wb){wb.classList.toggle("pri",wall);
   wb.onclick=()=>{view=wall?"map":"wall";stop();render();window.scrollTo(0,0)}}
 }
@@ -2003,6 +2124,11 @@ function strip(){
   return `<span class="sc ${d?"ok":""} ${now?"now":""}">${d?"\u2713 ":""}${nm[k]||k+1}</span>`}).join("")}</div>`}
 function gscore(){
  return `<div class="rail" id="rail">
+  <div class="rtime">
+   <div class="rclock mono" id="rclk">00:00</div>
+   <div class="rtbtn">
+    <button data-tm="1">1 分</button><button data-tm="3">3 分</button><button data-tm="5">5 分</button>
+    <button id="rgo" class="rgo">開始</button></div></div>
   <div class="rlbl">各組加分 ・ 卡片 ＋1 ・ 右鍵 ＋5</div>
   <div class="gsc">${Array.from({length:NG},(_,k)=>`<div class="grow">
    <button class="gcard" data-gp="${k}"><span class="n">第 ${k+1} 組</span>
@@ -2043,6 +2169,14 @@ function tp(){
   <span style="color:var(--dim);font-weight:400">（班級 ${score()} ＝ 各組 ${gsum()} ＋ 獎勵 ${me().b||0}）</span></p>
  <div>${[-5,5,10,20].map(n=>`<button data-s="${n}">${n>0?"+":""}${n}</button>`).join("")}
   <button data-s="reset">歸零</button></div>
+ <p style="margin-top:12px"><b style="color:#E9F4EF">鈴聲</b>
+  <span style="color:var(--dim);font-weight:400">上課前先試一次，順便把大屏幕音量調好。預設已經是「大」</span></p>
+ <div class="volrow"><button id="btest">試聽鈴聲</button>
+  <span class="vollbl">音量</span>
+  <button class="volb" data-vol="1">小</button>
+  <button class="volb" data-vol="2">中</button>
+  <button class="volb" data-vol="3">大</button></div>
+
  <p style="margin-top:12px"><b style="color:#E9F4EF">重置（測試用）</b></p>
  <div><button class="rst" id="r1">重置 ${cur}</button>
  <button class="rst" id="r2">重置全部 16 班</button></div>
@@ -2087,8 +2221,12 @@ function tp(){
   d.querySelector("#myes").onclick=()=>{d.remove();fn();save();view="map";stop();render()};
   d.onclick=e=>{if(e.target===d)d.remove()};
  };
- $("#r1").onclick=()=>ask(`要把 ${cur} 的進度和積分全部歸零嗎？`,()=>{CL[cur]=BLANK()});
- $("#r2").onclick=()=>ask("要把全部 16 班歸零嗎？這個不能復原。",()=>{CLASSES.forEach(c=>CL[c]=BLANK())});
+ const bt=$("#btest"); if(bt)bt.onclick=()=>beep(false);
+ document.querySelectorAll("[data-vol]").forEach(b=>{
+  b.classList.toggle("on", +b.dataset.vol===VOL);
+  b.onclick=()=>{setVol(+b.dataset.vol); beep(false); tp()}});
+ $("#r1").onclick=()=>ask(`要把 ${cur} 的進度和積分全部歸零嗎？`,()=>{CL[cur]=BLANK();clearAW(cur);clearPAW(cur)});
+ $("#r2").onclick=()=>ask("要把全部 16 班歸零嗎？這個不能復原。",()=>{CLASSES.forEach(c=>CL[c]=BLANK());clearAW();clearPAW()});
 
  const au=$("#apisave"); if(au)au.onclick=()=>{
   API=$("#apiu").value.trim(); AKY=$("#apik").value.trim();
@@ -2110,21 +2248,71 @@ function showInvite(){
  $("#accept").onclick=()=>{const v=$("#veil");if(v)v.remove()};
 }
 const T={set:0,left:0,id:null};
-function paint(){const c=$("#clk");if(!c)return;const m=Math.floor(T.left/60),s=T.left%60;
- c.textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
- c.className="clock mono"+(T.left===0?(T.set?" done":""):T.id?" run":"");
- const g=$("#go");if(g){g.textContent=T.set===0?"無計時":T.left===0?"再一次":T.id?"暫停":"開始";g.disabled=T.set===0}}
+function paint(){
+ const m=Math.floor(T.left/60), s=T.left%60;
+ const txt=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+ const cls=T.left===0?(T.set?" done":""):T.id?" run":"";
+ const lab=T.set===0?"無計時":T.left===0?"再一次":T.id?"暫停":"開始";
+ const c=$("#clk"); if(c){c.textContent=txt; c.className="clock mono"+cls}
+ const rc=$("#rclk"); if(rc){rc.textContent=txt; rc.className="rclock mono"+cls}
+ const g=$("#go"); if(g){g.textContent=lab; g.disabled=T.set===0}
+ const rg=$("#rgo"); if(rg){rg.textContent=lab; rg.disabled=T.set===0;
+  rg.className="rgo"+(T.id?" on":"")}
+ document.querySelectorAll("[data-tm]").forEach(b=>
+  b.classList.toggle("on", T.set===(+b.dataset.tm)*60));}
 function start(){if(T.id||!T.set)return;if(T.left===0)T.left=T.set;
  T.id=setInterval(()=>{T.left=Math.max(0,T.left-1);if(T.left===0){stop();beep()}paint()},1000);paint()}
 function stop(){if(T.id){clearInterval(T.id);T.id=null}paint()}
 let AC=null;
-function beep(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
- [0,.26,.52].forEach((t,k)=>{const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime+t;
-  o.frequency.value=k===2?660:880;o.connect(g);g.connect(AC.destination);
-  g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(.2,n+.012);
-  g.gain.exponentialRampToValueAtTime(.0001,n+.2);o.start(n);o.stop(n+.22)})}catch(e){}}
+function tone(t, f, dur, vol, dest) {
+ const o=AC.createOscillator(), o2=AC.createOscillator(), g=AC.createGain();
+ o.type="sawtooth"; o2.type="square";
+ o.frequency.value=f; o2.frequency.value=f*1.005;
+ o.connect(g); o2.connect(g); g.connect(dest);
+ g.gain.setValueAtTime(.0001,t);
+ g.gain.exponentialRampToValueAtTime(vol,t+.015);
+ g.gain.setValueAtTime(vol,t+dur-.08);
+ g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+ o.start(t); o2.start(t); o.stop(t+dur+.02); o2.stop(t+dur+.02);
+}
+const VOLS={1:1.6,2:3.4,3:6.5};
+let VOL=3; try{VOL=+(localStorage.getItem("mrtisland_vol")||3)||3}catch(e){}
+function setVol(v){VOL=v;try{localStorage.setItem("mrtisland_vol",String(v))}catch(e){}}
+function beep(flash){
+ try{
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==="suspended")AC.resume();
+  const vol=({1:.34,2:.62,3:.94})[VOL]||.94;
+  const step=.22, n=16, t0=AC.currentTime+.02, end=t0+n*step;
+  const g=AC.createGain(); g.connect(AC.destination);
+  const o=AC.createOscillator(); o.type="square"; o.connect(g);
+  for(let k=0;k<n;k++) o.frequency.setValueAtTime(k%2?880:1320, t0+k*step);
+  g.gain.setValueAtTime(.0001,t0);
+  g.gain.exponentialRampToValueAtTime(vol,t0+.02);
+  g.gain.setValueAtTime(vol,end-.06);
+  g.gain.exponentialRampToValueAtTime(.0001,end);
+  o.start(t0); o.stop(end+.02);
+ }catch(e){}
+ if(flash!==false) timeUp();
+}
+function timeUp(){
+ const old=document.querySelector(".tover"); if(old)old.remove();
+ const d=document.createElement("div"); d.className="tover";
+ d.innerHTML='<div class="tbox"><b>時間到</b><span>收筆，看螢幕</span></div>';
+ document.body.appendChild(d);
+ d.onclick=()=>d.remove();
+ setTimeout(()=>{d.classList.add("out"); setTimeout(()=>d.remove(),600)},4200);
+}
 $("#home").onclick=()=>{view="map";stop();render();window.scrollTo(0,0)};
-$("#go").onclick=()=>{T.id?stop():start()};
+{const g=$("#go"); if(g)g.onclick=()=>{T.id?stop():start()};}
+function bindTimer(){
+ document.querySelectorAll("[data-tm]").forEach(b=>b.onclick=()=>{
+  const m=+b.dataset.tm; stop(); T.set=m*60; T.left=T.set;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume()}catch(e){}
+  start();});
+ const rg=$("#rgo"); if(rg)rg.onclick=()=>{T.id?stop():start()};
+}
+bindTimer();
 $("#prev").onclick=()=>page(li-1);
 
 $("#rev").onclick=()=>{rev=!rev;
@@ -2200,12 +2388,12 @@ const ISL3D = (() => {
     t.anisotropy = 4; return t;
   }
   function pawnTex(txt, col) {
-    const c = document.createElement("canvas"); c.width = 128; c.height = 64;
+    const c = document.createElement("canvas"); c.width = 192; c.height = 80;
     const g = c.getContext("2d");
-    g.fillStyle = "rgba(6,18,16,.9)"; g.beginPath(); g.roundRect(4, 8, 120, 48, 16); g.fill();
-    g.strokeStyle = col; g.lineWidth = 3; g.stroke();
-    g.font = '800 34px ui-monospace,Menlo,monospace'; g.fillStyle = col;
-    g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(txt, 64, 33);
+    g.fillStyle = "rgba(5,16,14,.94)"; g.beginPath(); g.roundRect(5, 9, 182, 62, 20); g.fill();
+    g.strokeStyle = col; g.lineWidth = 5; g.stroke();
+    g.font = '800 46px ui-monospace,Menlo,monospace'; g.fillStyle = col;
+    g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(txt, 96, 42);
     const t = new V3.CanvasTexture(c); t.colorSpace = V3.SRGBColorSpace; return t;
   }
 
@@ -2454,34 +2642,35 @@ const ISL3D = (() => {
       while (g.children.length) { const o = g.children.pop(); o.geometry && o.geometry.dispose() }
       const list = by[i] || []; if (!list.length) return;
       const s = S[i];
-      list.slice(0, 8).forEach((c, k) => {
+      list.slice(0, 10).forEach((c, k) => {
         const mine = c === cur;
-        const a = -2.1 + (k / Math.max(1, Math.min(list.length, 8) - 1 || 1)) * 2.4 + .35;
-        const d = 5.1 + (k % 2) * 1.5;
+        const n = Math.min(list.length, 10);
+        const a = -2.5 + (k / Math.max(1, n - 1)) * 3.1 + .35;
+        const d = 6.6 + (k % 3) * 2.8;
         const p = new V3.Group();
         const col = mine ? 0xF2C14E : 0x7FD9B4;
-        const body = new V3.Mesh(new V3.CapsuleGeometry(.52, 1.0, 3, 8),
+        const body = new V3.Mesh(new V3.CapsuleGeometry(.78, 1.7, 4, 10),
           new V3.MeshLambertMaterial({ color: col, flatShading: true }));
-        body.position.y = 1.1; p.add(body);
-        const head = new V3.Mesh(new V3.SphereGeometry(.56, 10, 8),
+        body.position.y = 1.7; p.add(body);
+        const head = new V3.Mesh(new V3.SphereGeometry(.86, 12, 10),
           new V3.MeshLambertMaterial({ color: col }));
-        head.position.y = 2.3; p.add(head);
+        head.position.y = 3.5; p.add(head);
         p.position.set(wx(s.x) + Math.cos(a) * d, 0, wz(s.y) + Math.sin(a) * d);
         p.userData.bob = Math.random() * 6.3;
-        if (mine) {
-          const tag = new V3.Sprite(new V3.SpriteMaterial({
-            map: pawnTex(c, "#F2C14E"), transparent: true, depthTest: false
-          }));
-          tag.position.y = 4.1; tag.scale.set(4.6, 2.3, 1); tag.renderOrder = 12; p.add(tag);
-        }
+        const tag = new V3.Sprite(new V3.SpriteMaterial({
+          map: pawnTex(c, mine ? "#F2C14E" : "#9FE8C6"), transparent: true, depthTest: false
+        }));
+        tag.position.y = (mine ? 6.2 : 5.0) + (k % 3) * 1.5;
+        tag.scale.set(mine ? 6.0 : 4.6, mine ? 3.0 : 2.3, 1);
+        tag.renderOrder = 12; p.add(tag);
         g.add(p);
       });
-      if (list.length > 8) {
+      if (list.length > 10) {
         const tag = new V3.Sprite(new V3.SpriteMaterial({
-          map: pawnTex("+" + (list.length - 8), "#7FD9B4"), transparent: true, depthTest: false
+          map: pawnTex("+" + (list.length - 10) + " 班", "#7FD9B4"), transparent: true, depthTest: false
         }));
-        tag.position.set(wx(s.x) + 8.6, 3.4, wz(s.y) + 5.2);
-        tag.scale.set(4.2, 2.1, 1); tag.renderOrder = 12; g.add(tag);
+        tag.position.set(wx(s.x) + 10.4, 4.2, wz(s.y) + 6.4);
+        tag.scale.set(5.2, 2.6, 1); tag.renderOrder = 12; g.add(tag);
       }
     });
   }
