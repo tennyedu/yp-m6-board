@@ -431,6 +431,38 @@ body.stn .tp{right:calc(var(--railw,196px) + 26px);bottom:14px}
  border:1px solid #2E6B53;background:#0B1F1A;box-shadow:0 26px 70px -18px #000}
 .pbox img{display:block;max-width:92vw;max-height:88vh;object-fit:contain}
 .pld{padding:40px 54px;color:var(--sub);text-align:center;font-size:15px}
+.prop{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:0 0 14px;
+ padding:11px 15px;border-radius:13px;background:#102A1D;
+ border:1px solid #2C6344;border-left:5px solid #6FDCA0}
+.prop .pk{font-size:clamp(10.5px,1.15vw,13.5px);font-weight:900;letter-spacing:.12em;
+ color:#6FDCA0;background:#0A1C14;border:1px solid #2C6344;border-radius:7px;padding:4px 9px;
+ white-space:nowrap}
+.prop b{font-size:clamp(14.5px,1.75vw,21px);color:#E2F2EA;font-weight:900}
+.prop .pw{font-size:clamp(12.5px,1.4vw,16.5px);color:#8FBCA6;line-height:1.5}
+/* 密碼鍵盤：上台輸入時不要看出按了哪一鍵 */
+.pad button{-webkit-tap-highlight-color:transparent;transition:none}
+.pad button:not(.pri):hover,.pad button:not(.pri):focus,
+.pad button:not(.pri):focus-visible,.pad button:not(.pri):active{
+ background:#122A24;border-color:var(--edge)}
+.pad button:focus,.pad button:focus-visible,.pad button:active{outline:none;box-shadow:none}
+.lk{user-select:none}
+.stamp.q{border-style:dashed;border-color:#8A6A2A;background:#231C0B}
+.stamp.q .d{color:#F2C14E}
+.sy.hid{border-style:dashed;border-color:#8A6A2A;background:#231C0B}
+.sy.hid .no{color:#F2C14E;font-weight:900}
+.grow{display:flex;gap:6px;align-items:stretch}
+.grow .gcard{flex:1}
+.g5{flex:0 0 42px;border-radius:12px;font-size:13px;font-weight:900;
+ background:#11261F;border:1px solid var(--edge);color:#8FBCA6;padding:0}
+.g5:hover{background:#17352B;border-color:#2F6354;color:#BCEBD2}
+.seqb{display:block;width:100%;margin:11px 0 0;padding:11px 14px;border-radius:12px;
+ font-size:clamp(13.5px,1.5vw,17px);font-weight:800;background:#14302A;
+ border:1px dashed #2F6354;color:#8FBCA6}
+.seqb:hover{background:#1A3C33;border-style:solid;color:#CFEBDD}
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 4px}
+.sg1{padding:13px 8px;border-radius:12px;font-size:16px;font-weight:800;
+ background:#11261F;border:1px solid var(--edge);color:#CFEBDD}
+.sg1:hover{background:#17352B;border-color:#2F6354}
 </style>
 </head>
 <body>
@@ -531,14 +563,15 @@ const FLOW=[["詢問處","迷路了，先找人問方向"],["驗票閘門","確�
  ["無障礙電梯","要去地下另一層，走無階梯通道"],["月台","到列車停靠的地方等車"]];
 /* ===== 02 轉乘灣 ・ 景安站 Y11 / O02（依官方車站資訊圖） ===== */
 const JA=[                                   // 由上到下，景安站實際樓層
- ["6F","天橋層","往安樂路、中興街方向的人行天橋",0],
- ["5F","環狀線大廳／月台層","1月台 往新北產業園區　2月台 往大坪林",1],
- ["3F","連通道層","廁所、親子無障礙廁所、哺集乳室",0],
- ["1F","中和新蘆線大廳層","詢問處、飲水台、全站唯一出口（景平路）",0],
- ["B4","中和新蘆線上層月台層","2月台 往蘆洲・迴龍",1],
- ["B6","中和新蘆線下層月台層","1月台 往南勢角",1]];
-const JPATH=[["B4","從南勢角來的車停這裡（往蘆洲方向月台）"],
- ["1F","中和新蘆線大廳，出站的人從這裡走"],
+ ["6F","天橋層","連接環狀線兩座月台的天橋",0],
+ ["5F","環狀線月台層","1月台 往新北產業園區　2月台 往大坪林　・　詢問處",1],
+ ["3F","連通道層","洗手間（付費區內）",0],
+ ["1F","大廳層","全站唯一出入口（景平路）・詢問處・售票機・驗票閘門",0],
+ ["B3","通道層","地下通道",0],
+ ["B4","中和新蘆線上層月台層","1月台 往蘆洲・迴龍",1],
+ ["B6","中和新蘆線下層月台層","2月台 往南勢角",1]];
+const JPATH=[["B4","從南勢角來的車停這裡（1月台，往蘆洲方向）"],
+ ["1F","大廳層，出站的人從這裡走"],
  ["3F","連通道層，兩條線在這裡接起來"],
  ["5F","環狀線月台，往板橋的車在這裡"]];
 /* ===== 03~06 各站的四枚驗收章（name, 排序依據的說明） ===== */
@@ -561,6 +594,12 @@ function build(k){
  const map=SYM.map((s,i)=>[s[0],s[1],nums[i]]);
  const pick=[2,1,3];
  const cipher=pick.map(i=>map[i][2]).reverse().join("");
+ /* 遮住兩個數字，讓他們用「總和」和「相差」推回來 */
+ const hp=sh(pick.slice(),r).slice(0,2);          // 一定是用得到的那三個裡的兩個
+ const sum6=nums.reduce((a,c)=>a+c,0);
+ const hi=map[hp[0]][2]>map[hp[1]][2]?hp[0]:hp[1]; // 比較大的那一個
+ const lo=hi===hp[0]?hp[1]:hp[0];
+ const gap=map[hi][2]-map[lo][2];
  const hd=sh([1,2,3,4,5,6,7,8,9],r).slice(0,2);
  const td=sh([1,2,3,4,5,6,7,8,9],r).slice(0,4);
  const ord=sh([0,1,2,3],r);
@@ -569,14 +608,14 @@ function build(k){
  const ftags=JPATH.map((f,i)=>({name:f[0],why:f[1],digit:fd[i],level:ord2[i]}));
  const sets={3:mkset(r,SETS3),4:mkset(r,SETS4),5:mkset(r,SETS5),6:mkset(r,SETS6)};
  const tags=FLOW.map((f,i)=>({name:f[0],digit:td[i],level:ord[i]}));
- return {map,pick,cipher,tags,boss:tags.map(t=>t.digit).join(""),
+ return {map,pick,cipher,hide:[hi,lo],sum6,gap,tags,boss:tags.map(t=>t.digit).join(""),
   hdg:hd,hcode:hd.join(""),
   ftags,boss2:ftags.map(t=>t.digit).join(""),sets};
 }
 let D=build(0);
 const L2=[
- {n:"關卡一　讀懂剖面圖",tip:"景安站有幾層？各層是什麼",m:4,ans:"環狀線 5F／中和新蘆線 B4、B6／出口 1F 景平路"},
- {n:"關卡二　垂直的轉乘",tip:"從南勢角來的車停哪一層",m:5,ans:"停 B4（往蘆洲方向月台）→ 1F → 3F → 5F，跨 9 層樓"},
+ {n:"關卡一　讀懂剖面圖",tip:"景安站有幾層？各層是什麼",m:4,ans:"環狀線月台 5F／中和新蘆線 B4（1月台）、B6（2月台）／唯一出入口 1F 景平路"},
+ {n:"關卡二　垂直的轉乘",tip:"從南勢角來的車停哪一層",m:5,ans:"停 B4（1月台，往蘆洲方向）→ 1F → 3F → 5F，跨 9 層樓"},
  {n:"關卡三　最快 vs 走得到",tip:"推嬰兒車的爸爸要怎麼走",m:6,ans:"他沒得選，只能走電梯；任何一部維修，整條路就斷了"},
  {n:"關卡四　只有一個出口",tip:"全站唯一出口在 1F 景平路",m:5,ans:"住天橋另一側、行動不便、推車、提重物、趕時間的人"},
  {n:"FINAL　點亮轉乘灣",tip:"依乘客經過的樓層順序輸入",m:6,ans:"B4 → 1F → 3F → 5F"}];
@@ -753,21 +792,55 @@ function mapView(){
    </div></div>
  </div>`}
 
+/* ===== 實體道具提示列 ===== */
+function prop(kind, name, what) {
+  return `<div class="prop"><span class="pk">${esc(kind)}</span><b>${esc(name)}</b>
+   <span class="pw">${what}</span></div>`;
+}
+
+/* ===== 密碼遮罩：上台輸入時螢幕只顯示 ＊ ===== */
+function mask(n){
+  return (code + "_".repeat(n)).slice(0, n).split("")
+    .map(c => c === "_" ? "_" : "＊").join(" ");
+}
+
+/* ===== FINAL 密碼門：打散顯示、藏一枚數字 ===== */
+function shufBy(arr, seed) {
+  let h = 2166136261;
+  for (const c of String(seed)) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+  const a = arr.slice();
+  for (let k = a.length - 1; k > 0; k--) {
+    h = (Math.imul(h, 1103515245) + 12345) >>> 0;
+    const j = h % (k + 1);
+    [a[k], a[j]] = [a[j], a[k]];
+  }
+  return a;
+}
+function stampRow(tags, i) {
+  const sh4 = shufBy(tags, "s" + setI + "-" + i);
+  const k = (Math.abs((setI + 1) * 7919 + i * 104729)) % 4;
+  const sum = tags.reduce((a, c) => a + (+c.digit || 0), 0);
+  return `<div class="stamps" style="margin:17px 0 10px">${sh4.map((t, n) => `<div class="stamp${n === k ? " q" : ""}">
+   <div class="n">${esc(t.name)}</div><div class="d">${n === k ? "？" : t.digit}</div></div>`).join("")}</div>
+  <div class="ask">有一枚章被磨掉了。線索：<b>四枚章的數字相加等於 ${sum}</b>。四個數字都不一樣。</div>`;
+}
+function orderList(items, i) {
+  return `<div class="clues" style="margin-top:13px">${shufBy(items, "o" + setI + "-" + i).map(t =>
+    `<div class="clue"><span class="k">・</span><span class="v">${t}</span></div>`).join("")}</div>
+  <div class="warn" style="margin-top:12px">上面四項是打散的。<b>排列不是順序</b> —— 順序要你們自己想出來。</div>`;
+}
+
 /* ===== 前傳 ===== */
 const PRE=[
  {n:"登島",tip:"念故事＋講信使規則，約 6 分鐘",m:0},
- {n:"試玩一 ・ 四封信",tip:"信使跑第一趟。時間到按公布答案",m:5},
- {n:"試玩二 ・ 讀符號",tip:"信使換人。時間到按公布答案",m:4},
+ {n:"試玩一 ・ 四封信",tip:"各組打開四封信。時間到按公布答案",m:5},
+ {n:"試玩二 ・ 讀符號",tip:"這關派信使到前面看。時間到按公布答案",m:4},
  {n:"組成驗收小隊",tip:"分角色、發隊員證",m:0},
  {n:"登島密碼門",tip:"兩位數。開門 +50 分",m:4}];
-const LT=[["懷孕七個月的媽媽","我從 3 號出口要出站，只有樓梯。我扶著扶手走了 48 階，中間停了三次。後來才知道旁邊有電梯 —— 在 1 號出口，走過去要七分鐘。"],
- ["坐輪椅的大哥哥","無障礙電梯我找到了，在月台最尾端。我每次都要算好搭最後一節車廂。有一次搭錯，從月台這頭推到那頭推了四分鐘，門剛好關。"],
- ["七十八歲的阿公","站裡的字我看不清楚。問人的時候那位小姐講得很快就去忙了。我站在原地看很久還是不知道往哪走。那天我沒去成醫院，就回家了。"],
- ["推嬰兒車的爸爸","電扶梯不能推嬰兒車，我知道。但電梯只有一部，每次來都滿的。我等了三班，最後抱著小孩、折了車、一手拎著走樓梯。走到一半我在想 —— 如果我今天是一個人，這些都不是問題。"]];
-const BLK=[["懷孕的媽媽","樓梯","48 階，而電梯在七分鐘外","電梯的位置"],
- ["坐輪椅的人","無障礙電梯在月台最尾端","搭錯車廂就要多推四分鐘","電梯的數量與位置"],
- ["年長的阿公","看不清的字、講太快的人","他最後放棄，回家了","指標的大小與說明方式"],
- ["推嬰兒車的爸爸","只有一部電梯","等三班還是上不去，只好抱著走樓梯","電梯的數量"]];
+const LT=[["懷孕七個月的媽媽","那天我從 3 號出口出站，走了 48 階，中間停下來喘了三次。"],
+ ["坐輪椅的大哥哥","到站之後我還要沿著月台推到最尾端，才找得到能上去的地方。"],
+ ["七十八歲的阿公","站裡的字我看很久還是不知道往哪走。我問了人，他講得很快就去忙了。那天我沒去成醫院。"],
+ ["推嬰兒車的爸爸","我等了三班還是上不去。最後抱著小孩、折了車，一手拎著走樓梯。"]];
 const ROLE=[["站長","決定順序、代表發言"],["工程師","畫圖、記錄、寫答案"],["調度員","看時間、催進度"],
  ["信使","到前面看題目，回來講給組員聽。可以換人"],["觀察員","記錄這節課誰做了什麼"],["副工程師","幫忙畫和抄"]];
 function hstamp(k){
@@ -784,29 +857,39 @@ function pre(k){
   <div class="card"><div class="eyebrow">怎麼玩</div>
   <div class="clues" style="margin-top:13px">
    <div class="clue"><span class="k">1</span><span class="v">全組坐在座位上，用<b style="color:var(--gold)">紙筆</b>解題。電腦你們不用碰。</span></div>
-   <div class="clue"><span class="k">2</span><span class="v">每組派一位<b style="color:var(--gold)">信使</b>到前面看題目，看完回去講給組員聽。</span></div>
+   <div class="clue"><span class="k">2</span><span class="v">大部分的題目在<b style="color:var(--mint)">你們桌上的信封</b>裡，直接打開就好。
+    螢幕上出現<b style="color:var(--gold)">信使</b>兩個字的時候，才派一個人到前面看，回去講給組員聽。</span></div>
    <div class="clue"><span class="k">3</span><span class="v">時間到我切下一關，公布答案，發一枚章。</span></div></div>
   <div class="ask" style="margin-top:15px">今天碼頭這一關就要開始算分了。兩枚驗收章湊齊，開門 +50 分。</div></div></div>`;
  if(k===1)return `<div class="two"><div class="card">
-  <div class="eyebrow">試玩一 ・ 信使第一趟</div><h2 class="t">島上寄來的四封信</h2>
-  <div class="sp2" style="margin-top:14px">${LT.map(([w,b],i)=>`<div class="card" style="border-left:4px solid #F0A450;padding:13px 15px">
-   <div style="color:#F0A450;font-weight:900;font-size:clamp(13px,1.5vw,17px);margin-bottom:6px">${"甲乙丙丁"[i]}　${esc(w)}</div>
-   <p style="margin:0;font-size:clamp(13.5px,1.6vw,19px);line-height:1.6;color:#BCD2CA">${esc(b)}</p></div>`).join("")}</div></div>
-  <div class="card"><div class="eyebrow">任務紙要寫的</div>
-  <div class="clues" style="margin-top:13px">
-   <div class="clue"><span class="k">1</span><span class="v">甲乙丙丁<b>各被什麼擋住</b>？一人寫一行。</span></div>
-   <div class="clue"><span class="k">2</span><span class="v">四個人當中，被<b style="color:var(--gold)">同一樣東西</b>擋住的有幾個？那是什麼？</span></div></div>
+  <div class="eyebrow">試玩一 ・ 打開信封</div><h2 class="t">島上寄來的四封信</h2>
+  ${prop("打開信封","四封信卡　甲乙丙丁","人物卡裡寫著「四封信」的那四張，傳著看。")}
+  <div class="sp2" style="margin-top:4px">${LT.map(([w],i)=>`<div class="card" style="border-left:4px solid #F0A450;padding:13px 15px">
+   <div style="color:#F0A450;font-weight:900;font-size:clamp(15px,1.8vw,21px)">${"甲乙丙丁"[i]}</div>
+   <div style="font-size:clamp(13px,1.5vw,17px);color:#BCD2CA;margin-top:4px">${esc(w)}</div></div>`).join("")}</div>
+  <div class="warn" style="margin-top:13px">信的內容在卡片上。螢幕只放名字，確認你們拿對卡。</div></div>
+  <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
+  <div class="ask" style="margin-top:4px">用<b>設施卡盤</b>那一張，上面六個設施。</div>
+  <div class="clues" data-seq="1" style="margin-top:13px">
+   <div class="clue"><span class="k">1</span><span class="v">四封信都<b>沒有說自己缺什麼</b>。從他們講的事情推回去，每個人缺哪一項設施？</span></div>
+   <div class="clue"><span class="k">2</span><span class="v">設施卡盤上那六個，<b>不是每一個都用得到</b>。用不到的有哪些？</span></div>
+   <div class="clue"><span class="k">3</span><span class="v">四個人裡面，有沒有人<b style="color:var(--gold)">缺的是同一項</b>？是誰？</span></div></div>
   <div class="warn" style="margin-top:14px">他們都不是「走不動」。是車站的設計把他們擋住了。</div>
   ${rev?`<div class="rev" style="margin-top:14px"><div class="lab">答案</div><div class="v" style="font-size:clamp(15px,1.8vw,21px);line-height:1.6">
-   甲 樓梯（電梯遠在七分鐘外）　乙 無障礙電梯在月台最尾端<br>丙 看不清的字、講太快的人　丁 只有一部電梯，等不到<br>
-   <b style="color:var(--mint)">四個人裡有三個卡在「無障礙電梯」—— 數量不夠、位置太遠。</b></div></div>`:""}
+   甲 <b style="color:var(--mint)">無障礙電梯</b>（走了 48 階，代表那條路上沒有電梯可用）<br>
+   乙 <b style="color:var(--mint)">無障礙電梯</b>（要推到月台最尾端才上得去 —— 問題是位置）<br>
+   丙 <b style="color:var(--mint)">詢問處</b>（看不懂又問不到人）<br>
+   丁 <b style="color:var(--mint)">無障礙電梯</b>（等三班都上不去，是數量不夠）<br>
+   用不到的四張：輪椅候車位置、出口、廁所、驗票閘門。<br>
+   <b style="color:var(--gold)">甲、乙、丁三個人都卡在「無障礙電梯」—— 數量不夠、位置太遠。</b></div></div>`:""}
   ${hstamp(1)}</div></div>`;
  if(k===2)return `<div class="two"><div class="card">
-  <div class="eyebrow">試玩二 ・ 信使換人</div><h2 class="t">這六個符號，你認得幾個？</h2>
+  <div class="eyebrow">試玩二 ・ 信使出場</div><h2 class="t">這六個符號，你認得幾個？</h2>
+  ${prop("信使","派一個人到前面看","這一關的圖只在螢幕上。看完回去講給組員聽，可以來回。")}
   <p class="lead">捷運站不寫字，用圖。還不識字的小孩看得懂、不會中文的外國人看得懂、趕時間的人一眼就看到。</p>
   <div class="sg" style="margin-top:15px">${SYM.map((x,i)=>`<div class="sy"><div class="ic">${x[0]}</div><div class="nm">${"ABCDEF"[i]}</div></div>`).join("")}</div></div>
-  <div class="card"><div class="eyebrow">任務紙要寫的</div>
-  <div class="clues" style="margin-top:13px">
+  <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
+  <div class="clues" data-seq="1" style="margin-top:13px">
    <div class="clue"><span class="k">1</span><span class="v">A～F <b>各是什麼意思</b>？能寫幾個寫幾個。</span></div>
    <div class="clue"><span class="k">2</span><span class="v">上一關卡住最多人的那樣東西，是<b style="color:var(--gold)">哪一個字母</b>？</span></div></div>
   <div class="warn" style="margin-top:14px">到了指標村，這六個符號會各配一個號碼，用來解密碼。</div>
@@ -821,7 +904,7 @@ function pre(k){
   <div class="card"><div class="eyebrow">組內分工 ・ 寫在隊員證上</div><div class="clues" style="margin-top:13px">
   ${ROLE.map(([a,b])=>`<div class="clue"><span class="k" style="min-width:4.3em;font-size:clamp(14.5px,1.75vw,21px);font-family:var(--ff);font-weight:900;color:#5FA8E8">${esc(a)}</span>
    <span class="v" style="font-size:clamp(13.5px,1.6vw,19px);font-weight:500">${esc(b)}</span></div>`).join("")}</div>
-  <div class="ask" style="margin-top:14px">信使每一關都要換人。這六週都用同一份分工。</div></div></div>`;
+  <div class="ask" style="margin-top:14px">用到<b>信使</b>的那幾關，每次都要換人。這六週都用同一份分工。</div></div></div>`;
  return `<div class="two"><div class="card"><div class="eyebrow">登島碼頭 ・ FINAL</div>
   <h2 class="t">登島密碼門</h2>
   <p class="lead">兩枚驗收章上的數字，<b>照拿到的順序</b>輸入，碼頭的閘門就會開。</p>
@@ -830,7 +913,7 @@ function pre(k){
    <div class="stamp"><div class="n">驗收章 ・ 符號</div><div class="d">?</div></div></div>
   <div class="warn">沒拿到章的組別，先去跟老師確認答案。</div></div>
   <div class="card"><div class="eyebrow">輸入密碼</div>
-  <div class="lk" id="lk">${(code+"__").slice(0,2).split("").join(" ")}</div>
+  <div class="lk" id="lk">${mask(2)}</div>
   <div class="pad">${[1,2,3,4,5,6,7,8,9,"清除",0,"輸入"].map(k=>`<button data-k="${k}" ${k==="輸入"?'class="pri"':""}>${k}</button>`).join("")}</div>
   <div id="bm" class="warn" style="margin-top:12px;display:none"></div>
   ${rev?`<div class="rev"><div class="lab">答案</div><div class="v">${D.hcode}</div></div>`:""}</div></div>`}
@@ -844,20 +927,28 @@ function stamp(k){
   :`<div class="warn" style="margin-top:12px">老師按「公布答案」才會出現驗收章。</div>`}
 function w0(){return `<div class="two"><div class="card">
  <div class="eyebrow">指標村 / 01 ・ 圖像探索</div><h2 class="t">車站搜查</h2>
+ ${prop("打開信封","設施卡　10 張","把三段訊號對到正確的那一張卡。")}
  <p class="lead">驗收中心傳來三段訊號，每一段在講一個設施。</p>
- <div class="clues" style="margin-top:16px">
+ <div class="clues" style="margin-top:10px">
   <div class="clue"><span class="k">A</span><span class="v">我能幫旅客問路、求助。</span></div>
   <div class="clue"><span class="k">B</span><span class="v">通過我，才算完成進站驗票。</span></div>
   <div class="clue"><span class="k">C</span><span class="v">不用爬樓梯，就能上下樓層。</span></div></div></div>
  <div class="card"><div class="ask">在任務紙寫下這三個設施的名稱。</div>${stamp(0)}</div></div>`}
-function w1(){const m=D.map,p=D.pick;return `<div class="two"><div class="card">
+function w1(){const m=D.map,p=D.pick,[hi,lo]=D.hide;return `<div class="two"><div class="card">
  <div class="eyebrow">指標村 / 02 ・ 視覺密碼</div><h2 class="t">圖示解碼</h2>
- <div class="sg" style="margin-top:14px">${m.map(([ic,nm,no])=>
-  `<div class="sy"><div class="ic">${ic}</div><div class="nm">${esc(nm)}</div><div class="no">${no}</div></div>`).join("")}</div>
+ ${prop("信使","派一個人到前面看","數字只在螢幕上。看完回去講給組員聽，可以來回。")}
+ <div class="sg" style="margin-top:10px">${m.map(([ic,nm,no],i)=>
+  `<div class="sy${i===hi||i===lo?" hid":""}"><div class="ic">${ic}</div><div class="nm">${esc(nm)}</div>
+   <div class="no">${i===hi||i===lo?"？":no}</div></div>`).join("")}</div>
  <div class="plate"><div class="lab">指標殘影（原始順序）</div>
   <div class="ics">${p.map(k=>m[k][0]).join("")}</div>
   <div class="w">⚠ 鏡像干擾：數字必須由右往左讀</div></div></div>
- <div class="card"><div class="ask">把三個圖示換成數字，再由右往左讀 —— 寫出三位數密碼。</div>
+ <div class="card"><div class="eyebrow">兩個數字被磨掉了</div>
+ <div class="clues" style="margin-top:13px">
+  <div class="clue"><span class="k">1</span><span class="v">六個數字<b>全部相加等於 ${D.sum6}</b>。</span></div>
+  <div class="clue"><span class="k">2</span><span class="v"><b>${esc(m[hi][1])}</b>的數字，比<b>${esc(m[lo][1])}</b>的數字<b>大 ${D.gap}</b>。</span></div>
+  <div class="clue"><span class="k">3</span><span class="v">六個數字都不一樣，而且都在 1 到 9 之間。</span></div></div>
+ <div class="ask" style="margin-top:14px">先把兩個「？」算出來，再把三個圖示換成數字，<b>由右往左</b>讀出三位數密碼。</div>
  <div class="warn" style="margin-top:12px">不是從左到右照抄。</div>${stamp(1)}</div></div>`}
 const ND={entrance:[82,86,"入口","B1"],hall:[268,86,"大廳","B1"],stairs:[452,86,"樓梯","B1"],
  platform:[638,86,"月台","B2"],restroom:[82,266,"廁所","B1"],desk:[268,266,"詢問處","B1"],
@@ -896,10 +987,10 @@ function w3(){return `<div class="two"><div class="card" style="padding:12px"><d
 function w4(){const sw=D.tags.slice().sort((a,b)=>a.level-b.level);
  return `<div class="two"><div class="card"><div class="eyebrow">指標村 ・ FINAL</div><h2 class="t">驗收中心</h2>
  <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。請依<b>旅客實際進站的動線</b>重新排列。</p>
- <div class="stamps" style="margin:17px 0">${sw.map(t=>`<div class="stamp"><div class="n">${esc(t.name)}</div><div class="d">${t.digit}</div></div>`).join("")}</div>
- <div class="clues">${FLOW.map((f,k)=>`<div class="clue"><span class="k">${k+1}</span><span class="v">${esc(f[1])}</span></div>`).join("")}</div></div>
+ ${stampRow(sw,1)}
+ ${orderList(FLOW.map(f=>esc(f[1])),1)}</div>
  <div class="card"><div class="eyebrow">點亮指標村</div>
- <div class="lk" id="lk">${(code+"____").slice(0,4).split("").join(" ")}</div>
+ <div class="lk" id="lk">${mask(4)}</div>
  <div class="pad">${[1,2,3,4,5,6,7,8,9,"清除",0,"輸入"].map(k=>`<button data-k="${k}" ${k==="輸入"?'class="pri"':""}>${k}</button>`).join("")}</div>
  <div id="bm" class="warn" style="margin-top:12px;display:none"></div>
  ${rev?`<div class="rev"><div class="lab">答案</div><div class="v">${D.boss}</div></div>`:""}</div></div>`}
@@ -916,7 +1007,7 @@ function doneView(i){
    <span class="nn" style="color:${S[1].c}">01 ${esc(S[1].t)}</span>
    <span class="ns">${esc(S[1].sub)}</span></div>
   <div class="ask" style="max-width:40em;margin:18px auto 0">
-   信使制已經練過兩趟了。回地圖 → 點「01 指標村」，下一站開始收驗收章。</div></div>`;
+   信封和信使都已經練過一趟了。回地圖 → 點「01 指標村」，下一站開始收驗收章。</div></div>`;
  const s=S[i],n=i,nx=S[i+1];
  return `<div class="card win"><div class="burst" style="filter:drop-shadow(0 0 40px ${s.c}66)">✦</div>
   <h2 class="t" style="margin-top:10px">${esc(s.t)}　點亮了</h2>
@@ -995,17 +1086,23 @@ function x0() {
   return `<div class="two"><div class="card" style="padding:12px">
   <div class="board">${jaSVG(null, false)}</div></div>
  <div class="card"><div class="eyebrow">轉乘灣 / 01 ・ 讀圖</div><h2 class="t">景安站長什麼樣子</h2>
+  ${prop("打開信封","景安站剖面圖　A5","跟螢幕上同一張。放在桌上一起指。")}
   <p class="lead">這是你們每天經過的景安站。兩條線在同一座站裡，但不在同一層。</p>
   <div class="clues" style="margin-top:14px">
    <div class="clue"><span class="k">A</span><span class="v">環狀線的月台在<b>幾樓</b>？</span></div>
-   <div class="clue"><span class="k">B</span><span class="v">中和新蘆線的月台在<b>哪兩層</b>？</span></div>
-   <div class="clue"><span class="k">C</span><span class="v">出站的<b>出口</b>在幾樓？通到哪一條路？</span></div></div>
-  <div class="ask" style="margin-top:13px">三題都寫在任務紙上。</div>
+   <div class="clue"><span class="k">B</span><span class="v">中和新蘆線的月台在<b>哪兩層</b>？各往哪個方向？</span></div></div>
+  <div class="ask" style="margin-top:13px">下面三句話，<b style="color:var(--gold)">有一句是假的</b>。找出來，
+   並寫出<b>圖上哪裡證明它是假的</b>。</div>
+  <div class="clues" style="margin-top:11px">
+   <div class="clue"><span class="k">甲</span><span class="v">環狀線的月台在 5F，中和新蘆線的月台在 B4 和 B6。</span></div>
+   <div class="clue"><span class="k">乙</span><span class="v">景安站有兩個出入口，一個在 1F 景平路，一個在 6F 天橋。</span></div>
+   <div class="clue"><span class="k">丙</span><span class="v">從 B6 要到環狀線月台，中間會經過 1F 大廳層。</span></div></div>
   ${rev ? `<div class="rev" style="margin-top:13px"><div class="lab">答案</div>
-   <div class="v" style="font-size:clamp(15px,1.8vw,21px);line-height:1.65">
-   A　<b style="color:#F2C14E">5F</b> 環狀線大廳／月台層<br>
-   B　<b style="color:#F0A450">B4</b> 上層月台（往蘆洲・迴龍）、<b style="color:#F0A450">B6</b> 下層月台（往南勢角）<br>
-   C　<b style="color:var(--mint)">1F</b>，景平路。<b>而且全站只有這一個出口。</b></div></div>` : ""}
+   <div class="v" style="font-size:clamp(14.5px,1.7vw,20px);line-height:1.6">
+   A　<b style="color:#F2C14E">5F</b> 環狀線月台層<br>
+   B　<b style="color:#F0A450">B4</b>（1月台，往蘆洲・迴龍）、<b style="color:#F0A450">B6</b>（2月台，往南勢角）<br>
+   假的是 <b style="color:#E8685A">乙</b>。6F 天橋是<b>連接環狀線兩座月台</b>用的，走上去到不了街上。<br>
+   <b style="color:var(--mint)">全站只有 1F 景平路這一個出入口 —— 這是台北捷運唯一只有一個出口的轉乘站。</b></div></div>` : ""}
   ${fstamp(0)}</div></div>`;
 }
 
@@ -1043,8 +1140,8 @@ function x2() {
     ${steps.map(s => `<div style="font-size:clamp(12.5px,1.45vw,16px);color:#BCD2CA;line-height:1.75">・${esc(s)}</div>`).join("")}
     <div style="margin-top:7px;font-size:clamp(12px,1.4vw,15px);color:#E8685A">${esc(note)}</div></div>`).join("")}
   </div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
-  <div class="clues" style="margin-top:13px">
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
+  <div class="clues" data-seq="1" style="margin-top:13px">
    <div class="clue"><span class="k">1</span><span class="v">他<b>可以</b>選上面那條嗎？為什麼？</span></div>
    <div class="clue"><span class="k">2</span><span class="v">如果 3F→5F 那部電梯今天在維修，他要怎麼辦？</span></div>
    <div class="clue"><span class="k">3</span><span class="v">除了推嬰兒車的人，還有誰<b>也只能走電梯</b>？寫三種。</span></div></div>
@@ -1068,15 +1165,15 @@ function x3() {
     <rect x="250" y="96" width="200" height="54" rx="8" fill="#123328" stroke="#6FDCA0" stroke-width="2.4"/>
     <text x="350" y="130" text-anchor="middle" font-size="21" font-weight="800" fill="#6FDCA0">唯一出口</text>
     <path d="M70 150 v-52 h150" stroke="#4E7A6C" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
-    <text x="78" y="84" font-size="15" fill="#9FBCB1">中興街方向</text>
+    <text x="78" y="84" font-size="15" fill="#9FBCB1">從中興街那邊來</text>
     <path d="M630 150 v-52 h-150" stroke="#4E7A6C" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
-    <text x="622" y="84" font-size="15" text-anchor="end" fill="#9FBCB1">安樂路方向</text>
-    <text x="350" y="42" text-anchor="middle" font-size="15" fill="#F2C14E">6F 天橋　・　要過馬路的人得先上天橋再下來</text>
-    <text x="350" y="228" text-anchor="middle" font-size="14.5" fill="#688A7E">住在路的另一邊，進站之前要先繞一段</text>
+    <text x="622" y="84" font-size="15" text-anchor="end" fill="#9FBCB1">從安樂路那邊來</text>
+    <text x="350" y="42" text-anchor="middle" font-size="15" fill="#F2C14E">全站只有這一個出入口，開在景平路這一側</text>
+    <text x="350" y="228" text-anchor="middle" font-size="14.5" fill="#688A7E">住在路另一邊的人，進站之前要先繞過來</text>
    </svg></div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   <p class="lead" style="margin-top:6px">景安站每天進出好幾萬人，但從街上進到站裡，只有 1F 景平路那一個口。</p>
-  <div class="clues" style="margin-top:13px">
+  <div class="clues" data-seq="1" style="margin-top:13px">
    <div class="clue"><span class="k">1</span><span class="v">只有一個出口，對<b>哪三種人</b>最不方便？</span></div>
    <div class="clue"><span class="k">2</span><span class="v">放學時間大家一起出站，會發生什麼事？</span></div>
    <div class="clue"><span class="k">3</span><span class="v">如果你是設計師，<b>第二個出口</b>你會放在哪一邊？說出理由。</span></div></div>
@@ -1094,12 +1191,10 @@ function x4() {
   <h2 class="t">點亮轉乘灣</h2>
   <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。<br>
    請依<b>那位乘客從南勢角來、要轉環狀線</b>實際經過的樓層順序重新排列。</p>
-  <div class="stamps" style="margin:17px 0">${sw.map(t => `<div class="stamp">
-   <div class="n">${esc(t.name)}</div><div class="d">${t.digit}</div></div>`).join("")}</div>
-  <div class="clues">${JPATH.map((f, k) => `<div class="clue">
-   <span class="k">${k + 1}</span><span class="v">${esc(f[1])}</span></div>`).join("")}</div></div>
+  ${stampRow(sw, 2)}
+  ${orderList(JPATH.map(f => esc(f[1])), 2)}</div>
  <div class="card"><div class="eyebrow">輸入密碼</div>
-  <div class="lk" id="lk">${(code + "____").slice(0, 4).split("").join(" ")}</div>
+  <div class="lk" id="lk">${mask(4)}</div>
   <div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "清除", 0, "輸入"].map(k =>
     `<button data-k="${k}" ${k === "輸入" ? 'class="pri"' : ""}>${k}</button>`).join("")}</div>
   <div id="bm" class="warn" style="margin-top:12px;display:none"></div>
@@ -1118,7 +1213,7 @@ function ansBox(lab, html) {
    <div class="v" style="font-size:clamp(14.5px,1.7vw,20px);line-height:1.7">${html}</div></div>` : "";
 }
 function asks(list) {
-  return `<div class="clues" style="margin-top:13px">${list.map((t, k) =>
+  return `<div class="clues" data-seq="1" style="margin-top:13px">${list.map((t, k) =>
     `<div class="clue"><span class="k">${k + 1}</span><span class="v">${t}</span></div>`).join("")}</div>`;
 }
 /* 通用 FINAL 密碼門 */
@@ -1127,12 +1222,10 @@ function finalView(i, lead, order) {
   return `<div class="two"><div class="card"><div class="eyebrow">${esc(S[i].t)} ・ FINAL</div>
   <h2 class="t">點亮${esc(S[i].t)}</h2>
   <p class="lead">${lead}</p>
-  <div class="stamps" style="margin:17px 0">${sw.map(t => `<div class="stamp">
-   <div class="n">${esc(t.name)}</div><div class="d">${t.digit}</div></div>`).join("")}</div>
-  <div class="clues">${order.map((t, k) => `<div class="clue">
-   <span class="k">${k + 1}</span><span class="v">${t}</span></div>`).join("")}</div></div>
+  ${stampRow(sw, i)}
+  ${orderList(order, i)}</div>
  <div class="card"><div class="eyebrow">輸入密碼</div>
-  <div class="lk" id="lk">${(code + "____").slice(0, 4).split("").join(" ")}</div>
+  <div class="lk" id="lk">${mask(4)}</div>
   <div class="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "清除", 0, "輸入"].map(k =>
     `<button data-k="${k}" ${k === "輸入" ? 'class="pri"' : ""}>${k}</button>`).join("")}</div>
   <div id="bm" class="warn" style="margin-top:12px;display:none"></div>
@@ -1152,19 +1245,23 @@ function people(list) {
 const SG3 = [
   () => `<div class="two"><div class="card">
   <div class="eyebrow">無礙坡 / 01 ・ 回頭看</div><h2 class="t">四封信，現在看得懂了</h2>
+  ${prop("打開信封","四封信卡　甲乙丙丁","碼頭那四張，再拿出來一次。")}
   <p class="lead">碼頭那四封信，你們那時候只知道「他們被擋住」。走過指標村和轉乘灣之後，再看一次。</p>
-  ${people([["懷孕七個月的媽媽", "3 號出口只有樓梯，電梯在 1 號出口，走過去七分鐘。", "#E8685A"],
-  ["坐輪椅的大哥哥", "無障礙電梯在月台最尾端，每次都要算好搭哪一節車廂。", "#5FA8E8"],
-  ["七十八歲的阿公", "站裡的字看不清楚，問人的時候對方講得很快。", "#F0A450"],
-  ["推嬰兒車的爸爸", "電梯只有一部，等了三班還是上不去。", "#5FD6A0"]])}</div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+  ${people([["甲　懷孕七個月的媽媽", "", "#E8685A"],
+  ["乙　坐輪椅的大哥哥", "", "#5FA8E8"],
+  ["丙　七十八歲的阿公", "", "#F0A450"],
+  ["丁　推嬰兒車的爸爸", "", "#5FD6A0"]])}
+  <div class="warn" style="margin-top:12px">細節在卡片上。這一輪要配的是<b>設施的名稱</b>，設施卡也拿出來。</div></div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["四個人<b>各需要哪一項設施</b>？用指標村學過的名稱寫。",
     "這四項設施，景安站<b>有沒有</b>？",
     "既然都有，為什麼他們還是被擋住？<b>問題出在哪裡</b>？"])}
   <div class="warn" style="margin-top:13px">提示：不是「有沒有」的問題。</div>
-  ${ansBox("答案", `媽媽要<b style="color:var(--mint)">無障礙電梯</b>、大哥哥要<b style="color:var(--mint)">無障礙電梯＋輪椅候車位置</b>、
-   阿公要<b style="color:var(--mint)">清楚的指標＋詢問處</b>、爸爸要<b style="color:var(--mint)">無障礙電梯</b>。<br>
-   景安站四項<b>全都有</b>。<br>
+  ${ansBox("答案", `碼頭那一輪只能各配一張，答案是
+   <b style="color:var(--mint)">甲乙丁 → 無障礙電梯，丙 → 詢問處</b>。<br>
+   這一輪可以寫得更細：大哥哥上車還需要<b style="color:var(--mint)">輪椅候車位置</b>，
+   阿公除了詢問處，還需要<b style="color:var(--mint)">看得懂的指標</b>。<br>
+   這些東西景安站<b>全都有</b>。<br>
    <b style="color:var(--gold)">問題是：數量不夠、位置太遠、或是看不懂。有，不等於用得到。</b>`)}
   ${gstamp(3, 0)}</div></div>`,
 
@@ -1172,35 +1269,37 @@ const SG3 = [
   <div class="eyebrow">無礙坡 / 02 ・ 判斷</div><h2 class="t">這樣算無障礙嗎？</h2>
   <p class="lead">三個狀況。每一個都「有設施」。全組討論，每一題回答<b>算</b>或<b>不算</b>，並寫理由。</p>
   <div class="clues" style="margin-top:15px">
-   <div class="clue"><span class="k">甲</span><span class="v">車站有無障礙電梯，但在月台<b>最尾端</b>，從車廂走過去要三分鐘。</span></div>
-   <div class="clue"><span class="k">乙</span><span class="v">車站有無障礙電梯，<b>只有一部</b>，尖峰時間每次都滿。</span></div>
-   <div class="clue"><span class="k">丙</span><span class="v">車站有無障礙電梯，今天<b>維修中</b>，公告貼在電梯門上。</span></div></div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
-  ${asks(["甲乙丙各<b>算不算</b>無障礙？為什麼？",
-    "丙的公告貼在電梯門上 —— 什麼人<b>看不到</b>這張公告？",
+   <div class="clue"><span class="k">①</span><span class="v">車站有無障礙電梯，但在月台<b>最尾端</b>，從車廂走過去要三分鐘。</span></div>
+   <div class="clue"><span class="k">②</span><span class="v">車站有無障礙電梯，<b>只有一部</b>，尖峰時間每次都滿。</span></div>
+   <div class="clue"><span class="k">③</span><span class="v">車站有無障礙電梯，今天<b>維修中</b>，公告貼在電梯門上。</span></div></div></div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
+  ${asks(["①②③ 各<b>算不算</b>無障礙？為什麼？",
+    "③ 的公告貼在電梯門上 —— 什麼人<b>看不到</b>這張公告？",
     "你們覺得「真正的無障礙」要滿足<b>哪三個條件</b>？"])}
   ${ansBox("討論方向（沒有標準答案）", `這三題都可以說「有設施」，但都讓人到不了。<br>
-   丙最狠：貼在電梯門上的維修公告，<b style="color:#E8685A">只有走到電梯前面的人看得到</b> ——
+   ③ 最狠：貼在電梯門上的維修公告，<b style="color:#E8685A">只有走到電梯前面的人看得到</b> ——
    而那個人已經下不去了。<br>
    常見的三個條件：<b style="color:var(--mint)">到得了、用得到、事先知道</b>。`)}
   ${gstamp(3, 1)}</div></div>`,
 
   () => `<div class="two"><div class="card">
   <div class="eyebrow">無礙坡 / 03 ・ 看不見的</div><h2 class="t">看得出來，跟看不出來</h2>
-  <p class="lead">下面八個人都需要幫忙。信使回去把八個全部講一遍，全組分成兩堆。</p>
-  <div class="sg" style="margin-top:14px">${[
-    "拄拐杖的人", "孕婦（七個月）", "推嬰兒車的人", "坐輪椅的人",
-    "剛開完刀的人", "心臟不好的人", "懷孕兩個月的人", "長期暈眩的人"
-  ].map((t, i) => `<div class="sy" style="padding:14px 8px">
-   <div style="font-size:clamp(13.5px,1.6vw,18px);font-weight:800;color:#DCEDE5">${esc(t)}</div>
-   <div class="nm" style="margin-top:4px">${"ABCDEFGH"[i]}</div></div>`).join("")}</div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
-  ${asks(["哪些<b>看一眼就知道</b>？哪些<b>看不出來</b>？分成兩堆寫。",
-    "看不出來的那一堆，他們想坐下的時候會遇到什麼？",
-    "如果你是他，你會<b>開口</b>嗎？為什麼？"])}
-  ${ansBox("答案", `看得出來：<b style="color:var(--mint)">A 拄拐杖、B 孕婦七個月、C 推嬰兒車、D 坐輪椅</b><br>
+  ${prop("打開信封","人物卡　A 到 J　共十張","卡上沒寫他是誰，只有他說的話。")}
+  <p class="lead">十張卡，上面<b>只有他說的話</b>，沒有寫他是誰。先推出這個人是誰，再分成三堆。</p>
+  <div class="clues" style="margin-top:14px">
+   <div class="clue"><span class="k">1</span><span class="v">看一眼就知道他需要座位的</span></div>
+   <div class="clue"><span class="k">2</span><span class="v">需要座位，但<b style="color:var(--gold)">看不出來</b>的</span></div>
+   <div class="clue"><span class="k">3</span><span class="v">其實<b style="color:#E8685A">不需要</b>座位的</span></div></div>
+  <div class="ask" style="margin-top:13px">第三堆有幾張，先不告訴你們。</div></div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
+  ${asks(["每一張卡<b>這個人是誰</b>？十張都要寫。",
+    "分成三堆，寫下<b>各堆有哪幾個字母</b>。",
+    "第三堆為什麼不需要？跟前面兩堆<b>差在哪裡</b>？",
+    "看不出來的那一堆，他們想坐下的時候會遇到什麼？"])}
+  ${ansBox("答案", `看得出來：<b style="color:var(--mint)">A 拄拐杖、B 懷孕七個月、C 推嬰兒車、D 坐輪椅</b><br>
    看不出來：<b style="color:var(--gold)">E 剛開完刀、F 心臟不好、G 懷孕兩個月、H 長期暈眩</b><br>
-   <b style="color:#E8685A">一半的人，你看不出來。</b>下一站會接著講這件事。`)}
+   不需要：<b style="color:#E8685A">I 剛跑完步、J 提飲料</b> —— 會累、不方便，但身體沒有狀況。<br>
+   <b style="color:#E8685A">八個真的需要的人裡面，有一半你看不出來。</b>下一站會接著講這件事。`)}
   ${gstamp(3, 2)}</div></div>`,
 
   () => `<div class="two"><div class="card">
@@ -1232,38 +1331,50 @@ const SG3 = [
 function platSVG() {
   return `<svg viewBox="0 0 720 400" role="img" aria-label="月台示意圖">
   <rect width="720" height="400" fill="#07161A" rx="10"/>
-  <text x="360" y="30" text-anchor="middle" font-size="18" font-weight="800" fill="#CFE6DD">月台　示意圖</text>
+  <text x="360" y="26" text-anchor="middle" font-size="18" font-weight="800" fill="#CFE6DD">月台　示意圖</text>
+  <text x="360" y="48" text-anchor="middle" font-size="13.5" fill="#688A7E">這三個地方都「有設施」</text>
+  <!-- 月台與軌道 -->
   <rect x="30" y="286" width="660" height="76" fill="#12282C"/>
   <rect x="30" y="286" width="660" height="7" fill="#F2C14E"/>
-  <text x="46" y="314" font-size="14" fill="#F2C14E">黃色警戒線</text>
+  <text x="46" y="312" font-size="13" fill="#F2C14E">黃色警戒線</text>
   <rect x="30" y="362" width="660" height="26" fill="#0A1C20"/>
-  <text x="360" y="381" text-anchor="middle" font-size="13.5" fill="#5E8A86">軌道</text>
-  <g>
-   <rect x="300" y="300" width="120" height="48" rx="5" fill="#0D262A" stroke="#3E7278" stroke-width="2"/>
-   <text x="360" y="330" text-anchor="middle" font-size="14.5" fill="#9CC2C2">列車車門</text>
-   <path d="M300 348 h120" stroke="#E8685A" stroke-width="4" stroke-dasharray="6 5"/>
-   <text x="438" y="346" font-size="13.5" fill="#E8685A">間隙</text>
-  </g>
-  <g><rect x="58" y="96" width="150" height="62" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
-   <text x="133" y="124" text-anchor="middle" font-size="15" fill="#CFE6DD">緊急停車按鈕</text>
-   <text x="133" y="146" text-anchor="middle" font-size="12.5" fill="#7FA9AC">裝在離地 150 公分</text>
-   <text x="133" y="178" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">①</text></g>
-  <g><rect x="250" y="96" width="150" height="62" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
-   <text x="325" y="124" text-anchor="middle" font-size="15" fill="#CFE6DD">輪椅候車位置</text>
-   <text x="325" y="146" text-anchor="middle" font-size="12.5" fill="#7FA9AC">前面站著一根柱子</text>
-   <text x="325" y="178" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">②</text>
-   <rect x="316" y="196" width="18" height="86" fill="#2A4A52"/></g>
-  <g><rect x="442" y="96" width="210" height="62" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
-   <text x="547" y="124" text-anchor="middle" font-size="15" fill="#CFE6DD">往出口的指標</text>
-   <text x="547" y="146" text-anchor="middle" font-size="12.5" fill="#7FA9AC">被一面廣告看板擋住一半</text>
-   <text x="547" y="178" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">③</text></g>
-  <text x="360" y="236" text-anchor="middle" font-size="14" fill="#688A7E">這三個地方都「有設施」，但都有問題</text>
+  <text x="360" y="381" text-anchor="middle" font-size="13" fill="#5E8A86">軌道</text>
+  <!-- 列車車門與間隙 -->
+  <rect x="300" y="300" width="120" height="48" rx="5" fill="#0D262A" stroke="#3E7278" stroke-width="2"/>
+  <text x="360" y="330" text-anchor="middle" font-size="14" fill="#9CC2C2">列車車門</text>
+  <path d="M300 348 h120" stroke="#E8685A" stroke-width="4" stroke-dasharray="6 5"/>
+  <text x="432" y="346" font-size="13" fill="#E8685A">間隙</text>
+  <!-- ① 緊急停車按鈕（只標高度，不講問題） -->
+  <g><rect x="58" y="112" width="150" height="46" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
+   <text x="133" y="131" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">①</text>
+   <text x="133" y="150" text-anchor="middle" font-size="14" fill="#CFE6DD">緊急停車按鈕</text>
+   <path d="M133 158 V286" stroke="#6C8E8A" stroke-width="1.4" stroke-dasharray="5 4"/>
+   <path d="M126 166 h14 M126 278 h14" stroke="#6C8E8A" stroke-width="1.4"/>
+   <rect x="100" y="210" width="66" height="22" rx="4" fill="#07161A"/>
+   <text x="133" y="226" text-anchor="middle" font-size="14" fill="#9CC2C2">150 公分</text></g>
+  <!-- ② 輪椅候車位置＋柱子 -->
+  <g><rect x="250" y="112" width="150" height="46" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
+   <text x="325" y="131" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">②</text>
+   <text x="325" y="150" text-anchor="middle" font-size="14" fill="#CFE6DD">輪椅候車位置</text>
+   <rect x="292" y="240" width="76" height="44" rx="3" fill="none" stroke="#5FA8E8"
+    stroke-width="2" stroke-dasharray="7 5"/>
+   <text x="248" y="268" text-anchor="end" font-size="12" fill="#5FA8E8">地上畫的格子</text>
+   <path d="M252 264 h36" stroke="#5FA8E8" stroke-width="1.2"/>
+   <rect x="316" y="178" width="22" height="106" fill="#2A4A52"/>
+   <text x="348" y="206" font-size="13" fill="#8FB0AE">柱子</text></g>
+  <!-- ③ 往出口的指標＋廣告看板 -->
+  <g><rect x="442" y="112" width="210" height="46" rx="7" fill="#0D262A" stroke="#38666D" stroke-width="2"/>
+   <text x="547" y="131" text-anchor="middle" font-size="26" fill="#E8685A" font-weight="bold">③</text>
+   <text x="547" y="150" text-anchor="middle" font-size="14" fill="#CFE6DD">往出口的指標</text>
+   <rect x="556" y="104" width="118" height="62" rx="5" fill="#243A3E" stroke="#4A6E72" stroke-width="2"/>
+   <text x="615" y="140" text-anchor="middle" font-size="15" fill="#8FB0AE" font-weight="700">廣告看板</text></g>
  </svg>`;
 }
 const SG4 = [
   () => `<div class="two"><div class="card" style="padding:12px">
   <div class="board">${platSVG()}</div></div>
- <div class="card"><div class="eyebrow">偵查丘 / 01 ・ 月台邊緣</div><h2 class="t">黃線、月台門、間隙</h2>
+ <div class="card">${prop("打開信封","月台問題圖　A5","跟螢幕同一張。桌上那張可以直接指。")}
+  <div class="eyebrow">偵查丘 / 01 ・ 月台邊緣</div><h2 class="t">黃線、月台門、間隙</h2>
   <p class="lead">月台最危險的地方是邊緣。捷運用三樣東西在擋：<b>黃色警戒線</b>、<b>月台門</b>、
    以及上下車時那道<b>間隙</b>的警示。</p>
   ${asks(["黃色警戒線為什麼要畫在<b>離邊緣有一段距離</b>的地方？",
@@ -1281,25 +1392,31 @@ const SG4 = [
   <p class="lead">月台上有這些東西。平常沒人注意，出事的時候要在三秒內找到。</p>
   ${people([["緊急停車按鈕", "有人掉到軌道上、或是車門夾到人的時候按。按下去列車會停。", "#E8685A"],
   ["車站對講機", "按了直接跟站務人員講話。不是廣播，是對話。", "#5FA8E8"],
-  ["自動電擊器 AED", "有人倒下沒有呼吸的時候用。景安站 1F 和 5F 都有。", "#F0A450"],
+  ["自動電擊器 AED", "有人倒下沒有呼吸的時候用。捷運站通常放在大廳層的詢問處附近。", "#F0A450"],
   ["緊急出口", "綠色的那個跑步小人。平常是關著的。", "#5FD6A0"]])}</div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["這四樣，你在真的捷運站裡<b>看過幾樣</b>？在哪裡看到的？",
-    "緊急停車按鈕裝在離地 150 公分。<b>誰按不到</b>？",
-    "如果你是設計師，你會把它裝在<b>多高</b>？為什麼不能太低？"])}
-  ${ansBox("討論方向", `按不到的：<b style="color:var(--gold)">坐輪椅的人、小孩、身高較矮的大人</b>。<br>
+    "如果你是設計師，緊急停車按鈕你會裝在<b>離地多高</b>？",
+    "裝太高、裝太低，<b>各會有什麼問題</b>？"])}
+  ${ansBox("討論方向", `裝太高，<b style="color:var(--gold)">坐輪椅的人、小孩、身高較矮的大人</b>就按不到。<br>
    但也不能太低 —— 太低<b style="color:#E8685A">小孩會去亂按</b>，而且掃地時容易誤觸。<br>
    <b style="color:var(--mint)">安全設計常常是在兩種風險之間找平衡，不是越低越好。</b>`)}
   ${gstamp(4, 1)}</div></div>`,
 
   () => `<div class="two"><div class="card" style="padding:12px">
   <div class="board">${platSVG()}</div></div>
- <div class="card"><div class="eyebrow">偵查丘 / 03 ・ 設計偵探</div><h2 class="t">三個問題，各害到誰</h2>
-  <p class="lead">圖上標了 ①②③ 三個地方。每一個都不是「壞掉」，是<b>設計沒想到</b>。</p>
-  ${asks(["①②③ 各是什麼問題？用一句話寫。",
-    "每一個<b>會害到哪一種人</b>？一個問題配一種人。",
+ <div class="card"><div class="eyebrow">偵查丘 / 03 ・ 設計偵探</div><h2 class="t">三張投訴單</h2>
+  <p class="lead">站長收到三張投訴單，每一張只有一句話，<b>都沒說問題在哪裡</b>。</p>
+  <div class="clues" style="margin-top:13px">
+   <div class="clue"><span class="k">甲</span><span class="v">「我按不到。」</span></div>
+   <div class="clue"><span class="k">乙</span><span class="v">「我根本停不進去。」</span></div>
+   <div class="clue"><span class="k">丙</span><span class="v">「我走到一半就不知道要往哪走了。」</span></div></div>
+  <div class="warn" style="margin-top:12px">圖上<b>沒有寫問題</b>，但三個問題都畫在上面了。看圖，不要用猜的。</div>
+  ${asks(["甲乙丙各對應圖上的 <b>①②③</b> 哪一個？",
+    "每一張投訴單是<b>什麼人</b>寫的？為什麼別人沒事、他有事？",
     "三個裡面，你覺得<b>哪一個最嚴重</b>？說出理由。"])}
-  ${ansBox("答案", `① 緊急按鈕 150 公分 → <b style="color:var(--mint)">坐輪椅的人、小孩按不到</b><br>
+  ${ansBox("答案", `甲 → ①　乙 → ②　丙 → ③<br>
+   ① 緊急按鈕裝在 150 公分 → <b style="color:var(--mint)">坐輪椅的人、小孩按不到</b><br>
    ② 輪椅候車位置前面有柱子 → <b style="color:var(--mint)">輪椅根本停不進去</b><br>
    ③ 指標被廣告擋住 → <b style="color:var(--mint)">第一次來的人、視力不好的人找不到出口</b><br>
    最嚴重通常會選 ① ——
@@ -1315,7 +1432,7 @@ const SG4 = [
    <div class="clue"><span class="k">乙</span><span class="v">找根傘或棍子伸下去勾。</span></div>
    <div class="clue"><span class="k">丙</span><span class="v">按月台的緊急對講機，告訴站務人員。</span></div>
    <div class="clue"><span class="k">丁</span><span class="v">先拍照記錄位置，再去找站務人員。</span></div></div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["甲乙丙丁，<b>哪一個才對</b>？",
     "其他三個<b>各錯在哪裡</b>？一個一個寫。",
     "如果掉下去的不是手機，是<b>你弟弟的書包</b>，答案會變嗎？"])}
@@ -1339,7 +1456,7 @@ const SG5 = [
   () => `<div class="two"><div class="card">
   <div class="eyebrow">讓座廣場 / 01 ・ 它改名了</div><h2 class="t">博愛座 → 優先席</h2>
   <p class="lead">你們從小看到大的「博愛座」，<b>2025 年 7 月立法院三讀通過改名</b>，
-   同年九月底捷運全面換完標示。現在車廂上寫的是<b style="color:var(--gold)">優先席</b>。</p>
+   交通部要求各家運輸業者在 2025 年底前把標示全部換掉。現在車廂上寫的是<b style="color:var(--gold)">優先席</b>。</p>
   <div class="sp2" style="margin-top:15px">
    <div class="card" style="border-left:4px solid #5C7A70;padding:13px 15px">
     <div style="color:#89A79C;font-weight:900;margin-bottom:6px">以前　博愛座</div>
@@ -1350,21 +1467,23 @@ const SG5 = [
     <p style="margin:0;font-size:clamp(13.5px,1.55vw,18px);line-height:1.7;color:#DCEDE5">
      給「身心障礙者及其他<b>有實際需要</b>者」<br>
      <span style="color:#A9C7BB">── 用需要決定誰可以坐</span></p></div></div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["「老弱婦孺」和「有實際需要」，差在哪裡？",
     "為什麼要改？想出<b>兩個理由</b>。",
     "新的標示上畫了<b>五個人形</b>。你猜是哪五種人？"])}
   ${ansBox("答案", `差別在：舊的看<b style="color:var(--gold)">你是誰</b>，新的看<b style="color:var(--mint)">你現在需不需要</b>。<br>
    改的理由常見兩個：一是<b>年輕人也可能真的需要</b>（剛開完刀、生病），
    二是<b>避免用年紀去逼人讓座</b>。<br>
-   交通部公布的統一圖示包含：<b style="color:var(--mint)">年長者、孕婦、行動不便者、抱小孩的人、
-   其他有實際需要的人</b>。`)}
+   標示上的人形<b>從四個變成五個</b>：<b style="color:var(--mint)">長者、孕婦、受傷的人、帶小孩的人</b>，
+   再加上第五個 ── <b style="color:var(--gold)">其他同樣需要座位的人</b>。
+   多出來的那一個，就是這次改名真正的重點。`)}
   ${gstamp(5, 0)}</div></div>`,
 
   () => `<div class="two"><div class="card">
   <div class="eyebrow">讓座廣場 / 02 ・ 判斷</div><h2 class="t">六個人站在優先席前面</h2>
+  ${prop("打開信封","人物卡　甲 到 己　共六張","卡上寫著「優先席」的那六張。排成一排再討論。")}
   <p class="lead">車廂裡只剩一個優先席。這六個人同時上車。</p>
-  <div class="sg" style="margin-top:14px">${[
+  <div class="sg" style="margin-top:10px">${[
     ["甲", "七十五歲的阿嬤，走路很穩"], ["乙", "二十歲，剛動完膝蓋手術"],
     ["丙", "懷孕兩個月，還看不出來"], ["丁", "四十歲，提著很重的行李"],
     ["戊", "十五歲，昨天打球扭到腳"], ["己", "三十歲，心臟病發作過"]
@@ -1372,7 +1491,7 @@ const SG5 = [
    <div style="font-size:clamp(17px,2vw,24px);font-weight:900;color:var(--gold)">${k}</div>
    <div style="font-size:clamp(12.5px,1.45vw,16px);color:#C3DAD0;line-height:1.5;margin-top:3px">${esc(t)}</div>
   </div>`).join("")}</div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["哪些人<b>看得出來</b>需要？哪些<b>看不出來</b>？",
     "如果只能給一個人，你們這一組會給誰？<b>全組要有共識</b>。",
     "你們怎麼知道自己選對了？<b>有辦法知道嗎</b>？"])}
@@ -1398,8 +1517,9 @@ const SG5 = [
     <p style="margin:0;font-size:clamp(13px,1.5vw,17px);line-height:1.7;color:#BCD2CA">
      阿公站著會跌倒的風險比較高。而且旁邊的人只看得到「年輕人坐著、老人站著」，
      這種畫面會讓大家更不願意讓座。</p></div></div></div>
- <div class="card"><div class="eyebrow">怎麼進行</div>
-  ${asks(["老師指定你們這一組是<b>正方還是反方</b>（跟你們真正的想法無關）。",
+ <div class="card">${prop("老師現在發","立場籤　一組一張","抽到什麼講什麼，跟你們真正的想法無關。")}
+  <div class="eyebrow">怎麼進行</div>
+  ${asks(["抽到的那張就是你們這一組的<b>立場</b>。",
     "三分鐘內，想出<b>三個支持你方的理由</b>。",
     "再想一個 ── 對方<b>最可能拿來反駁你</b>的點是什麼？"])}
   <div class="ask" style="margin-top:14px">時間到，正方先講，反方再講，然後互相反駁一輪。</div>
@@ -1414,7 +1534,7 @@ const SG5 = [
   ${people([["Ａ　維持現在", "固定幾個優先席，位置明顯、顏色不同。好認，但也最容易被盯著看。", "#5FD6A0"],
   ["Ｂ　全部取消", "沒有特別的位子，需要的人自己開口。沒有道德壓力，但開不了口的人就沒位子。", "#F0A450"],
   ["Ｃ　全部都是優先席", "每個位子都貼提醒，誰需要誰坐。觀念要大家都接受才有用。", "#5FA8E8"]])}</div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["你們這一組選<b>哪一個方案</b>？全組要有共識。",
     "說出這個方案的<b>一個缺點</b> ── 而且你們願意接受它。",
     "如果你是捷運公司，你會怎麼讓大家<b>願意開口說「我需要」</b>？"])}
@@ -1441,7 +1561,7 @@ const SG6 = [
   ["03 無礙坡", "有設施不等於用得到。到得了、用得到、事先知道。", "#5FD6A0"],
   ["04 偵查丘", "緊急按鈕 150 公分，坐輪椅的人按不到。", "#5FA8E8"],
   ["05 讓座廣場", "一半的需要看不出來。優先席看的是需要，不是身分。", "#C08A5E"]])}</div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["五站裡面，<b>哪一件事最讓你意外</b>？為什麼？",
     "這五站有一個共同的重點，用<b>一句話</b>寫出來。",
     "如果只能跟學弟妹講一件事，你會講哪一件？"])}
@@ -1453,13 +1573,14 @@ const SG6 = [
   <div class="eyebrow">中央車站 / 02 ・ 基地</div><h2 class="t">永平站要蓋在這裡</h2>
   <p class="lead">假設捷運要在<b>永平國小旁邊</b>開一站，叫做<b style="color:var(--gold)">永平站</b>。
    這是基地周邊的狀況：</p>
-  <div class="clues" style="margin-top:15px">
+  ${prop("打開信封","永平站基地圖　A5","四個方向都在圖上。桌上那張一起看。")}
+  <div class="clues" style="margin-top:10px">
    <div class="clue"><span class="k">北</span><span class="v">永平國小。上下學時間一次湧出幾百個學生。</span></div>
    <div class="clue"><span class="k">東</span><span class="v">傳統市場。早上很多推菜籃車的長輩。</span></div>
    <div class="clue"><span class="k">南</span><span class="v">一間診所和一間藥局。</span></div>
    <div class="clue"><span class="k">西</span><span class="v">四五層樓的舊公寓，沒有電梯。</span></div>
    <div class="clue"><span class="k">—</span><span class="v">車站主體要蓋在地下，馬路兩側都有住戶。</span></div></div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["這四個方向，<b>各會帶來什麼樣的乘客</b>？",
     "哪一個方向的人<b>最需要電梯</b>？為什麼？",
     "如果出口只能蓋<b>兩個</b>，你們會放哪兩邊？說出理由。"])}
@@ -1476,7 +1597,7 @@ const SG6 = [
    <b>挑三位</b>當你們永平站的主要使用者。</div>
   <div class="ask" style="margin-top:13px">每一位要寫：他是誰、他會從哪個方向來、
    他最需要的<b>一項設施</b>。</div></div>
- <div class="card"><div class="eyebrow">任務紙要寫的</div>
+ <div class="card"><div class="eyebrow">題目 ・ 寫在任務紙上</div>
   ${asks(["三位使用者，各寫三行（是誰／從哪來／需要什麼）。",
     "這三位的需求<b>有沒有衝突</b>？哪裡衝突？",
     "衝突的話，你們<b>優先滿足誰</b>？為什麼？"])}
@@ -1487,7 +1608,11 @@ const SG6 = [
 
   () => `<div class="two"><div class="card">
   <div class="eyebrow">中央車站 / 04 ・ 畫出來</div><h2 class="t">永平站設計圖</h2>
-  <p class="lead">在任務紙背面，畫出永平站的<b>剖面圖</b> —— 就像你們在轉乘灣看過的景安站那張。</p>
+  ${prop("老師現在發","空白設計圖　一組一張","畫在這張上，不用畫在任務紙背面。")}
+  <p class="lead">畫出永平站的<b>剖面圖</b> —— 就像你們在轉乘灣看過的景安站那張。</p>
+  <div class="warn" style="margin-top:13px"><b>三個限制，不能違反：</b><br>
+   ① 電梯<b>最多兩部</b>　② 出口<b>最多兩個</b>，而且不能同時開在北邊和南邊<br>
+   ③ 你們挑的三位使用者，<b>每一位都要能從街上一路到月台</b>，中間不能有階梯</div>
   <div class="clues" style="margin-top:14px">
    <div class="clue"><span class="k">1</span><span class="v">至少畫<b>三層</b>（地面、大廳層、月台層）。</span></div>
    <div class="clue"><span class="k">2</span><span class="v">標出<b>出口</b>在哪一邊、有幾個。</span></div>
@@ -1751,7 +1876,7 @@ function invite(){
 let use3d=true;
 function psave(){save();cloudSave()}
 function goStation(i){if(i>=unlockedN())return;
- view="stn";si=i;li=0;rev=false;code="";shown=false;setT();render();window.scrollTo(0,0)}
+ view="stn";si=i;li=0;rev=false;code="";shown=false;qn=0;setT();render();window.scrollTo(0,0)}
 window.goStation=goStation;
 window.on3DReady=()=>{if(view==="map"&&use3d)render()};
 const LN={3:["四封信回來了","這樣算無障礙嗎","看得出來跟看不出來","完整的一條路"],
@@ -1803,20 +1928,32 @@ function render(){
   else body=soon(si);
   const hd=last?(si===0?{n:"登島完成",tip:"前傳結束，下週正式開始"}:{n:"點亮完成",tip:"這一站結束"})
    :P[Math.min(li,P.length-1)];
+  let pbar=""; body=body.replace(/<div class="prop">[\s\S]*?<\/div>/, m=>{pbar=m;return ""});
   $("#app").innerHTML=`${gscore()}<div class="wrap mis railed"><div class="mhead">
    <span class="mbadge" style="color:${s.c};border-color:${s.c}66;background:${s.c}14">${String(si).padStart(2,"0")}</span>
    <span class="tt"><h1>${esc(hd.n)}</h1><span class="sub">${esc(s.t)}　・　${esc(hd.tip)}</span></span></div>
-   ${strip()}
+   ${strip()}${pbar}
    <div class="qwrap">${body}${veil?`<div class="qveil"><div class="qvi">
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="3"
      stroke="#6FDCA0" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#6FDCA0" stroke-width="2"/></svg>
-    <b>題目鎖住了</b><span>各組信使就定位後，按一下打開</span>
+    <b>題目鎖住了</b><span>各組都拿到信封、準備好了，按一下打開</span>
     <button class="pri" id="qvb">打開題目</button></div></div>`:""}</div></div>`;
   const qv=$("#qvb"); if(qv)qv.onclick=()=>{shown=true;render()};
+  document.querySelectorAll("[data-seq]").forEach(el=>{
+   const its=[...el.querySelectorAll(".clue")];
+   its.forEach((it,i)=>{if(i>qn)it.style.display="none"});
+   if(qn<its.length-1){
+    const nb=document.createElement("button");
+    nb.className="seqb"; nb.textContent="出下一題（還有 "+(its.length-1-qn)+" 題）";
+    nb.onclick=()=>{qn++;render()};
+    el.parentNode.insertBefore(nb, el.nextSibling);
+   }});
   const rb=$("#rev"); if(rb)rb.disabled=veil;
-  if(!last)document.querySelectorAll(".pad button").forEach(b=>b.onclick=()=>key(b.dataset.k));
+  if(!last)document.querySelectorAll(".pad button").forEach(b=>b.onclick=e=>{b.blur();key(b.dataset.k)});
   document.querySelectorAll("[data-gp]").forEach(b=>b.onclick=()=>{
    const k=+b.dataset.gp; CL[cur].g[k]+=1; save(); render()});
+  document.querySelectorAll("[data-g5]").forEach(b=>b.onclick=e=>{
+   e.stopPropagation(); const k=+b.dataset.g5; CL[cur].g[k]+=5; save(); render()});
   const nx=$("#next"), pv=$("#prev");
   if(pv)pv.disabled=li<=0;
   if(nx){
@@ -1833,7 +1970,7 @@ function render(){
   wb.onclick=()=>{view=wall?"map":"wall";stop();render();window.scrollTo(0,0)}}
 }
 function setT(){const P=pages();const m=(li<P.length)?(P[li].m||0):0;stop();T.set=m*60;T.left=T.set;if(m)start()}
-function page(n){const P=pages();li=Math.max(0,Math.min(P.length,n));rev=false;code="";shown=false;setT();render();window.scrollTo(0,0)}
+function page(n){const P=pages();li=Math.max(0,Math.min(P.length,n));rev=false;code="";shown=false;qn=0;setT();render();window.scrollTo(0,0)}
 function key(k){
  const H=si===0, TGT=H?D.hcode:si===1?D.boss:si===2?D.boss2:D.sets[si].boss, LEN=H?2:4;
  if(k==="清除")code="";
@@ -1841,13 +1978,13 @@ function key(k){
   if(code===TGT){
    if(H){if(!me().h){CL[cur].h=1;CL[cur].b+=50;CL[cur].st=Math.max(me().st,2);save()}}
    else if(me().p<si){CL[cur].p=si;CL[cur].b+=100;CL[cur].st=Math.max(me().st,stBase(si)+4);save()}
-   page(H?5:5);return}
+   page(5);return}
   const b=$("#bm");if(b){b.style.display="";
    b.textContent=H?"密碼不對。兩枚驗收章的數字，照拿到的順序。"
     :si===2?"密碼不對。再看一次那位乘客經過的樓層順序。":"密碼不對。再看一次旅客動線的順序。"}code=""}
  else if(code.length<LEN)code+=k;
- const l=$("#lk");if(l)l.textContent=(code+"______").slice(0,LEN).split("").join(" ")}
-let showAns=false, shown=false;
+ const l=$("#lk");if(l)l.textContent=mask(LEN)}
+let showAns=false, shown=false, qn=0;
 function sync(){   // 依 h/p 重算驗收章與闖關獎勵
  const o=CL[cur];
  o.st = o.p>0 ? stBase(o.p)+4 : (o.h?2:0);
@@ -1866,14 +2003,16 @@ function strip(){
   return `<span class="sc ${d?"ok":""} ${now?"now":""}">${d?"\u2713 ":""}${nm[k]||k+1}</span>`}).join("")}</div>`}
 function gscore(){
  return `<div class="rail" id="rail">
-  <div class="rlbl">各組加分 ・ 點一下 ＋1</div>
-  <div class="gsc">${Array.from({length:NG},(_,k)=>`<button class="gcard" data-gp="${k}">
-   <span class="n">第 ${k+1} 組</span><span class="v">${me().g[k]}</span></button>`).join("")}</div>
+  <div class="rlbl">各組加分 ・ 卡片 ＋1 ・ 右鍵 ＋5</div>
+  <div class="gsc">${Array.from({length:NG},(_,k)=>`<div class="grow">
+   <button class="gcard" data-gp="${k}"><span class="n">第 ${k+1} 組</span>
+    <span class="v">${me().g[k]}</span></button>
+   <button class="g5" data-g5="${k}" title="加 5 分">+5</button></div>`).join("")}</div>
   <div class="rtot"><span>各組 ${gsum()} ＋ 獎勵 ${me().b||0}</span><b>${score()} 分</b></div>
   <div class="rsp"></div></div>`}
 function tp(){
  $("#tpb").innerHTML=`<button id="ansT" class="${showAns?"pri":""}">${showAns?"隱藏答案":"顯示答案"}</button>
- <div class="ans" ${showAns?"":"hidden"}><b>指標村・題組 ${SETS[setI]}</b>
+ <div class="ans" ${showAns?"":"hidden"}><b>${cur} 班專屬題目</b>
   <p style="margin:6px 0 0;color:#C9E6D8">登島密碼　<b>${D.hcode}</b>（旅客 ${D.hdg[0]}　符號 ${D.hdg[1]}）</p>
   <p style="margin:6px 0 0;color:#C9E6D8">關卡一　詢問處、驗票閘門、無障礙電梯<br>關卡二　<b>${D.cipher}</b><br>
   關卡三　入口 → 大廳 → 詢問處 → 無障礙電梯 → 月台<br>關卡四　無障礙電梯→樓梯、詢問處→販賣機、出口箭頭反向<br>
@@ -1919,8 +2058,10 @@ function tp(){
  <div style="margin-top:6px"><button id="apisave" class="pri">儲存並連線</button>
   <button id="apipull">從雲端重新載入</button><button id="apipush">立刻上傳</button></div>
  <p style="color:var(--dim);margin:5px 0 0">設定一次就好。換電腦時在那台再貼一次同一個網址。</p>
- <div style="margin-top:12px"><button id="swap">換題組（現在 ${SETS[setI]}）</button>
- <button id="reinv">重看邀請</button><button id="bk">備份／還原</button></div>
+ <p style="color:var(--dim);margin:12px 0 0">題目會<b style="color:#8FBCA6">依班級自動換</b> ──
+  16 個班各有一組自己的數字，不用手動切，重開也不會變。</p>
+ <div style="margin-top:8px"><button id="reinv">重看邀請</button>
+ <button id="bk">備份／還原</button></div>
  <div id="bkbox" hidden><textarea id="bkta" spellcheck="false"></textarea>
   <button id="bkapply">貼上後按這裡還原</button></div>
  <p>換班上課時按「換題組」，指標村的數字會重算，上一班傳出去的答案就失效。<br>
@@ -1961,7 +2102,6 @@ function tp(){
   if(!box.hidden)$("#bkta").value=JSON.stringify(CL)};
  const ap=$("#bkapply"); if(ap)ap.onclick=()=>{try{const o=JSON.parse($("#bkta").value);
   CLASSES.forEach(c=>{if(o[c])CL[c]=o[c]});save();render();alert("已還原")}catch(e){alert("格式不對，請重貼")}};
- const sw=$("#swap");if(sw)sw.onclick=()=>{setI=(setI+1)%SETS.length;D=build(setI);rev=false;code="";render()};
  const ri=$("#reinv");if(ri)ri.onclick=()=>{showInvite()};
 }
 function showInvite(){
@@ -2000,8 +2140,10 @@ $("#fs").onclick=async()=>{try{
 }catch(e){$("#fs").textContent="請按 F11"}};
 CLASSES.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c+" 班";$("#cls").appendChild(o)});
 $("#cls").value=cur;
-$("#cls").onchange=e=>{cur=e.target.value;PH=[];save();view="map";stop();render();window.scrollTo(0,0);
+$("#cls").onchange=e=>{cur=e.target.value;setI=CLASSES.indexOf(cur);D=build(setI);
+ PH=[];rev=false;code="";save();view="map";stop();render();window.scrollTo(0,0);
  if(API)cloudLoad()};
+setI=Math.max(0,CLASSES.indexOf(cur));D=build(setI);
 render();showInvite();
 setSync(API?"idle":"off");
 if(API)cloudLoad();
