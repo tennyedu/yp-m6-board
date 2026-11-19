@@ -526,6 +526,41 @@ body.stn .tp{right:calc(var(--railw,196px) + 26px);bottom:14px}
 .volb{padding:7px 12px;border-radius:9px;font-size:13px;font-weight:800;
  background:#11261F;border:1px solid var(--edge);color:#8FBCA6}
 .volb.on{background:#1C5E42;border-color:#6FDCA0;color:#EAFBF2}
+
+/* ── 右欄不要被底下的導覽方塊壓到 ── */
+.rail{bottom:calc(14px + var(--navh, 186px) + 10px)}
+.rail .gsc{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+ padding-right:2px;scrollbar-width:thin;scrollbar-color:#2A5B4C transparent}
+.rail .gsc::-webkit-scrollbar{width:6px}
+.rail .gsc::-webkit-scrollbar-thumb{background:#2A5B4C;border-radius:3px}
+.rail .rtime,.rail .rlbl,.rail .rtot{flex:0 0 auto}
+.rsp{display:none}
+/* 導覽方塊縮小一點 */
+body.stn .nav{padding:7px;gap:6px;border-radius:15px}
+body.stn .nav button{font-size:15px;padding:9px 8px;min-height:42px}
+body.stn .nav button#rev{min-height:40px}
+body.stn .nav button#prev{min-height:38px;font-size:18px}
+body.stn .nav button#next{min-height:48px;font-size:17px}
+/* 空間不夠時自動壓扁，六組一次看完 */
+.rail.tight{gap:6px}
+.rail.tight .rtime{padding:7px 9px;margin-bottom:0}
+.rail.tight .rclock{font-size:clamp(20px,2.4vw,28px)}
+.rail.tight .rtbtn{gap:4px;margin-top:5px}
+.rail.tight .rtbtn button{padding:5px 2px;font-size:11.5px}
+.rail.tight .rtbtn .rgo{padding:6px 2px;font-size:12.5px;margin-top:2px}
+.rail.tight .rlbl{font-size:10px;letter-spacing:.1em}
+.rail.tight .gsc{gap:5px}
+.rail.tight .gcard{padding:5px 11px}
+.rail.tight .gcard .n{font-size:12px}
+.rail.tight .gcard .v{font-size:19px}
+.rail.tight .g5{flex-basis:36px;font-size:12px}
+.rail.tight .rtot{padding:6px 11px}
+.rail.tight .rtot b{font-size:17px}
+.rail.tight .rtot span{font-size:10.5px}
+.rtbtn{grid-template-columns:repeat(3,1fr)}
+.rtbtn .radd{grid-column:1 / 2;margin-top:3px;background:#16342B;color:#CFEBDD}
+.rtbtn .radd:hover{background:#1E4A3C;border-color:#4E9C76}
+.rtbtn .rgo{grid-column:2 / -1}
 </style>
 </head>
 <body>
@@ -2086,7 +2121,7 @@ function render(){
      const P=pages(); if(si===0&&li+1>=P.length&&!me().h){CL[cur].h=1;save()} page(li+1)} }
   }
  }
- tp(); bindTimer(); paint(); bindPhotos();
+ tp(); bindTimer(); paint(); bindPhotos(); fitRail();
  const wb=$("#wall"); if(wb){wb.classList.toggle("pri",wall);
   wb.onclick=()=>{view=wall?"map":"wall";stop();render();window.scrollTo(0,0)}}
 }
@@ -2122,12 +2157,25 @@ function strip(){
  return `<div class="strip">${P.map((_,k)=>{
   const d=stageDone(si,k), now=k===li;
   return `<span class="sc ${d?"ok":""} ${now?"now":""}">${d?"\u2713 ":""}${nm[k]||k+1}</span>`}).join("")}</div>`}
+function fitRail(){
+ const n=$("#nav"), r=$("#rail");
+ if(!n||n.hidden){document.documentElement.style.setProperty("--navh","0px");return}
+ const h=Math.round(n.getBoundingClientRect().height)||186;
+ document.documentElement.style.setProperty("--navh", h+"px");
+ if(!r)return;
+ const g=r.querySelector(".gsc"); if(!g)return;
+ r.classList.remove("tight");
+ if(g.scrollHeight>g.clientHeight+1) r.classList.add("tight");
+ g.scrollTop=0;
+}
+addEventListener("resize",()=>{try{fitRail()}catch(e){}});
 function gscore(){
  return `<div class="rail" id="rail">
   <div class="rtime">
    <div class="rclock mono" id="rclk">00:00</div>
    <div class="rtbtn">
     <button data-tm="1">1 分</button><button data-tm="3">3 分</button><button data-tm="5">5 分</button>
+    <button class="radd" data-tadd="1">＋1 分</button>
     <button id="rgo" class="rgo">開始</button></div></div>
   <div class="rlbl">各組加分 ・ 卡片 ＋1 ・ 右鍵 ＋5</div>
   <div class="gsc">${Array.from({length:NG},(_,k)=>`<div class="grow">
@@ -2311,6 +2359,10 @@ function bindTimer(){
   try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume()}catch(e){}
   start();});
  const rg=$("#rgo"); if(rg)rg.onclick=()=>{T.id?stop():start()};
+ document.querySelectorAll("[data-tadd]").forEach(b=>b.onclick=()=>{
+  const add=(+b.dataset.tadd)*60;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume()}catch(e){}
+  T.set=(T.set||0)+add; T.left=(T.left||0)+add; start(); paint();});
 }
 bindTimer();
 $("#prev").onclick=()=>page(li-1);
