@@ -1369,7 +1369,7 @@ function w0(){return `<div class="two"><div class="card">
  <div class="card"><div class="ask">在自己的筆記本寫下這三個設施的名稱。</div>${stamp(0)}</div></div>`}
 function w1(){const m=D.map,p=D.pick,[hi,lo]=D.hide;return `<div class="card">
  <div class="eyebrow">指標村 / 02 ・ 視覺密碼</div><h2 class="t">圖示解碼</h2>
- ${prop("打開信封","符號卡盤　A 到 F","符號在你們的卡盤上。數字只有螢幕有，兩個被磨掉了。")}
+ ${prop("打開信封","符號卡　A 到 F　六張","碼頭那六張再拿出來排好。數字只有螢幕有，兩個被磨掉了。")}
  <div class="sg big" style="margin-top:14px">${m.map(([ic,nm,no],i)=>
   `<div class="sy${i===hi||i===lo?" hid":""}"><div class="ic">${ic}</div><div class="nm">${esc(nm)}</div>
    <div class="no">${i===hi||i===lo?"？":no}</div></div>`).join("")}</div></div>
