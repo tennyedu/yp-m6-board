@@ -778,6 +778,45 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
 @media (max-width:620px){
  .card.grade .ggrid{grid-template-columns:1fr}
 }
+
+/* 螢幕不夠高時，八個警告標誌排成一列，圖反而可以放更大 */
+@media (max-height:900px){
+ .mis .sg.warn8.huge{grid-template-columns:repeat(8,1fr);gap:8px}
+ .mis .sg.warn8.huge .sy{padding:8px 4px 6px}
+ .mis .sg.warn8.huge .sy .ic{font-size:min(10.2vw,26vh,200px)}
+ .mis .sg.warn8.named .sy .ic{font-size:min(9vw,21vh,176px)}
+ .mis .sg.warn8.named .wd{display:none}
+ .mis .sg.warn8.huge .sy .nm{font-size:clamp(14px,1.6vw,21px)}
+ .mis .sg.warn8 .wn{font-size:clamp(12px,1.3vw,17px);line-height:1.2}
+}
+@media (max-height:900px) and (max-width:900px){
+ .sg.warn8.huge{grid-template-columns:repeat(4,1fr)}
+}
+/* 矮螢幕公布答案時，把已出過的題目收掉，答案才完整看得到 */
+@media (max-height:900px){ .mis.hasans .clues .clue.past{display:none} }
+@media (max-height:900px){
+ .mis .lk{font-size:clamp(26px,3.6vw,46px);letter-spacing:.3em}
+ .mis .pad{gap:6px;margin-top:9px}
+ .mis .pad button{padding:clamp(6px,.85vw,11px) 0;font-size:clamp(15px,1.75vw,21px);border-radius:11px}
+}
+
+/* 右側控制台壓到最扁時，五組一定要一次看完 */
+.rail.tight .gbox{gap:3px}
+.rail.tight .gcard{padding:3px 10px}
+.rail.tight .gcard .n{font-size:11px}
+.rail.tight .gcard .v{font-size:17px}
+.rail.tight .grow2 button{padding:3px 0;font-size:11px;border-radius:7px}
+.rail.tight .rtime{padding:6px 8px}
+.rail.tight .rtbtn button{padding:4px 2px;font-size:11px}
+.rail.tight .rclock{font-size:clamp(18px,2vw,24px)}
+.rail .gsc{overflow:visible}
+/* 大螢幕（高度 900 以上）四欄排法，圖再放大一階 */
+@media (min-height:901px){
+ .mis .sg.warn8.huge .sy .ic{font-size:min(10.4vw,16.3vh,186px)}
+ .mis .sg.warn8.named .sy .ic{font-size:min(8.6vw,13.8vh,160px)}
+ .mis .sg.big.huge .sy .ic{font-size:min(8.6vw,17vh,165px)}
+ .mis .sg.big.named .sy .ic{font-size:min(7.4vw,14vh,142px)}
+}
 </style>
 </head>
 <body>
@@ -2339,7 +2378,7 @@ function render(){
    :P[Math.min(li,P.length-1)];
   let pbar=""; body=body.replace(/<div class="prop">[\s\S]*?<\/div>/, m=>{pbar=m;return ""});
   if(!last) body+=gradeRow();
-  $("#app").innerHTML=`${gscore()}<div class="wrap mis railed${rev?" ansmode":""}"><div class="mhead">
+  $("#app").innerHTML=`${gscore()}<div class="wrap mis railed${rev?" ansmode":""}${rev&&/class="rev big"/.test(body)?" hasans":""}"><div class="mhead">
    <span class="mbadge" style="color:${s.c};border-color:${s.c}66;background:${s.c}14">${String(si).padStart(2,"0")}</span>
    <span class="tt"><h1>${esc(hd.n)}</h1><span class="sub">${esc(s.t)}　・　${esc(hd.tip)}</span></span></div>
    ${strip()}${pbar}
