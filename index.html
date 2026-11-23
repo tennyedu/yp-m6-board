@@ -908,6 +908,21 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
  .mis .clues .clue.cur .v{font-size:clamp(20px,2.45vw,34px)}
  .mis .clues .clue.cur .k{font-size:clamp(22px,2.7vw,37px)}
 }
+/* 試玩一：一個大框，題目和名牌都在裡面 */
+.clue.one .k{color:#6FDCA0}
+.clue.one .v{font-size:clamp(23px,2.9vw,42px)}
+@media (max-height:900px){ .mis .clue.one .v{font-size:clamp(21px,2.6vw,36px)} }
+
+/* 右下角那一塊縮小，不要擋到題目 */
+body.stn .nav{gap:6px;padding:7px;border-radius:14px}
+body.stn .nav button{font-size:14.5px;padding:9px 8px;min-height:40px}
+body.stn .nav button#rev{min-height:44px;font-size:15.5px}
+body.stn .nav button#next{min-height:48px;font-size:17px}
+body.stn .nav button#prev{min-width:0;font-size:17px;min-height:38px;flex:0 0 42px}
+body.stn .nav button#qhb{font-size:12.5px;padding:7px 4px;min-height:38px;flex:1.15}
+body.stn .nav button#home{font-size:13px;padding:7px 4px;min-height:38px;flex:1}
+body.stn .nav .pair{gap:5px}
+body.stn .nav button#qhb[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -930,8 +945,7 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
 </div></div>
 <div class="nav" id="nav" hidden>
  <button id="rev" hidden>公布答案</button>
- <button id="qhb" hidden>⌃ 收起題目</button>
- <div class="pair"><button id="prev">←</button><button id="home">回地圖</button></div>
+ <div class="pair"><button id="qhb" hidden>⌃ 收起</button><button id="prev">←</button><button id="home">回地圖</button></div>
  <button class="pri" id="next">下一關 →</button>
 </div>
 <main id="app"></main>
@@ -1389,10 +1403,10 @@ function pre(k){
    丁　推嬰兒車的爸爸 → <b style="color:var(--mint)">無障礙電梯</b>（等三班都上不去，是數量不夠）<br>
    用不到的四張：輪椅候車位置、出口、廁所、驗票閘門。<br>
    <b style="color:var(--gold)">甲、乙、丁三個人都卡在「無障礙電梯」—— 數量不夠、位置太遠。</b>`)}
-  <div class="clues focus" data-seq="1">
-   <div class="clue"><span class="k">1</span><span class="v">甲乙丙丁<b>各是什麼人</b>？
-    ${(rev||qn>0)?"":candList()}</span></div>
-   <div class="clue"><span class="k">2</span><span class="v">他們<b>各缺哪一項設施</b>？誰缺的<b style="color:var(--gold)">一樣</b>？</span></div></div>
+  <div class="clues focus">
+   <div class="clue cur one"><span class="k">?</span><span class="v">甲乙丙丁<b>各是什麼人</b>？
+    <b>各缺哪一項設施</b>？誰缺的<b style="color:var(--gold)">一樣</b>？
+    ${rev?"":candList()}</span></div></div>
   ${hstamp(1)}`;
  if(k===2)return `
   ${prop("一人一到兩張","符號卡　A 到 F","不能給別人看，只能用說的把圖描述出來。90 秒後收回。")}
