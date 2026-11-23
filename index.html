@@ -870,6 +870,44 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
 .tpgr button:disabled{opacity:.5;cursor:wait}
 .tptot{margin-top:11px;font-size:14px;font-weight:800;color:#8FB3A5}
 .tptot b{font-size:21px;color:#6FDCA0}
+
+/* ===== 投影：出過的題目要留著而且看得清楚 ===== */
+.clues .clue.past{padding:clamp(9px,1.05vw,14px) clamp(12px,1.3vw,18px);
+ border-radius:12px;background:#0D211C;border-color:#20473C;opacity:1}
+.clues .clue.past .k{font-size:clamp(17px,2vw,27px);min-width:1.1em;color:#5E8C7B}
+.clues .clue.past .v{font-size:clamp(16px,1.85vw,26px);line-height:1.34;font-weight:700;
+ white-space:normal;overflow:visible;text-overflow:clip;color:#A8C7BA}
+.clues .clue.past .v b{font-weight:800;color:#C7E2D5}
+/* 十個人的名牌：再放大 */
+.cand .cd{padding:9px 17px;font-size:clamp(19px,2.25vw,32px);font-weight:800;
+ border-width:2px;color:#DFF3E8}
+@media (max-height:900px){
+ .mis .clues .clue.past{padding:7px 13px}
+ .mis .clues .clue.past .v{font-size:clamp(15px,1.7vw,23px);line-height:1.3}
+ .mis .clues .clue.past .k{font-size:clamp(15px,1.75vw,23px)}
+ .mis .cand{gap:7px;margin-top:11px}
+ .mis .cand .cd{padding:7px 14px;font-size:clamp(17px,1.95vw,27px)}
+}
+/* 公布答案時，題目讓位給答案（答案本來就把題目重講一遍） */
+.mis.hasans .clues .clue.past{display:none}
+@media (min-height:901px){
+ .mis .sg.warn8.huge .sy .ic{font-size:min(10.4vw,15.2vh,174px)}
+ .mis .sg.warn8.named .sy .ic{font-size:min(8.6vw,13vh,150px)}
+}
+@media (min-height:901px){
+ .mis .sg.warn8.huge .sy .ic{font-size:min(10.4vw,14.2vh,164px)}
+ .mis .sg.warn8.named .sy .ic{font-size:min(8.6vw,11.8vh,138px)}
+ .mis .sg.big.named .sy .ic{font-size:min(7.4vw,12.5vh,130px)}
+}
+/* 還有空間，題目再放大一階 */
+@media (max-height:900px){
+ .mis .clues .clue.past{padding:10px 15px}
+ .mis .clues .clue.past .v{font-size:clamp(17px,2.05vw,28px)}
+ .mis .clues .clue.past .k{font-size:clamp(17px,2.05vw,28px)}
+ .mis .clues .clue.cur{padding:clamp(13px,1.5vw,20px)}
+ .mis .clues .clue.cur .v{font-size:clamp(20px,2.45vw,34px)}
+ .mis .clues .clue.cur .k{font-size:clamp(22px,2.7vw,37px)}
+}
 </style>
 </head>
 <body>
@@ -1323,7 +1361,7 @@ const ROLE=[["站長","決定順序、代表發言"],["工程師","畫圖、記�
 function hstamp(k){
  const nm=k===1?"旅客":"符號", dg=D.hdg[k-1];
  return rev?`<div class="stamp" style="margin-top:14px"><div class="n">驗收章 ・ ${nm}</div><div class="d">${dg}</div></div>`
-  :`<div class="warn" style="margin-top:14px">老師按「公布答案」才會出現驗收章。</div>`}
+  :""}
 function pre(k){
  if(k===0)return `<div class="two"><div class="card">
   <div class="eyebrow">EPISODE 00 ・ 登島</div><h2 class="t">歡迎來到捷運島</h2>
@@ -1359,7 +1397,7 @@ function pre(k){
    <div class="clue"><span class="k">4</span><span class="v">四個人裡面，有沒有人<b style="color:var(--gold)">缺的是同一項</b>？是誰？</span></div></div>
   ${hstamp(1)}`;
  if(k===2)return `
-  ${prop("一人一到兩張","符號卡　A 到 F","不能給別人看，只能用嘴巴把圖描述出來。90 秒後收回。")}
+  ${prop("一人一到兩張","符號卡　A 到 F","不能給別人看，只能用說的把圖描述出來。90 秒後收回。")}
   <div class="clues focus" data-seq="1">
    <div class="clue"><span class="k">1</span><span class="v">A～F <b>各是什麼意思</b>？能寫幾個寫幾個。</span></div>
    <div class="clue"><span class="k">2</span><span class="v">上一關卡住最多人的那樣東西，是<b style="color:var(--gold)">哪一個字母</b>？</span></div></div>
