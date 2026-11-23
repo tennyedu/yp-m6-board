@@ -923,6 +923,21 @@ body.stn .nav button#qhb{font-size:12.5px;padding:7px 4px;min-height:38px;flex:1
 body.stn .nav button#home{font-size:13px;padding:7px 4px;min-height:38px;flex:1}
 body.stn .nav .pair{gap:5px}
 body.stn .nav button#qhb[hidden]{display:none}
+
+/* ===== 班級榜：前五名 ＋ 其他併一框 ===== */
+.rk.top1 .pos{background:#C9A227;color:#15110a;border-color:#E6C25A}
+.rk.top2 .pos{background:#9BA6AD;color:#131719;border-color:#C2CBD1}
+.rk.top3 .pos{background:#A9723E;color:#17100a;border-color:#C98F55}
+.rk.top1 .cn,.rk.top2 .cn,.rk.top3 .cn{font-weight:900}
+.restbox{margin-top:12px;padding:11px 12px;border-radius:13px;background:#0C1F1A;
+ border:1px dashed #2A5B4C}
+.restbox .rl{font-size:11.5px;font-weight:800;color:#6E8F82;letter-spacing:.05em;margin-bottom:8px}
+.restbox .rcs{display:flex;flex-wrap:wrap;gap:6px}
+.restbox .rc{padding:4px 10px;border-radius:999px;background:#102A23;border:1px solid #244C40;
+ color:#9FBAB0;font-weight:700;font-size:13px;font-variant-numeric:tabular-nums}
+.restbox .rc.me{background:#3A3008;border-color:#C9A227;color:#FFD47A;font-weight:900}
+.restbox .rme{margin-top:9px;font-size:12.5px;color:#8FB3A5;font-weight:700}
+.restbox .rme b{color:#FFD47A;font-size:15px}
 </style>
 </head>
 <body>
@@ -1175,15 +1190,22 @@ function mapSVG(){
 /* ===== 地圖畫面 ===== */
 function board(){
  const rows=CLASSES.map(c=>({c,...CL[c]})).sort((a,b)=>score(b)-score(a)||b.st-a.st||b.p-a.p||a.c.localeCompare(b.c));
+ const top=rows.slice(0,5), rest=rows.slice(5);
+ const myi=rows.findIndex(r=>r.c===cur);
  return `<div class="card">
-  <div class="lbl" style="margin-bottom:10px">班級榜 ・ 16 班</div>
-  <div class="rank">${rows.map((r,i)=>`<div class="rk ${r.c===cur?"me":""}">
+  <div class="lbl" style="margin-bottom:10px">班級榜 ・ 前五名</div>
+  <div class="rank">${top.map((r,i)=>`<div class="rk top${i+1} ${r.c===cur?"me":""}">
    <span class="pos">${i+1}</span>
    <span class="cn">${r.c}</span>
    <span class="pb"><i style="width:${r.p/6*100}%"></i></span>
    <span class="pp mono">${r.p}/6</span>
    <span class="sc mono">${score(r)}</span></div>`).join("")}</div>
-  <div class="rkfoot"><span>名次依<b>班級積分</b>排序（各組分數總和＋闖關獎勵）</span><span class="sp"></span><span>進度 ・ 積分</span></div>
+  ${rest.length?`<div class="restbox">
+   <div class="rl">其他 ${rest.length} 班　・　還在路上</div>
+   <div class="rcs">${rest.map(r=>`<span class="rc${r.c===cur?" me":""}">${r.c}</span>`).join("")}</div>
+   ${myi>=5?`<div class="rme">本班 ${cur} 目前第 <b>${myi+1}</b> 名</div>`:""}
+  </div>`:""}
+  <div class="rkfoot"><span>依<b>班級積分</b>排序</span><span class="sp"></span><span>進度 ・ 積分</span></div>
  </div>`}
 function mapView(){
  return `<div class="wrap shell">
