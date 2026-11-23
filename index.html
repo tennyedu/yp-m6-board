@@ -809,7 +809,6 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
 .rail.tight .rtime{padding:6px 8px}
 .rail.tight .rtbtn button{padding:4px 2px;font-size:11px}
 .rail.tight .rclock{font-size:clamp(18px,2vw,24px)}
-.rail .gsc{overflow:visible}
 /* 大螢幕（高度 900 以上）四欄排法，圖再放大一階 */
 @media (min-height:901px){
  .mis .sg.warn8.huge .sy .ic{font-size:min(10.4vw,16.3vh,186px)}
@@ -817,6 +816,60 @@ body.stn .nav button#next{min-height:48px;font-size:17px}
  .mis .sg.big.huge .sy .ic{font-size:min(8.6vw,17vh,165px)}
  .mis .sg.big.named .sy .ic{font-size:min(7.4vw,14vh,142px)}
 }
+
+/* 各組清單永遠關在自己的格子裡，絕對不會蓋到總分和下面的按鈕 */
+.rail .gsc{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.rail .rtot,.rail .rtime,.rail .rlbl{flex:0 0 auto;position:relative;z-index:2}
+.rail .rtot{margin-top:8px}
+/* 盡量讓五組一次排得下 */
+.rail.tight .gsc{gap:5px}
+.rail.tight .gbox{gap:2px}
+.rail.tight .gcard{padding:3px 9px}
+.rail.tight .gcard .n{font-size:11px}
+.rail.tight .gcard .v{font-size:16px}
+.rail.tight .grow2 button{padding:3px 0;font-size:10.5px;border-radius:6px}
+.rail.tight .rlbl{font-size:9.5px;line-height:1.3}
+
+/* 十個人的名牌：投影要看得到，放大 */
+.cand{gap:8px;margin-top:13px}
+.cand .cd{padding:8px 15px;font-size:clamp(17px,1.95vw,28px);font-weight:800;
+ border-width:2px;border-radius:999px;line-height:1.2}
+@media (max-height:900px){
+ .mis .cand{gap:6px;margin-top:10px}
+ .mis .cand .cd{padding:6px 12px;font-size:clamp(15px,1.7vw,23px)}
+}
+/* 螢幕矮的時候，計時器那塊再收一點，讓五組一次排得下 */
+.rail.tight .rtime{padding:5px 8px}
+.rail.tight .rclock{font-size:clamp(17px,1.9vw,22px)}
+.rail.tight .rtbtn{gap:3px;margin-top:4px}
+.rail.tight .rtbtn button{padding:3px 1px;font-size:10.5px}
+.rail.tight .rtbtn .rgo{padding:5px 1px;font-size:11.5px}
+.rail.tight .rtot{margin-top:5px;padding:5px 10px}
+
+/* ===== 教師控制臺裡的各組加分 ===== */
+.tpg{margin:0 0 14px;padding:12px;border-radius:14px;background:#0C1F1A;border:1px solid #2A5B4C}
+.tpglb{font-size:13px;font-weight:800;color:#8FB3A5;letter-spacing:.04em;margin-bottom:10px}
+.tpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
+.tpgb{background:#102A23;border:1px solid #2A5B4C;border-radius:12px;padding:9px 10px}
+.tpgn{display:flex;align-items:baseline;justify-content:space-between;
+ font-size:15px;font-weight:800;color:#CFEBDD;margin-bottom:7px}
+.tpgn b{font-size:24px;color:#FFD47A;line-height:1}
+.tpgr{display:flex;gap:5px}
+.tpgr button{border:1px solid #2A5B4C;background:#0C1F1A;color:#CFEBDD;border-radius:9px;
+ font-family:var(--ff);font-weight:900;font-size:14px;padding:9px 0;cursor:pointer;
+ line-height:1;transition:.12s}
+.tpgr button:hover{background:#17352B;border-color:#4E9C76}
+.tpgr button:active{transform:scale(.95)}
+.tpgr .tgm{flex:0 0 38px;color:#9BB7AC}
+.tpgr .tgm:hover{background:#3A2320;border-color:#A8564C;color:#F2CFC9}
+.tpgr .tgp{flex:1;background:#1C5E42;border-color:#6FDCA0;color:#EAFBF2;font-size:15px}
+.tpgr .tgp:hover{background:#2A7D59}
+.tpgr .tg5{flex:0 0 44px;font-size:13px}
+.tpgr .tgc{flex:0 0 96px;font-size:12px}
+.tpgr .tgc.on{background:#17402F;border-color:#4E9C76;color:#8FE0B4}
+.tpgr button:disabled{opacity:.5;cursor:wait}
+.tptot{margin-top:11px;font-size:14px;font-weight:800;color:#8FB3A5}
+.tptot b{font-size:21px;color:#6FDCA0}
 </style>
 </head>
 <body>
@@ -2377,7 +2430,6 @@ function render(){
   const hd=last?(si===0?{n:"登島完成",tip:"前傳結束，下週正式開始"}:{n:"點亮完成",tip:"這一站結束"})
    :P[Math.min(li,P.length-1)];
   let pbar=""; body=body.replace(/<div class="prop">[\s\S]*?<\/div>/, m=>{pbar=m;return ""});
-  if(!last) body+=gradeRow();
   $("#app").innerHTML=`${gscore()}<div class="wrap mis railed${rev?" ansmode":""}${rev&&/class="rev big"/.test(body)?" hasans":""}"><div class="mhead">
    <span class="mbadge" style="color:${s.c};border-color:${s.c}66;background:${s.c}14">${String(si).padStart(2,"0")}</span>
    <span class="tt"><h1>${esc(hd.n)}</h1><span class="sub">${esc(s.t)}　・　${esc(hd.tip)}</span></span></div>
@@ -2490,20 +2542,21 @@ function gscore(){
     <button class="radd" data-tadj="10">＋10 秒</button>
     <button class="radd" data-tadj="60">＋1 分</button>
     <button id="rgo" class="rgo">開始</button></div></div>
-  <div class="rlbl">各組加分 ・ 答對＋1 ・ 理由＋1 ・ 別組沒講到＋1</div>
-  <div class="gsc">${Array.from({length:NG},(_,k)=>{
-   const g=k+1, busy=PHbusy[si+"-"+g], done=shotDone(g);
-   return `<div class="gbox"><div class="grow">
-   <button class="gcard" data-gp="${k}"><span class="n">第 ${g} 組</span>
-    <span class="v">${me().g[k]}</span></button></div>
-   <div class="grow2"><button class="gmi2" data-gm="${k}" title="扣 1 分">−</button>
-    <button class="g5" data-g5="${k}" title="加 5 分">+5</button>
-    <button class="gcam${done?" on":""}" data-shot="${si}|${g}" ${busy?"disabled":""}
-     title="拍筆記本 ＋1">${busy?"…":done?"✓":"◉"}</button></div></div>`}).join("")}</div>
+  <div class="rlbl">各組加分在下面的「教師控制臺」</div>
   <div class="rtot"><span>各組 ${gsum()} ＋ 獎勵 ${me().b||0}</span><b>${score()} 分</b></div>
   <div class="rsp"></div></div>`}
 function tp(){
- $("#tpb").innerHTML=`<button id="ansT" class="${showAns?"pri":""}">${showAns?"隱藏答案":"顯示答案"}</button>
+ $("#tpb").innerHTML=`<div class="tpg"><div class="tpglb">各組加分　・　答對 ＋1　・　寫出理由 ＋1　・　講出別組沒講到的 ＋1</div>
+ <div class="tpgrid">${Array.from({length:NG},(_,k)=>{
+  const g=k+1, busy=PHbusy[si+"-"+g], done=shotDone(g);
+  return `<div class="tpgb"><div class="tpgn">第 ${g} 組<b>${me().g[k]}</b></div>
+   <div class="tpgr"><button class="tgm" data-gm="${k}">−</button>
+    <button class="tgp" data-gp="${k}">＋1</button>
+    <button class="tg5" data-g5="${k}">+5</button>
+    <button class="tgc${done?" on":""}" data-shot="${si}|${g}" ${busy?"disabled":""}
+     >${busy?"上傳中…":done?"✓ 已拍":"◉ 拍筆記本"}</button></div></div>`}).join("")}</div>
+ <div class="tptot">本班 <b>${score()}</b> 分　（各組 ${gsum()} ＋ 獎勵 ${me().b||0}）</div></div>
+ <button id="ansT" class="${showAns?"pri":""}">${showAns?"隱藏答案":"顯示答案"}</button>
  <div class="ans" ${showAns?"":"hidden"}><b>${cur} 班專屬題目</b>
   <p style="margin:6px 0 0;color:#C9E6D8">登島密碼　<b>${D.hcode}</b>（旅客 ${D.hdg[0]}　符號 ${D.hdg[1]}）</p>
   <p style="margin:6px 0 0;color:#C9E6D8">關卡一　詢問處、驗票閘門、無障礙電梯<br>關卡二　<b>${D.cipher}</b><br>
@@ -2567,6 +2620,13 @@ function tp(){
  <p>換班上課時按「換題組」，指標村的數字會重算，上一班傳出去的答案就失效。<br>
  資料存在這臺電腦的瀏覽器裡。換電腦前先按「備份」把文字複製起來。</p>`;
  $("#ansT").onclick=()=>{showAns=!showAns;render()};
+ $("#tpb").querySelectorAll("[data-gp]").forEach(b=>b.onclick=()=>{
+  const k=+b.dataset.gp; CL[cur].g[k]+=1; save(); render()});
+ $("#tpb").querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{
+  const k=+b.dataset.gm; CL[cur].g[k]=Math.max(0,(+CL[cur].g[k]||0)-1); save(); render()});
+ $("#tpb").querySelectorAll("[data-g5]").forEach(b=>b.onclick=()=>{
+  const k=+b.dataset.g5; CL[cur].g[k]+=5; save(); render()});
+
  $("#tpb").querySelectorAll("[data-ng]").forEach(b=>b.onclick=()=>{NG=+b.dataset.ng;save();render()});
  $("#tpb").querySelectorAll("[data-gd]").forEach(b=>b.onclick=()=>{
   const [k,d]=b.dataset.gd.split("|").map(Number);
