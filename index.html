@@ -1025,29 +1025,34 @@ body.stn .nav button#qhb[hidden]{display:none}
 <script>
 /* ===== 站點資料 ===== */
 const S=[
- {t:"登島碼頭",en:"HARBOUR",c:"#8FB9AC",x:196,y:604,
+ {t:"登島碼頭",en:"HARBOUR",c:"#8FB9AC",x:180,y:640,
   sub:"前傳 ・ 認識捷運島、組成驗收小隊",topic:"課程介紹、分組、規則練習",play:"聽故事、分角色、試跑一關",u:0},
- {close:"每組說出一個今天用到的設施，以及它幫哪一種旅客解決了什麼問題。",t:"指標村",en:"SIGN VILLAGE",c:"#E8685A",x:302,y:524,
+ {close:"每組說出一個今天用到的設施，以及它幫哪一種旅客解決了什麼問題。",t:"指標村",en:"SIGN VILLAGE",c:"#E8685A",x:380,y:560,
   sub:"任務一 ・ 車站設施與指標",topic:"認得站內設施與圖示，看懂平面圖",play:"圖示解碼、聽聲畫圖、動線推理、密碼門",u:0},
- {close:"每組說出一次轉乘，和你們為什麼選那一條路線而不是另一條。",t:"轉乘灣",en:"TRANSFER BAY",c:"#F0A450",x:404,y:404,
+ {close:"每組說出一次轉乘，和你們為什麼選那一條路線而不是另一條。",t:"轉乘灣",en:"TRANSFER BAY",c:"#F0A450",x:330,y:330,
   sub:"任務二 ・ 路線規劃與轉乘",topic:"讀路線圖、判斷轉乘站、規劃最佳路徑",play:"地圖迷宮、條件排除、路線推理",u:1},
- {close:"每組說出一位旅客，和車站替他做了什麼、還少做了什麼。",t:"無礙坡",en:"EASY SLOPE",c:"#5FD6A0",x:312,y:318,
+ {close:"每組說出一位旅客，和車站替他做了什麼、還少做了什麼。",t:"無礙坡",en:"EASY SLOPE",c:"#5FD6A0",x:560,y:215,
   sub:"任務三 ・ 無障礙與乘客需求",topic:"不同乘客需要什麼，環境怎麼擋住人",play:"乘客需求卡、條件限制、動線比較",u:1},
- {close:"每組說出一個你們在車站找到的設計問題，以及它會害到誰。",t:"偵查丘",en:"SPOTTER HILL",c:"#5FA8E8",x:706,y:252,
+ {close:"每組說出一個你們在車站找到的設計問題，以及它會害到誰。",t:"偵查丘",en:"SPOTTER HILL",c:"#5FA8E8",x:800,y:320,
   sub:"任務四 ・ 車站安全與設計問題",topic:"找出不合理的設計，說出為什麼有問題",play:"大圖找碴、證據交叉比對、問題分類",u:2},
- {close:"每組說出一個「看不出來但需要座位」的情況。",t:"讓座廣場",en:"PRIORITY SQ.",c:"#C08A5E",x:906,y:590,
+ {close:"每組說出一個「看不出來但需要座位」的情況。",t:"讓座廣場",en:"PRIORITY SQ.",c:"#C08A5E",x:880,y:560,
   sub:"任務五 ・ 優先席與公共空間",topic:"2025 年博愛座正式改名「優先席」，誰該讓座？",play:"證詞分析、時間軸排序、立場辯論",u:2},
- {close:"每組用一句話說完永平站的設計提案：為了誰、改了什麼。",t:"中央車站",en:"CENTRAL",c:"#F2C14E",x:1056,y:486,
+ {close:"每組用一句話說完永平站的設計提案：為了誰、改了什麼。",t:"中央車站",en:"CENTRAL",c:"#F2C14E",x:1100,y:420,
   sub:"任務六 ・ 統整與永平站設計提案",topic:"把六週學到的，變成一份交得出去的提案",play:"複合密碼、設計挑戰、全班審查",u:3},
 ];
 const UNITS=[{n:"車站探索",k:[0,1]},{n:"路線與人",k:[2,3]},{n:"安全與公民",k:[4,5]},{n:"最終提案",k:[6]}];
-const ISLES=[
- "150,448 196,330 300,258 414,262 492,336 508,452 470,578 376,664 254,690 164,614",
- "580,258 630,168 730,138 828,178 856,258 808,338 700,368 612,330",
- "800,536 842,440 952,404 1078,430 1148,512 1128,614 1018,682 890,672 820,612"
-];
-const TREES=[[232,392],[268,468],[196,520],[366,330],[438,414],[330,604],[412,552],
- [650,216],[760,208],[702,312],[800,268],[880,500],[962,452],[1092,502],[1040,604],[912,636]];
+const ISLES=(()=>{const out=[];
+ S.forEach((s,i)=>{const rnd=(k=>()=>(k=k*16807%2147483647)/2147483647)(i*7919+101);
+  const n=9,R=i===6?96:86,pts=[];
+  for(let j=0;j<n;j++){const a=j/n*6.2832+(rnd()-.5)*.30, r=R*(.80+rnd()*.34);
+   pts.push(Math.round(s.x+Math.cos(a)*r)+","+Math.round(s.y+Math.sin(a)*r*.86))}
+  out.push(pts.join(" "))});
+ return out})();
+const TREES=(()=>{const out=[];
+ S.forEach((s,i)=>{const rnd=(k=>()=>(k=k*16807%2147483647)/2147483647)(i*104729+7);
+  for(let j=0;j<4;j++){const a=rnd()*6.2832,d=34+rnd()*38;
+   out.push([Math.round(s.x+Math.cos(a)*d),Math.round(s.y+Math.sin(a)*d*.86)])}});
+ return out})();
 /* ===== 16 個班 ===== */
 const CLASSES=Array.from({length:16},(_,i)=>"6"+String(i+1).padStart(2,"0"));
 let CL={}, cur="601";
@@ -1475,8 +1480,8 @@ const PRE=[
  {n:"組成驗收小隊",tip:"分角色、發隊員證",m:0},
  {n:"登島密碼門",tip:"兩位數。開門 +50 分",m:4}];
 const CAND=["懷孕七個月的媽媽","坐輪椅的大哥哥","七十八歲的阿公","推嬰兒車的爸爸",
- "拄拐杖的國中生","看不懂中文的外國旅客","視障的大姐姐","提兩大箱行李的旅客",
- "戴助聽器的阿姨","剛下班的上班族"];
+ "手打石膏的國中生","帶幼兒園小朋友的老師","騎腳踏車來的高中生","趕時間的外送員",
+ "穿制服的站務員","低頭滑手機的大學生"];
 function candList(){
  return `<div class="cand">${shufBy(CAND.slice(),"c"+setI).map(t=>
   `<span class="cd">${esc(t)}</span>`).join("")}</div>`}
@@ -1536,9 +1541,9 @@ function pre(k){
   ${hstamp(2)}`;
  if(k===3)return `
   ${prop("看螢幕","警告標誌　八個","剛剛那六個說「這裡有什麼」，這八個說「不可以做什麼」。這一關不用拿卡片。")}
-  <div class="clues focus" data-seq="1">
-   <div class="clue"><span class="k">1</span><span class="v">挑<b>三個</b>寫下來：它在<b>警告什麼</b>？</span></div>
-   <div class="clue"><span class="k">2</span><span class="v">挑其中一個，寫出<b style="color:var(--gold)">車站為什麼非貼不可</b> —— 不貼會發生什麼事？</span></div></div>
+  <div class="clues focus">
+   <div class="clue cur one"><span class="k">?</span><span class="v">①～⑧ <b>各在警告什麼</b>？
+    一個寫一句，<b style="color:var(--gold)">八個都寫</b>。</span></div></div>
   <div class="sg warn8 huge${rev?" named":""}">${WARN.map((x,i)=>
    `<div class="sy"><div class="ic">${x[0]}</div>${rev
      ?`<div class="wn">${esc(x[1])}</div><div class="wd">${esc(x[2])}</div>`
@@ -2950,7 +2955,7 @@ const ISL3D = (() => {
   let ren, scn, cam, ray, host = null, raf = 0, ok = false;
   let stnG = [], pawnG = [], lampMat = [], glowS = [], ringM = [];
   let pick = [], hovered = -1, flying = null, idle = 0;
-  const HOME = { r: 134, th: -0.55, ph: 0.74, x: 4, y: 0, z: 6 };
+  const HOME = { r: 166, th: -0.52, ph: 0.66, x: -6, y: 0, z: 2 };
   const sph = { r: HOME.r, th: HOME.th, ph: HOME.ph };
   const tgt = new V3.Vector3(HOME.x, HOME.y, HOME.z);
   const want = { r: HOME.r, th: HOME.th, ph: HOME.ph, tx: HOME.x, ty: HOME.y, tz: HOME.z };
@@ -3047,13 +3052,34 @@ const ISL3D = (() => {
       t.position.set(cx + Math.cos(a) * d, .5, cz + Math.sin(a) * d);
       t.scale.setScalar(.7 + rnd() * .6); g.add(t);
     }
-    for (let k = 0; k < 7; k++) {
+    for (let k = 0; k < 9; k++) {
       const a = rnd() * 6.283, d = 4 + rnd() * 11;
       const r = new V3.Mesh(new V3.DodecahedronGeometry(.5 + rnd() * .75, 0),
         new V3.MeshLambertMaterial({ color: 0x2B4A41, flatShading: true }));
       r.position.set(cx + Math.cos(a) * d, .45, cz + Math.sin(a) * d);
       r.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
       r.scale.y = .66; g.add(r);
+    }
+    // 小房子（造景）
+    const WALL = [0xBFD9CC, 0xA9C6B8, 0xCFE3D6];
+    for (let k = 0; k < 5; k++) {
+      const a = rnd() * 6.283, d = 5 + rnd() * 9.5, h = 1.5 + rnd() * 1.6;
+      const w = .9 + rnd() * .8, dp = .9 + rnd() * .7, hz = new V3.Group();
+      const bd = new V3.Mesh(new V3.BoxGeometry(w * 2, h, dp * 2),
+        new V3.MeshLambertMaterial({ color: WALL[k % 3], flatShading: true }));
+      bd.position.y = h / 2; hz.add(bd);
+      const rf = new V3.Mesh(new V3.ConeGeometry(Math.max(w, dp) * 1.5, 1.1, 4),
+        new V3.MeshLambertMaterial({ color: 0x8A4A3A, flatShading: true }));
+      rf.position.y = h + .5; rf.rotation.y = Math.PI / 4; hz.add(rf);
+      hz.position.set(cx + Math.cos(a) * d, .45, cz + Math.sin(a) * d);
+      hz.rotation.y = rnd() * 6.283; g.add(hz);
+    }
+    // 岸邊木樁（碼頭感）
+    for (let k = 0; k < 6; k++) {
+      const a = rnd() * 6.283, d = 12 + rnd() * 3.5;
+      const pl = new V3.Mesh(new V3.CylinderGeometry(.22, .26, 2.6, 6),
+        new V3.MeshLambertMaterial({ color: 0x4A3A28, flatShading: true }));
+      pl.position.set(cx + Math.cos(a) * d, -1.0, cz + Math.sin(a) * d); g.add(pl);
     }
     return g;
   }
@@ -3207,7 +3233,7 @@ const ISL3D = (() => {
     flying = {
       t: 0, dur: 620, done,
       fr: { r: sph.r, th: sph.th, ph: sph.ph, x: tgt.x, y: tgt.y, z: tgt.z },
-      to: { r: 42, th: sph.th, ph: .72, x: wx(s.x), y: 2.5, z: wz(s.y) }
+      to: { r: 34, th: sph.th, ph: .70, x: wx(s.x), y: 2.0, z: wz(s.y) }
     };
   }
   function home() {
@@ -3259,9 +3285,21 @@ const ISL3D = (() => {
         const tag = new V3.Sprite(new V3.SpriteMaterial({
           map: pawnTex(c, mine ? "#F2C14E" : "#9FE8C6"), transparent: true, depthTest: false
         }));
-        tag.position.y = (mine ? 6.2 : 5.0) + (k % 3) * 1.5;
-        tag.scale.set(mine ? 6.0 : 4.6, mine ? 3.0 : 2.3, 1);
+        tag.position.y = (mine ? 7.4 : 5.0) + (k % 3) * 1.5;
+        tag.scale.set(mine ? 9.0 : 4.6, mine ? 4.5 : 2.3, 1);
         tag.renderOrder = 12; p.add(tag);
+        if (mine) {
+          p.scale.setScalar(1.75);
+          const ha = new V3.Sprite(new V3.SpriteMaterial({
+            map: glowTex("#F2C14E"), transparent: true, depthWrite: false,
+            blending: V3.AdditiveBlending, opacity: .8 }));
+          ha.position.y = 2.2; ha.scale.set(13, 13, 1); ha.renderOrder = 4; p.add(ha);
+          const rg = new V3.Mesh(new V3.RingGeometry(2.4, 3.1, 28),
+            new V3.MeshBasicMaterial({ color: 0xF2C14E, transparent: true,
+              opacity: .85, side: V3.DoubleSide }));
+          rg.rotation.x = -Math.PI / 2; rg.position.y = .3; p.add(rg);
+          p.userData.me = 1;
+        }
         g.add(p);
       });
       if (list.length > 10) {
