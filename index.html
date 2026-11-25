@@ -991,6 +991,23 @@ body.stn .nav button#qhb[hidden]{display:none}
 .ip-btn .ip-go.off{background:#1A1A1A;border-color:#333;color:#6B6B6B;cursor:not-allowed}
 .ip-btn .ip-back:hover{background:#17352B;color:#CFEBDD}
 @media(max-width:900px){.ipc{width:min(340px,86%)}#ipanel{justify-content:center}}
+/* 圖像找碴：兩張圖佔滿整個畫面寬 */
+.bdlb{font-weight:900;margin:2px 0 8px;font-size:clamp(14px,1.55vw,21px)}
+.bdlb.ok{color:var(--mint)} .bdlb.ng{color:#E8685A}
+.sp2{gap:14px}
+.mis .board{border-width:2px}
+/* 上面那排關卡可以點 */
+.strip .sc{cursor:pointer;font-family:var(--ff);transition:.12s}
+.strip .sc:hover{background:#17352B;border-color:#6FDCA0;color:#EAF6F0;transform:translateY(-1px)}
+.strip .sc:active{transform:scale(.96)}
+.strip .sc.now{cursor:default}
+/* 找碴圖：矮螢幕時限制高度，兩張還是一樣大 */
+@media (max-height:900px){
+ .mis .board svg{max-height:33vh;width:auto;max-width:100%;margin:0 auto}
+ .mis .bdlb{margin:0 0 5px;font-size:clamp(13px,1.4vw,18px)}
+ .mis .sp2{gap:10px}
+}
+@media (max-height:810px){ .mis .board svg{max-height:30vh} }
 </style>
 </head>
 <body>
@@ -1638,19 +1655,37 @@ function w2(){
   ${rev?`<div class="warn" style="margin-top:13px">直接往月台的那條被封鎖，走樓梯那條不能用 —— 只剩這一條。</div>`:""}
   ${stamp(2)}</div></div>`}
 function dg(bad){
- const it=[[108,84,bad?"≋":"↕",bad?"樓梯":"無障礙電梯"],[296,84,bad?"▣":"ℹ",bad?"販賣機":"詢問處"],
-  [478,84,bad?"⬅":"➜","出口"],[108,206,"▥","驗票閘門"],[296,206,"♿︎","廁所"],[478,206,"≋","樓梯"]];
- return `<svg viewBox="0 0 588 276" role="img" aria-label="${bad?"異常":"正常"}車站圖">
- <rect x="4" y="4" width="580" height="268" rx="10" fill="#081A1D" stroke="#28535A" stroke-width="2.4"/>
- ${it.map(([x,y,ic,lb])=>`<g><rect x="${x-62}" y="${y-48}" width="124" height="86" rx="11" fill="#0D262A" stroke="#38666D" stroke-width="2.4"/>
- <text x="${x}" y="${y-2}" text-anchor="middle" font-size="33" font-weight="bold" fill="#CFE6E4">${ic}</text>
- <text x="${x}" y="${y+25}" text-anchor="middle" font-size="17" fill="#9CC2C2">${lb}</text></g>`).join("")}</svg>`}
-function w3(){return `<div class="two"><div class="card" style="padding:12px"><div class="sp2">
- <div><div style="color:var(--mint);font-weight:900;margin:3px 0 7px;font-size:14.5px">✓ 正常版本</div><div class="board">${dg(false)}</div></div>
- <div><div style="color:#E8685A;font-weight:900;margin:3px 0 7px;font-size:14.5px">⚠ 被改掉的版本</div><div class="board">${dg(true)}</div></div></div></div>
- <div class="card"><div class="eyebrow">指標村 / 04 ・ 圖像找碴</div><h2 class="t">被改掉的指標</h2>
- <div class="ask" style="margin-top:12px">兩張圖有 <b style="color:var(--gold)">3 處</b> 不一樣。<br>寫在筆記本上 —— 不只看文字，也要看方向。</div>
- ${stamp(3)}</div></div>`}
+ const it=[
+  ["↕","無障礙電梯","↕","無障礙電梯"],
+  ["ℹ","詢問處","ℹ","詢問處"],
+  ["➜","出口","⬅","出口"],
+  ["▥","驗票閘門","▥","驗票閘門"],
+  ["♿","無障礙廁所","♿","廁所"],
+  ["≋","樓梯","↕","樓梯"],
+  ["⇅","手扶梯","⇅","手扶梯"],
+  ["▤","置物櫃","▤","置物箱"],
+  ["✚","哺集乳室","▣","販賣機"]];
+ const CW=206,CH=134,PX=12,PY=12;
+ const W=PX*2+CW*3, H=PY*2+CH*3;
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${bad?"異常":"正常"}車站圖"
+  style="width:100%;height:auto;display:block">
+ <rect x="3" y="3" width="${W-6}" height="${H-6}" rx="13" fill="#081A1D" stroke="#28535A" stroke-width="2.6"/>
+ ${it.map((r,k)=>{const ic=bad?r[2]:r[0], lb=bad?r[3]:r[1];
+   const x=PX+(k%3)*CW, y=PY+((k/3)|0)*CH;
+   return `<g><rect x="${x+7}" y="${y+7}" width="${CW-14}" height="${CH-14}" rx="13"
+     fill="#0D262A" stroke="#38666D" stroke-width="2.6"/>
+   <text x="${x+CW/2}" y="${y+CH/2+4}" text-anchor="middle" font-size="52" font-weight="bold" fill="#CFE6E4">${ic}</text>
+   <text x="${x+CW/2}" y="${y+CH-26}" text-anchor="middle" font-size="23" fill="#9CC2C2">${lb}</text></g>`}).join("")}
+ </svg>`}
+function w3(){return `<div class="clues focus">
+  <div class="clue cur one"><span class="k">?</span><span class="v">兩張圖有 <b style="color:var(--gold)">5 處</b> 不一樣，<b>全部找出來</b>。
+   不只看文字 —— 也要看<b>方向</b>、看<b>圖跟字有沒有對上</b>。</span></div></div>
+ <div class="card" style="padding:13px">
+  <div class="sp2">
+   <div><div class="bdlb ok">✓ 正常版本</div><div class="board">${dg(false)}</div></div>
+   <div><div class="bdlb ng">⚠ 被改掉的版本</div><div class="board">${dg(true)}</div></div>
+  </div></div>
+ ${stamp(3)}`}
 function w4(){const sw=D.tags.slice().sort((a,b)=>a.level-b.level);
  return `<div class="two"><div class="card"><div class="eyebrow">指標村 ・ FINAL</div><h2 class="t">驗收中心</h2>
  <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。請依<b>旅客實際進站的動線</b>重新排列。</p>
@@ -2612,6 +2647,8 @@ function render(){
     <b>題目鎖住了</b><span>各組都拿到信封、準備好了，按一下打開</span>
     <button class="pri" id="qvb">打開題目</button></div></div>`
    :""}</div></div>`;
+  document.querySelectorAll(".strip [data-li]").forEach(b=>b.onclick=()=>{
+   const k=+b.dataset.li; if(k===li)return; page(k); render()});
   const qv=$("#qvb"); if(qv)qv.onclick=()=>{shown=true;render()};
   const qh=$("#qhb"); if(qh){qh.hidden=!(canveil&&shown);
    qh.onclick=()=>{shown=false;qn=0;rev=false;render()}}
@@ -2691,7 +2728,8 @@ function strip(){
                 :["關一","關二","關三","關四","FINAL"];
  return `<div class="strip">${P.map((_,k)=>{
   const d=stageDone(si,k), now=k===li;
-  return `<span class="sc ${d?"ok":""} ${now?"now":""}">${d?"\u2713 ":""}${nm[k]||k+1}</span>`}).join("")}</div>`}
+  return `<button class="sc ${d?"ok":""} ${now?"now":""}" data-li="${k}"
+   title="跳到這一關">${d?"\u2713 ":""}${nm[k]||k+1}</button>`}).join("")}</div>`}
 function fitRail(){
  const n=$("#nav"), r=$("#rail");
  if(!n||n.hidden){document.documentElement.style.setProperty("--navh","0px");return}
@@ -2880,16 +2918,48 @@ function beep(flash){
  try{
   AC=AC||new (window.AudioContext||window.webkitAudioContext)();
   if(AC.state==="suspended")AC.resume();
-  const vol=({1:.34,2:.62,3:.94})[VOL]||.94;
-  const step=.22, n=16, t0=AC.currentTime+.02, end=t0+n*step;
-  const g=AC.createGain(); g.connect(AC.destination);
-  const o=AC.createOscillator(); o.type="square"; o.connect(g);
-  for(let k=0;k<n;k++) o.frequency.setValueAtTime(k%2?880:1320, t0+k*step);
-  g.gain.setValueAtTime(.0001,t0);
-  g.gain.exponentialRampToValueAtTime(vol,t0+.02);
-  g.gain.setValueAtTime(vol,end-.06);
-  g.gain.exponentialRampToValueAtTime(.0001,end);
-  o.start(t0); o.stop(end+.02);
+  const vol=({1:.40,2:.80,3:1.25})[VOL]||1.25;
+  // 鈴兒響叮噹（Jingle Bells，1857，公共財）
+  const E=659.25,G=783.99,C=523.25,D=587.33;
+  const M=[[E,1],[E,1],[E,2],[E,1],[E,1],[E,2],
+           [E,1],[G,1],[C,1.5],[D,.5],[E,4]];
+  const U=.20, t0=AC.currentTime+.03;
+  const lim=AC.createDynamicsCompressor();
+  lim.threshold.setValueAtTime(-20,AC.currentTime); lim.knee.setValueAtTime(2,AC.currentTime);
+  lim.ratio.setValueAtTime(20,AC.currentTime); lim.attack.setValueAtTime(.001,AC.currentTime);
+  lim.release.setValueAtTime(.08,AC.currentTime);
+  const mk=AC.createGain(); mk.gain.value=1.95; lim.connect(mk);
+  const sat=AC.createWaveShaper();                 // 軟削峰：大聲但不破音
+  {const N=2048,c=new Float32Array(N);
+   for(let i=0;i<N;i++){const x=i/(N-1)*2-1; c[i]=Math.tanh(x*2.1)/Math.tanh(2.1)*.74}
+   sat.curve=c; sat.oversample="4x"}
+  mk.connect(sat); sat.connect(AC.destination);
+  const bus=AC.createGain(); bus.gain.value=vol; bus.connect(lim);
+  let t=t0;
+  for(let rep=0; rep<2; rep++){
+   for(const [f,len] of M){
+    const dur=len*U;
+    [[1,1],[2,.34],[3,.12]].forEach(([mul,amp])=>{      // 泛音做出鈴鐺音色
+     const o=AC.createOscillator(); o.type=mul===1?"triangle":"sine";
+     o.frequency.setValueAtTime(f*mul,t);
+     const g=AC.createGain(); g.gain.setValueAtTime(.0001,t);
+     g.gain.exponentialRampToValueAtTime(amp,t+.022);
+     g.gain.setValueAtTime(amp,t+dur*.62);
+     g.gain.exponentialRampToValueAtTime(.0001,t+dur*1.02);
+     o.connect(g); g.connect(bus); o.start(t); o.stop(t+dur+.05);
+    });
+    // 鈴鼓般的短噪音，讓它在吵鬧教室裡穿透
+    const nb=AC.createBuffer(1,Math.ceil(AC.sampleRate*.05),AC.sampleRate);
+    const nd=nb.getChannelData(0);
+    for(let i=0;i<nd.length;i++) nd[i]=(Math.random()*2-1)*(1-i/nd.length);
+    const ns=AC.createBufferSource(); ns.buffer=nb;
+    const hp=AC.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=3200;
+    const ng=AC.createGain(); ng.gain.value=.30;
+    ns.connect(hp); hp.connect(ng); ng.connect(bus); ns.start(t);
+    t+=dur;
+   }
+   t+=U*1.2;
+  }
  }catch(e){}
  if(flash!==false) timeUp();
 }
