@@ -3002,7 +3002,7 @@ const ISL3D = (() => {
   }
 
   /* ---------- 建島 ---------- */
-  function buildIsland(pts) {
+  function buildIsland(pts, idx) {
     const P = pts.trim().split(/\s+/).map(s => s.split(",").map(Number));
     const sh = new V3.Shape();
     P.forEach(([x, y], i) => i ? sh.lineTo(wx(x), wz(y)) : sh.moveTo(wx(x), wz(y)));
@@ -3041,7 +3041,7 @@ const ISL3D = (() => {
       h.scale.y = .30 + rnd() * .26; g.add(h);
     }
     // 小樹
-    for (let k = 0; k < 18; k++) {
+    for (let k = 0; k < 11; k++) {
       const a = rnd() * 6.283, d = 3 + rnd() * 11, t = new V3.Group();
       const tr = new V3.Mesh(new V3.CylinderGeometry(.13, .19, 1.1, 5),
         new V3.MeshLambertMaterial({ color: 0x3B2E1E, flatShading: true }));
@@ -3060,19 +3060,12 @@ const ISL3D = (() => {
       r.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
       r.scale.y = .66; g.add(r);
     }
-    // 小房子（造景）
-    const WALL = [0xBFD9CC, 0xA9C6B8, 0xCFE3D6];
-    for (let k = 0; k < 5; k++) {
-      const a = rnd() * 6.283, d = 5 + rnd() * 9.5, h = 1.5 + rnd() * 1.6;
-      const w = .9 + rnd() * .8, dp = .9 + rnd() * .7, hz = new V3.Group();
-      const bd = new V3.Mesh(new V3.BoxGeometry(w * 2, h, dp * 2),
-        new V3.MeshLambertMaterial({ color: WALL[k % 3], flatShading: true }));
-      bd.position.y = h / 2; hz.add(bd);
-      const rf = new V3.Mesh(new V3.ConeGeometry(Math.max(w, dp) * 1.5, 1.1, 4),
-        new V3.MeshLambertMaterial({ color: 0x8A4A3A, flatShading: true }));
-      rf.position.y = h + .5; rf.rotation.y = Math.PI / 4; hz.add(rf);
-      hz.position.set(cx + Math.cos(a) * d, .45, cz + Math.sin(a) * d);
-      hz.rotation.y = rnd() * 6.283; g.add(hz);
+    {
+      const me0 = S[idx], nb = S[idx + 1] || S[idx - 1];
+      let hd = 0;
+      if (me0 && nb) hd = -Math.atan2(wz(nb.y) - wz(me0.y), wx(nb.x) - wx(me0.x));
+      g.add(buildMRT(me0 ? wx(me0.x) : cx, me0 ? wz(me0.y) : cz,
+                     me0 ? me0.c : "#6FDCA0", rnd, hd));
     }
     // 岸邊木樁（碼頭感）
     for (let k = 0; k < 6; k++) {
@@ -3080,6 +3073,102 @@ const ISL3D = (() => {
       const pl = new V3.Mesh(new V3.CylinderGeometry(.22, .26, 2.6, 6),
         new V3.MeshLambertMaterial({ color: 0x4A3A28, flatShading: true }));
       pl.position.set(cx + Math.cos(a) * d, -1.0, cz + Math.sin(a) * d); g.add(pl);
+    }
+    return g;
+  }
+
+
+  /* ---------- 島上的捷運站（站體＋電梯＋高架＋列車） ---------- */
+  const MLam = (c, flat) => new V3.MeshLambertMaterial({ color: c, flatShading: !!flat });
+  const MBas = (c, o) => new V3.MeshBasicMaterial({ color: c, transparent: o !== undefined, opacity: o === undefined ? 1 : o });
+
+  function buildMRT(cx, cz, colHex, rnd, heading) {
+    const col = new V3.Color(colHex);
+    const g = new V3.Group();
+    g.position.set(cx, .45, cz);
+    g.rotation.y = (heading || 0) + Math.PI / 2;
+    g.scale.setScalar(1.12);
+
+    /* ---- 主站體 ---- */
+    const BW = 6.4, BH = 2.9, BD = 3.6, SX = 5.4;
+    const body = new V3.Mesh(new V3.BoxGeometry(BW, BH, BD), MLam(0xE4EEE9));
+    body.position.set(SX, BH / 2, 0); g.add(body);
+    // 玻璃帶（兩面）
+    [0, 1].forEach(f => {
+      const gl = new V3.Mesh(new V3.PlaneGeometry(BW * .88, 1.05), MBas(0x86E8CC, .92));
+      gl.position.set(SX, 1.75, (f ? 1 : -1) * (BD / 2 + .02));
+      if (!f) gl.rotation.y = Math.PI; g.add(gl);
+    });
+    // 門
+    const dr = new V3.Mesh(new V3.PlaneGeometry(1.5, 1.5), MBas(0x1E5C4A));
+    dr.position.set(SX, .78, BD / 2 + .03); g.add(dr);
+    // 弧形屋頂
+    const roof = new V3.Mesh(
+      new V3.CylinderGeometry(BD * .60, BD * .60, BW * 1.03, 18, 1, false, 0, Math.PI),
+      MLam(col.clone().lerp(new V3.Color(0xFFFFFF), .18)));
+    roof.rotation.z = Math.PI / 2; roof.position.set(SX, BH, 0); g.add(roof);
+    // 站名牌
+    const sign = new V3.Mesh(new V3.BoxGeometry(3.0, .62, .14), MBas(col));
+    sign.position.set(SX, BH + .5, BD / 2 - .1); g.add(sign);
+
+    /* ---- 出入口雨棚 ---- */
+    const ent = new V3.Group(); ent.position.set(SX - 5.3, 0, 1.2);
+    const cano = new V3.Mesh(new V3.BoxGeometry(3.0, .22, 2.4), MLam(col));
+    cano.position.y = 2.5; ent.add(cano);
+    [[-1.3, -1.0], [1.3, -1.0], [-1.3, 1.0], [1.3, 1.0]].forEach(([px, pz]) => {
+      const po = new V3.Mesh(new V3.CylinderGeometry(.11, .11, 2.5, 6), MLam(0xC8DAD2));
+      po.position.set(px, 1.25, pz); ent.add(po);
+    });
+    const step = new V3.Mesh(new V3.BoxGeometry(2.4, .3, 1.6), MLam(0xBCCEC6));
+    step.position.set(0, .15, 0); ent.add(step);
+    g.add(ent);
+
+    /* ---- 無障礙電梯（玻璃塔）---- */
+    const lf = new V3.Group(); lf.position.set(SX - 2.4, 0, -2.6);
+    const sh = new V3.Mesh(new V3.BoxGeometry(1.5, 4.4, 1.5), MBas(0x9FF0D4, .34));
+    sh.position.y = 2.2; lf.add(sh);
+    const fr = new V3.Mesh(new V3.BoxGeometry(1.62, .16, 1.62), MLam(0xD8E8E1));
+    fr.position.y = 4.4; lf.add(fr);
+    const car = new V3.Mesh(new V3.BoxGeometry(1.1, 1.2, 1.1), MBas(0xEAFBF2, .85));
+    car.position.y = 1.1 + rnd() * 2.0; lf.add(car);
+    g.add(lf);
+
+    /* ---- 高架橋＋列車 ---- */
+    const vy = 5.6, VL = 16.5;
+    const beam = new V3.Mesh(new V3.BoxGeometry(VL, .7, 2.3), MLam(0xB9CDC5));
+    beam.position.set(0, vy, -4.4); g.add(beam);
+    const rail = new V3.Mesh(new V3.BoxGeometry(VL, .12, 2.0), MBas(0x55776D));
+    rail.position.set(0, vy + .46, -4.4); g.add(rail);
+    [-6.6, 0, 6.6].forEach(px => {
+      const pr = new V3.Mesh(new V3.CylinderGeometry(.46, .60, vy - .4, 8), MLam(0xA9BEB6));
+      pr.position.set(px, (vy - .4) / 2, -4.4); g.add(pr);
+    });
+    const tr = new V3.Group(); tr.position.set(-2 + rnd() * 4, vy + 1.35, -4.4);
+    for (let c = 0; c < 3; c++) {
+      const cc = new V3.Mesh(new V3.BoxGeometry(3.3, 1.5, 1.8), MLam(0xF2F7F5));
+      cc.position.x = (c - 1) * 3.6; tr.add(cc);
+      const bandA = new V3.Mesh(new V3.BoxGeometry(3.34, .34, 1.84), MBas(col));
+      bandA.position.set((c - 1) * 3.6, -.34, 0); tr.add(bandA);
+      [-1, 1].forEach(sd => {
+        const w = new V3.Mesh(new V3.PlaneGeometry(2.5, .52), MBas(0x2A4A52));
+        w.position.set((c - 1) * 3.6, .22, sd * .92);
+        if (sd < 0) w.rotation.y = Math.PI; tr.add(w);
+      });
+    }
+    g.add(tr);
+
+    /* ---- 月台雨棚 ---- */
+    const pl = new V3.Mesh(new V3.BoxGeometry(8.0, .2, 1.8), MLam(0xCBDCD4));
+    pl.position.set(0, vy - 1.1, -4.4); g.add(pl);
+
+    /* ---- 低矮街廓（兩三棟，不搶戲）---- */
+    for (let k = 0; k < 3; k++) {
+      const a = 2.2 + rnd() * 1.6, h = 1.4 + rnd() * 1.8;
+      const bd = new V3.Mesh(new V3.BoxGeometry(a, h, a * .8), MLam(0xAFC6BD));
+      bd.position.set(-6 - rnd() * 4, h / 2, 3 + rnd() * 5);
+      bd.rotation.y = rnd() * 6.283; g.add(bd);
+      const tp = new V3.Mesh(new V3.BoxGeometry(a * 1.04, .18, a * .84), MLam(0x8FA9A0));
+      tp.position.copy(bd.position); tp.position.y = h + .09; tp.rotation.y = bd.rotation.y; g.add(tp);
     }
     return g;
   }
@@ -3170,7 +3259,7 @@ const ISL3D = (() => {
     const dl2 = new V3.DirectionalLight(0x3F8FB8, .35);
     dl2.position.set(-50, 24, -40); scn.add(dl2);
 
-    ISLES.forEach(p => scn.add(buildIsland(p)));
+    ISLES.forEach((p, i) => scn.add(buildIsland(p, i)));
     scn.add(buildRoutes());
     stnG = S.map((s, i) => { const g = buildStation(s, i); scn.add(g); return g });
     pawnG = S.map(() => { const g = new V3.Group(); scn.add(g); return g });
@@ -3362,7 +3451,7 @@ const ISL3D = (() => {
     ren.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
   }
   addEventListener("resize", () => resize());
-  return { mount, sync, resize, home, available: () => { try { return init() } catch (e) { return false } } };
+  return { mount, sync, resize, home, focus: i => flyTo(i, () => { if (window.onIslandPick) window.onIslandPick(i) }), available: () => { try { return init() } catch (e) { return false } } };
 })();
 window.ISL3D = ISL3D;
 if (window.on3DReady) window.on3DReady();
