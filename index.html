@@ -938,6 +938,59 @@ body.stn .nav button#qhb[hidden]{display:none}
 .restbox .rc.me{background:#3A3008;border-color:#C9A227;color:#FFD47A;font-weight:900}
 .restbox .rme{margin-top:9px;font-size:12.5px;color:#8FB3A5;font-weight:700}
 .restbox .rme b{color:#FFD47A;font-size:15px}
+
+/* 圖不可以凸出格子（凸出去就會露在遮罩外面） */
+.sg{min-width:0}
+.sg .sy{min-width:0;overflow:hidden}
+.sg .sy .ic{max-width:100%;display:block;margin-left:auto;margin-right:auto}
+.sg .sy .ic img{max-width:100%;height:auto;object-fit:contain;display:block;margin:0 auto}
+.sg .sy .ic svg{max-width:100%;height:auto}
+/* 遮罩一定要以題目區為基準，而且要蓋得比內容大 */
+.mis .qwrap{position:relative}
+.mis .qveil,.mis.railed .qveil{inset:-10px;z-index:40}
+/* 題目鎖住時，內容整個不畫出來，不可能漏出任何一張圖 */
+.qwrap.veiled{min-height:min(48vh,420px);position:relative}
+.qwrap.veiled .qveil{position:absolute;inset:0;border-radius:20px}
+
+/* ===== 點島之後跳出來的資訊卡 ===== */
+#ipanel{position:absolute;inset:0;pointer-events:none;z-index:30;
+ display:flex;align-items:center;justify-content:flex-end;padding:18px}
+#ipanel:not(.on){display:none}
+.ipc{pointer-events:auto;width:min(340px,42%);background:#0C1F1Aef;
+ border:2px solid var(--ic,#6FDCA0);border-radius:20px;padding:18px 20px 16px;
+ backdrop-filter:blur(10px);box-shadow:0 18px 50px #0009;position:relative;
+ animation:ipin .22s ease-out}
+@keyframes ipin{from{opacity:0;transform:translateX(14px) scale(.97)}to{opacity:1;transform:none}}
+.ipx{position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;
+ border:1px solid #2A5B4C;background:#102A23;color:#9BB7AC;font-size:14px;cursor:pointer}
+.ipx:hover{background:#17352B;color:#CFEBDD}
+.ip-no{font-family:var(--fm);font-size:clamp(28px,3vw,42px);font-weight:800;
+ color:var(--ic,#6FDCA0);line-height:1}
+.ip-nm{font-size:clamp(21px,2.3vw,30px);font-weight:800;color:#EAF6F0;margin-top:2px}
+.ip-sub{font-size:clamp(12px,1.25vw,15px);color:#8FB3A5;margin-top:2px}
+.ip-st{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;
+ font-size:clamp(11.5px,1.2vw,14px);font-weight:800}
+.ip-st.done{background:#17402F;color:#8FE0B4;border:1px solid #4E9C76}
+.ip-st.now{background:#3A3008;color:#FFD47A;border:1px solid #8A7430}
+.ip-st.lock{background:#1A1A1A;color:#7B8B85;border:1px solid #333}
+.ip-lb{margin-top:15px;font-size:clamp(11.5px,1.2vw,14px);color:#8FB3A5;font-weight:800;
+ letter-spacing:.04em}
+.ip-lb b{color:#EAF6F0;font-size:1.25em}
+.ip-cs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ip-c{padding:5px 11px;border-radius:9px;background:#102A23;border:1px solid #2A5B4C;
+ color:#BFE0CE;font-family:var(--fm);font-weight:800;font-size:clamp(13px,1.4vw,17px)}
+.ip-c.me{background:#F2C14E;border-color:#F2C14E;color:#1A1405}
+.ip-non{font-size:13px;color:#6E8F82}
+.ip-me{margin-top:10px;font-size:clamp(12px,1.25vw,15px);color:#F2C14E;font-weight:800}
+.ip-btn{display:flex;gap:8px;margin-top:16px}
+.ip-btn button{flex:1;padding:11px 8px;border-radius:12px;font-family:var(--ff);
+ font-weight:900;font-size:clamp(13px,1.35vw,16px);cursor:pointer;border:1px solid #2A5B4C;
+ background:#102A23;color:#9BB7AC}
+.ip-btn .ip-go{flex:1.5;background:#6FDCA0;border-color:#6FDCA0;color:#07241A}
+.ip-btn .ip-go:hover{background:#8FE8B8}
+.ip-btn .ip-go.off{background:#1A1A1A;border-color:#333;color:#6B6B6B;cursor:not-allowed}
+.ip-btn .ip-back:hover{background:#17352B;color:#CFEBDD}
+@media(max-width:900px){.ipc{width:min(340px,86%)}#ipanel{justify-content:center}}
 </style>
 </head>
 <body>
@@ -1190,22 +1243,29 @@ function mapSVG(){
 /* ===== 地圖畫面 ===== */
 function board(){
  const rows=CLASSES.map(c=>({c,...CL[c]})).sort((a,b)=>score(b)-score(a)||b.st-a.st||b.p-a.p||a.c.localeCompare(b.c));
- const top=rows.slice(0,5), rest=rows.slice(5);
- const myi=rows.findIndex(r=>r.c===cur);
+ const scored=rows.filter(r=>score(r)>0);            // 還沒得分的不進前五名
+ const top=scored.slice(0,5);
+ const rest=rows.filter(r=>!top.includes(r));
+ // 同分同名次
+ let pos=[], last=null, n=0;
+ top.forEach((r,i)=>{const v=score(r); if(v!==last){n=i+1;last=v} pos.push(n)});
+ const myi=top.findIndex(r=>r.c===cur);
+ const myAll=rows.findIndex(r=>r.c===cur);
  return `<div class="card">
   <div class="lbl" style="margin-bottom:10px">班級榜 ・ 前五名</div>
-  <div class="rank">${top.map((r,i)=>`<div class="rk top${i+1} ${r.c===cur?"me":""}">
-   <span class="pos">${i+1}</span>
+  ${top.length?`<div class="rank">${top.map((r,i)=>`<div class="rk top${pos[i]} ${r.c===cur?"me":""}">
+   <span class="pos">${pos[i]}</span>
    <span class="cn">${r.c}</span>
    <span class="pb"><i style="width:${r.p/6*100}%"></i></span>
    <span class="pp mono">${r.p}/6</span>
-   <span class="sc mono">${score(r)}</span></div>`).join("")}</div>
+   <span class="sc mono">${score(r)}</span></div>`).join("")}</div>`
+  :`<div class="restbox" style="margin-top:0"><div class="rl">還沒有班級得分</div></div>`}
   ${rest.length?`<div class="restbox">
-   <div class="rl">其他 ${rest.length} 班　・　還在路上</div>
+   <div class="rl">其他 ${rest.length} 班</div>
    <div class="rcs">${rest.map(r=>`<span class="rc${r.c===cur?" me":""}">${r.c}</span>`).join("")}</div>
-   ${myi>=5?`<div class="rme">本班 ${cur} 目前第 <b>${myi+1}</b> 名</div>`:""}
+   ${myi<0?`<div class="rme">本班 ${cur} 還沒進前五名${score()>0?`（目前第 ${myAll+1} 名）`:""}</div>`:""}
   </div>`:""}
-  <div class="rkfoot"><span>依<b>班級積分</b>排序</span><span class="sp"></span><span>進度 ・ 積分</span></div>
+  <div class="rkfoot"><span>依<b>班級積分</b>排序　・　同分同名次</span><span class="sp"></span><span>進度 ・ 積分</span></div>
  </div>`}
 function mapView(){
  return `<div class="wrap shell">
@@ -1270,13 +1330,13 @@ function mapView(){
    </div>
    ${board()}
   </aside>
-  <div class="mapbox">${use3d?`<div id="scene3d"></div>`:mapSVG()}
+  <div class="mapbox">${use3d?`<div id="scene3d"></div><div id="ipanel"></div>`:mapSVG()}
    <div class="mapfoot">
     <span class="lgd"><i style="background:#F2C14E"></i>${cur}（本班）</span>
     <span class="lgd"><i style="background:#7FD9B4"></i>其他班</span>
     <span class="lgd"><i style="background:#44645B"></i>未開放</span>
     <span class="sp"></span>
-    ${use3d?`<span class="hint3d">拖曳轉動 ・ 滾輪縮放 ・ 點站進關卡</span>
+    ${use3d?`<span class="hint3d">拖曳轉動 ・ 滾輪縮放 ・ <b>點一下島看誰在那裡</b></span>
       <button class="v3" id="vhome">回到全島</button>`:`<span>小人站的位置＝那一班的下一站</span>`}
     <button class="v3" id="v3d">${use3d?"平面地圖":"3D 島"}</button>
    </div></div>
@@ -1371,6 +1431,40 @@ function gradeRow() {
    <div class="gnote">按幾下就加幾分，一關通常 1～3 分。<b>寫得快沒有加分</b>，想得深才有。
     拍照每一站每組一次 ＋1，只拍筆記本，不要拍到臉、姓名或座號。</div></div>`;
 }
+
+/* ===== 點島 → 放大並顯示哪幾班在這一站 ===== */
+let picked=null;
+function atStation(i){ return CLASSES.filter(c=>spotOf(CL[c])===i) }
+function islandPanel(){
+ const el=document.getElementById("ipanel"); if(!el)return;
+ if(picked==null){ el.innerHTML=""; el.classList.remove("on"); return }
+ const i=picked, s=S[i], here=atStation(i), mine=spotOf(me())===i;
+ const open=i<unlockedN(), done=i===0?(me().h>0):(i<=lit());
+ const st=`<span class="ip-st ${done?"done":open?"now":"lock"}">${
+   done?"已點亮":open?"現在這一站":"還沒開放"}</span>`;
+ el.innerHTML=`<div class="ipc" style="--ic:${s.c}">
+  <button class="ipx" id="ipx">✕</button>
+  <div class="ip-no">${String(i).padStart(2,"0")}</div>
+  <div class="ip-nm">${esc(s.t)}</div>
+  <div class="ip-sub">${esc(s.n||"")}</div>
+  ${st}
+  <div class="ip-lb">現在在這一站的班級　<b>${here.length}</b> 班</div>
+  <div class="ip-cs">${here.length?here.map(c=>
+    `<span class="ip-c${c===cur?" me":""}">${c}</span>`).join(""):
+    `<span class="ip-non">目前沒有班級在這一站</span>`}</div>
+  ${mine?`<div class="ip-me">本班 ${cur} 就在這裡</div>`:""}
+  <div class="ip-btn">
+   <button class="ip-back" id="ipb">返回全島</button>
+   ${open?`<button class="ip-go" id="ipg">進入這一站 →</button>`
+         :`<button class="ip-go off" disabled>先把前一站點亮</button>`}
+  </div></div>`;
+ el.classList.add("on");
+ const x=document.getElementById("ipx"), b=document.getElementById("ipb"), g=document.getElementById("ipg");
+ const close=()=>{picked=null;islandPanel();window.ISL3D&&ISL3D.home()};
+ if(x)x.onclick=close; if(b)b.onclick=close;
+ if(g)g.onclick=()=>{const t=picked;picked=null;goStation(t)};
+}
+window.onIslandPick=i=>{ picked=i; islandPanel() };
 
 /* ===== 前傳 ===== */
 const PRE=[
@@ -2487,7 +2581,8 @@ function render(){
    if(el&&window.ISL3D){ if(ISL3D.mount(el)){ISL3D.sync()} else {use3d=false;render();return} }
   }
   const tg=$("#v3d"); if(tg)tg.onclick=()=>{use3d=!use3d;render()};
-  const hm=$("#vhome"); if(hm)hm.onclick=()=>{window.ISL3D&&ISL3D.home()};
+  const hm=$("#vhome"); if(hm)hm.onclick=()=>{picked=null;islandPanel();window.ISL3D&&ISL3D.home()};
+  islandPanel();
  }else{
   const P=pages(),last=li>=P.length,s=S[si];
   const canveil=!last&&(si===0?(li===1||li===2||li===3||li===5):true);
@@ -2506,7 +2601,7 @@ function render(){
    <span class="mbadge" style="color:${s.c};border-color:${s.c}66;background:${s.c}14">${String(si).padStart(2,"0")}</span>
    <span class="tt"><h1>${esc(hd.n)}</h1><span class="sub">${esc(s.t)}　・　${esc(hd.tip)}</span></span></div>
    ${strip()}${pbar}
-   <div class="qwrap">${body}${veil?`<div class="qveil"><div class="qvi">
+   <div class="qwrap${veil?" veiled":""}">${veil?"":body}${veil?`<div class="qveil"><div class="qvi">
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="3"
      stroke="#6FDCA0" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#6FDCA0" stroke-width="2"/></svg>
     <b>題目鎖住了</b><span>各組都拿到信封、準備好了，按一下打開</span>
@@ -3105,7 +3200,7 @@ const ISL3D = (() => {
   function clickAt(e) {
     const i = hitIndex(e);
     if (i < 0 || i >= unlockedN()) return;
-    flyTo(i, () => { if (window.goStation) window.goStation(i) });
+    flyTo(i, () => { if (window.onIslandPick) window.onIslandPick(i); });
   }
   function flyTo(i, done) {
     const s = S[i];
