@@ -1129,6 +1129,19 @@ body.stn .nav button#qhb[hidden]{display:none}
 .tpgr2 .tgc:disabled{opacity:.5;cursor:wait}
 .tpgr .tgm{flex:0 0 46px}
 .tpgr .tg5{flex:0 0 50px;font-size:13px}
+
+/* 停止鈴聲：響的時候浮在畫面正上方，按一下就停 */
+#bellstop{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:300;
+ font-family:var(--ff);font-weight:900;font-size:clamp(17px,2vw,26px);
+ padding:14px 34px;border-radius:999px;cursor:pointer;
+ border:2px solid #F2C14E;background:#3B2C0C;color:#FFE6AE;
+ box-shadow:0 10px 34px #000A0899,0 0 0 6px #F2C14E1F;
+ animation:bellpulse .62s ease-in-out infinite alternate}
+#bellstop:hover{background:#4D3A10}
+#bellstop[hidden]{display:none}
+@keyframes bellpulse{from{box-shadow:0 10px 34px #000A0899,0 0 0 4px #F2C14E1A}
+ to{box-shadow:0 10px 34px #000A0899,0 0 0 13px #F2C14E00}}
+@media(max-width:1180px){#bellstop{font-size:17px;padding:12px 24px;top:10px}}
 </style>
 </head>
 <body>
@@ -1155,6 +1168,7 @@ body.stn .nav button#qhb[hidden]{display:none}
  <div class="pair"><button id="qhb" hidden>⌃ 收起</button><button id="prev">←</button><button id="home">回地圖</button></div>
  <button class="pri" id="next">下一關 →</button>
 </div>
+<button id="bellstop" hidden>🔔 停止鈴聲</button>
 <main id="app"></main>
 <div class="wrap"><div class="foot">
  新北市永平國民小學 ・ 六年級彈性學習課程（校訂）　・　課程設計 Tenny<br>
@@ -1561,7 +1575,7 @@ function clearPAW(cls) {
 function gradeRow() {
   const shots = Array.from({ length: NG }, (_, i) => shotDone(i + 1)).filter(Boolean).length;
   return `<div class="card grade"><div class="glbl">各組加分
-   <span class="gh">答對 ＋1　・　有寫理由 ＋1　・　講出別組沒講到的 ＋1</span>
+   <span class="gh">每一關 ＋5　・　有一小題寫錯 −1　・　最多扣到 0</span>
    <span class="gdone">照片 ${shots}/${NG}</span></div>
   <div class="ggrid">${Array.from({ length: NG }, (_, i) => {
     const g = i + 1;
@@ -1625,7 +1639,7 @@ function candList(){
  return `<div class="cand">${shufBy(CAND.slice(),"c"+setI).map(t=>
   `<span class="cd">${esc(t)}</span>`).join("")}</div>`}
 function revBox(h){return rev?`<div class="rev big"><div class="lab">答案</div>
- <div class="v">${h}</div></div><div class="ghint">答對 ＋1　・　有寫理由 ＋1　・　講出別組沒講到的 ＋1</div>`:""}
+ <div class="v">${h}</div></div><div class="ghint">每一關 ＋5　・　有一小題寫錯 −1　・　最多扣到 0</div>`:""}
 const LT=[["懷孕七個月的媽媽","那天我從 3 號出口出站，走了 48 階，中間停下來喘了三次。"],
  ["坐輪椅的大哥哥","到站之後我還要沿著月台推到最尾端，才找得到能上去的地方。"],
  ["七十八歲的阿公","站裡的字我看很久還是不知道往哪走。我問了人，他講得很快就去忙了。那天我沒去成醫院。"],
@@ -1676,7 +1690,7 @@ function pre(k){
   <div class="sg big huge${rev?" named":""}">${SYM.map((x,i)=>
    `<div class="sy"><div class="ic">${x[0]}</div><div class="nm">${"ABCDEF"[i]}</div>${rev
      ?`<div class="wn">${esc(x[1])}</div>`:""}</div>`).join("")}</div>
-  ${rev?`<div class="ghint">答對 ＋1　・　有寫理由 ＋1　・　講出別組沒講到的 ＋1　　<b style="color:#8FE0B4">卡住最多人的是 B 無障礙電梯</b></div>`:""}
+  ${rev?`<div class="ghint">每一關 ＋5　・　有一小題寫錯 −1　・　最多扣到 0　　<b style="color:#8FE0B4">卡住最多人的是 B 無障礙電梯</b></div>`:""}
   ${hstamp(2)}`;
  if(k===3)return `
   ${prop("看螢幕","警告標誌　八個","剛剛那六個說「這裡有什麼」，這八個說「不可以做什麼」。這一關不用拿卡片。")}
@@ -1693,7 +1707,7 @@ function pre(k){
   <div class="eyebrow" style="margin-top:18px">分數怎麼算</div>
   <div class="clues" style="margin-top:11px">
    <div class="clue"><span class="k" style="color:#6FDCA0">＋1</span><span class="v"><b>答案對</b></span></div>
-   <div class="clue"><span class="k" style="color:#6FDCA0">＋1</span><span class="v"><b>筆記本上寫出理由</b>，不是只抄答案</span></div>
+   <div class="clue"><span class="k" style="color:#6FDCA0">＋5</span><span class="v"><b>每一關 ＋5</b>，有一小題寫錯 −1</span></div>
    <div class="clue"><span class="k" style="color:#6FDCA0">＋1</span><span class="v"><b>講出別組沒想到的</b></span></div>
    <div class="clue"><span class="k" style="color:#5FA8E8">◉</span><span class="v">每一站拍一次筆記本 ＋1</span></div></div>
   <div class="ask" style="margin-top:13px">一關通常 1～3 分。<b>寫得快沒有加分</b>，想得深才有。</div></div>
@@ -2929,16 +2943,14 @@ function gscore(){
   <div class="rtot"><span>各組 ${gsum()} ＋ 獎勵 ${me().b||0}</span><b>${score()} 分</b></div>
   <div class="rsp"></div></div>`}
 function tp(){
- $("#tpb").innerHTML=`<div class="tpg"><div class="tpglb">各組加分　・　可以直接點數字改　・　答對 ＋1　・　寫出理由 ＋1　・　講出別組沒講到的 ＋1</div>
+ $("#tpb").innerHTML=`<div class="tpg"><div class="tpglb">各組加分　・　每一關 ＋5　・　有一小題寫錯 −1　・　最多扣到 0　・　也可以直接點數字改</div>
  <div class="tpgrid">${Array.from({length:NG},(_,k)=>{
   const g=k+1, busy=PHbusy[si+"-"+g], done=shotDone(g);
   return `<div class="tpgb"><div class="tpgn">第 ${g} 組
     <input class="tgi" type="number" inputmode="numeric" min="0" max="999"
      data-gi="${k}" value="${me().g[k]}"></div>
    <div class="tpgr"><button class="tgm" data-gm="${k}">−1</button>
-    <button class="tgp" data-gp="${k}">＋1</button>
-    <button class="tg5" data-g5="${k}">＋5</button>
-    <button class="tg5" data-g10="${k}">＋10</button></div>
+    <button class="tgp" data-g5="${k}">＋5</button></div>
    <div class="tpgr2"><button class="tgc${done?" on":""}" data-shot="${si}|${g}" ${busy?"disabled":""}
      >${busy?"上傳中…":done?"✓ 已拍":"◉ 拍筆記本"}</button></div></div>`}).join("")}</div>
  <div class="tptot">本班 <b>${score()}</b> 分　（各組 ${gsum()} ＋ 獎勵 ${me().b||0}）</div></div>
@@ -3037,7 +3049,7 @@ function tp(){
   d.querySelector("#myes").onclick=()=>{d.remove();fn();save();view="map";stop();render()};
   d.onclick=e=>{if(e.target===d)d.remove()};
  };
- const bt=$("#btest"); if(bt)bt.onclick=()=>beep(false);
+ const bt=$("#btest"); if(bt)bt.onclick=()=>{ if(BELL){stopBell()} else beep(false) };
  document.querySelectorAll("[data-vol]").forEach(b=>{
   b.classList.toggle("on", +b.dataset.vol===VOL);
   b.onclick=()=>{setVol(+b.dataset.vol); beep(false); tp()}});
@@ -3094,7 +3106,21 @@ function tone(t, f, dur, vol, dest) {
 const VOLS={1:1.6,2:3.4,3:6.5};
 let VOL=3; try{VOL=+(localStorage.getItem("mrtisland_vol")||3)||3}catch(e){}
 function setVol(v){VOL=v;try{localStorage.setItem("mrtisland_vol",String(v))}catch(e){}}
+let BELL=null;
+function bellBtn(on){const b=$("#bellstop"); if(b)b.hidden=!on}
+function stopBell(){
+ if(!BELL)return;
+ const B=BELL; BELL=null; bellBtn(false); clearTimeout(B.tm);
+ try{
+  const n=AC.currentTime;
+  B.bus.gain.cancelScheduledValues(n);
+  B.bus.gain.setValueAtTime(Math.max(.0001,B.bus.gain.value),n);
+  B.bus.gain.exponentialRampToValueAtTime(.0001,n+.07);
+  B.src.forEach(o=>{try{o.stop(n+.09)}catch(e){}});
+ }catch(e){}
+}
 function beep(flash){
+ stopBell();
  try{
   AC=AC||new (window.AudioContext||window.webkitAudioContext)();
   if(AC.state==="suspended")AC.resume();
@@ -3118,6 +3144,7 @@ function beep(flash){
    sat.curve=c; sat.oversample="4x"}
   mk.connect(sat); sat.connect(AC.destination);
   const bus=AC.createGain(); bus.gain.value=vol; bus.connect(lim);
+  const SRC=[];
   let t=t0;
   for(let rep=0; rep<2; rep++){
    for(const [f,len] of M){
@@ -3129,7 +3156,7 @@ function beep(flash){
      g.gain.exponentialRampToValueAtTime(amp,t+.022);
      g.gain.setValueAtTime(amp,t+dur*.62);
      g.gain.exponentialRampToValueAtTime(.0001,t+dur*1.02);
-     o.connect(g); g.connect(bus); o.start(t); o.stop(t+dur+.05);
+     o.connect(g); g.connect(bus); o.start(t); o.stop(t+dur+.05); SRC.push(o);
     });
     // 鈴鼓般的短噪音，讓它在吵鬧教室裡穿透
     const nb=AC.createBuffer(1,Math.ceil(AC.sampleRate*.05),AC.sampleRate);
@@ -3138,11 +3165,14 @@ function beep(flash){
     const ns=AC.createBufferSource(); ns.buffer=nb;
     const hp=AC.createBiquadFilter(); hp.type="highpass"; hp.frequency.value=3200;
     const ng=AC.createGain(); ng.gain.value=.30;
-    ns.connect(hp); hp.connect(ng); ng.connect(bus); ns.start(t);
+    ns.connect(hp); hp.connect(ng); ng.connect(bus); ns.start(t); SRC.push(ns);
     t+=dur;
    }
    t+=U*1.2;
   }
+  const ms=Math.max(500,(t-AC.currentTime)*1000+300);
+  BELL={bus,src:SRC,tm:setTimeout(()=>{BELL=null;bellBtn(false)},ms)};
+  bellBtn(true);
  }catch(e){}
  if(flash!==false) timeUp();
 }
@@ -3170,6 +3200,9 @@ function bindTimer(){
   paint();});
 }
 bindTimer();
+$("#bellstop").onclick=e=>{e.stopPropagation();stopBell()};
+addEventListener("pointerdown",()=>{if(BELL)stopBell()},true);
+addEventListener("keydown",()=>{if(BELL)stopBell()},true);
 $("#prev").onclick=()=>page(li-1);
 
 function giveStamp(){
@@ -3208,7 +3241,7 @@ const ISL3D = (() => {
   let ren, scn, cam, ray, host = null, raf = 0, ok = false;
   let stnG = [], pawnG = [], lampMat = [], glowS = [], ringM = [];
   let pick = [], hovered = -1, flying = null, idle = 0;
-  const HOME = { r: 166, th: -0.52, ph: 0.66, x: -6, y: 0, z: 2 };
+  const HOME = { r: 164, th: -0.52, ph: 0.66, x: -3, y: 0, z: 9 };
   const sph = { r: HOME.r, th: HOME.th, ph: HOME.ph };
   const tgt = new V3.Vector3(HOME.x, HOME.y, HOME.z);
   const want = { r: HOME.r, th: HOME.th, ph: HOME.ph, tx: HOME.x, ty: HOME.y, tz: HOME.z };
@@ -3260,26 +3293,55 @@ const ISL3D = (() => {
     const sh = new V3.Shape();
     P.forEach(([x, y], i) => i ? sh.lineTo(wx(x), wz(y)) : sh.moveTo(wx(x), wz(y)));
     sh.closePath();
-    const geo = new V3.ExtrudeGeometry(sh, {
-      depth: DEP, bevelEnabled: true, bevelThickness: .5, bevelSize: .55, bevelSegments: 2
+    const g = new V3.Group();
+    // 島的中心（往內縮用）
+    let ccx = 0, ccz = 0;
+    P.forEach(([x, y]) => { ccx += wx(x); ccz += wz(y) });
+    ccx /= P.length; ccz /= P.length;
+    const shapeOf = k => {
+      const h = new V3.Shape();
+      P.forEach(([x, y], i) => {
+        const X = ccx + (wx(x) - ccx) * k, Z = ccz + (wz(y) - ccz) * k;
+        i ? h.lineTo(X, Z) : h.moveTo(X, Z);
+      });
+      h.closePath(); return h;
+    };
+    // 由上而下三層：草皮 → 淺岩 → 深岩，一層比一層小，做出階梯狀斷崖
+    const LAYERS = [
+      { k: 1.000, d: 1.9, top: 0x3F7A4E, side: 0x2F5C3B, y: 0 },
+      { k: 0.978, d: 3.4, top: 0x6E6A5C, side: 0x5B584C, y: 1.9 },
+      { k: 0.930, d: 5.2, top: 0x4A4840, side: 0x3A3833, y: 5.3 }
+    ];
+    LAYERS.forEach(L => {
+      const gm = new V3.ExtrudeGeometry(shapeOf(L.k), {
+        depth: L.d, bevelEnabled: true, bevelThickness: .34, bevelSize: .38, bevelSegments: 1
+      });
+      gm.computeVertexNormals();
+      const mm = new V3.Mesh(gm, [
+        new V3.MeshLambertMaterial({ color: L.top, flatShading: true }),
+        new V3.MeshLambertMaterial({ color: L.side, flatShading: true })]);
+      mm.rotation.x = Math.PI / 2; mm.position.y = -L.y;
+      g.add(mm);
     });
-    geo.computeVertexNormals();
-    const cap = new V3.MeshLambertMaterial({ color: 0x174431, flatShading: true });
-    const wall = new V3.MeshLambertMaterial({ color: 0x0A211A, flatShading: true });
-    const m = new V3.Mesh(geo, [cap, wall]);
-    m.rotation.x = Math.PI / 2;
-    const g = new V3.Group(); g.add(m);
 
     // 頂面輪廓光
     const lp = P.map(([x, y]) => new V3.Vector3(wx(x), .57, wz(y)));
     lp.push(lp[0].clone());
     g.add(new V3.Line(new V3.BufferGeometry().setFromPoints(lp),
-      new V3.LineBasicMaterial({ color: 0x7FEAB0, transparent: true, opacity: .95 })));
+      new V3.LineBasicMaterial({ color: 0x8FD9A0, transparent: true, opacity: .55 })));
     // 水線
-    const lp2 = P.map(([x, y]) => new V3.Vector3(wx(x) * 1.004, -DEP - .7, wz(y) * 1.004));
-    lp2.push(lp2[0].clone());
-    g.add(new V3.Line(new V3.BufferGeometry().setFromPoints(lp2),
-      new V3.LineBasicMaterial({ color: 0x1D5A48, transparent: true, opacity: .5 })));
+    {   // 浪花：沿著島緣外擴一圈淡色環
+      const sf = new V3.Shape();
+      P.forEach(([x, y], i) => {
+        const X = ccx + (wx(x) - ccx) * 1.085, Z = ccz + (wz(y) - ccz) * 1.085;
+        i ? sf.lineTo(X, Z) : sf.moveTo(X, Z);
+      });
+      sf.closePath();
+      const foam = new V3.Mesh(new V3.ShapeGeometry(sf),
+        new V3.MeshBasicMaterial({ color: 0x4E7FA8, transparent: true, opacity: .20,
+          side: V3.DoubleSide, depthWrite: false }));
+      foam.rotation.x = Math.PI / 2; foam.position.y = -10.2; g.add(foam);
+    }
 
     // 地表起伏
     let cx = 0, cz = 0; P.forEach(([x, y]) => { cx += wx(x); cz += wz(y) });
@@ -3289,7 +3351,7 @@ const ISL3D = (() => {
       const a = rnd() * 6.283, d = 2 + rnd() * 9;
       const h = new V3.Mesh(
         new V3.SphereGeometry(2.1 + rnd() * 3.4, 7, 5),
-        new V3.MeshLambertMaterial({ color: 0x24664A, flatShading: true }));
+        new V3.MeshLambertMaterial({ color: 0x47855A, flatShading: true }));
       h.position.set(cx + Math.cos(a) * d, .1 - rnd() * .6, cz + Math.sin(a) * d);
       h.scale.y = .30 + rnd() * .26; g.add(h);
     }
@@ -3300,7 +3362,7 @@ const ISL3D = (() => {
         new V3.MeshLambertMaterial({ color: 0x3B2E1E, flatShading: true }));
       tr.position.y = .55; t.add(tr);
       const cn = new V3.Mesh(new V3.ConeGeometry(.78, 2.1, 6),
-        new V3.MeshLambertMaterial({ color: 0x2F7A52, flatShading: true }));
+        new V3.MeshLambertMaterial({ color: 0x3E9A62, flatShading: true }));
       cn.position.y = 2; t.add(cn);
       t.position.set(cx + Math.cos(a) * d, .5, cz + Math.sin(a) * d);
       t.scale.setScalar(.7 + rnd() * .6); g.add(t);
@@ -3308,7 +3370,7 @@ const ISL3D = (() => {
     for (let k = 0; k < 9; k++) {
       const a = rnd() * 6.283, d = 4 + rnd() * 11;
       const r = new V3.Mesh(new V3.DodecahedronGeometry(.5 + rnd() * .75, 0),
-        new V3.MeshLambertMaterial({ color: 0x2B4A41, flatShading: true }));
+        new V3.MeshLambertMaterial({ color: 0x6E6A5C, flatShading: true }));
       r.position.set(cx + Math.cos(a) * d, .45, cz + Math.sin(a) * d);
       r.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
       r.scale.y = .66; g.add(r);
@@ -3464,7 +3526,11 @@ const ISL3D = (() => {
     lab.renderOrder = 10; g.add(lab); g.userData.lab = lab;
 
     plat.userData.i = i; lamp.userData.i = i;
-    pick.push(plat, lamp);
+    // 看不見的大範圍點擊區：整座島都點得到
+    const hit = new V3.Mesh(new V3.CylinderGeometry(12.5, 12.5, 24, 14),
+      new V3.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+    hit.position.y = 6; hit.userData.i = i; hit.renderOrder = -1; g.add(hit);
+    pick.push(hit, plat, lamp);
     g.userData.i = i;
     return g;
   }
@@ -3478,12 +3544,14 @@ const ISL3D = (() => {
       const mid = a.clone().add(b).multiplyScalar(.5);
       mid.y += a.distanceTo(b) * .17;
       const cv = new V3.QuadraticBezierCurve3(a, mid, b);
-      const ln = new V3.Line(
-        new V3.BufferGeometry().setFromPoints(cv.getPoints(44)),
-        new V3.LineDashedMaterial({
-          color: 0x3E7A68, dashSize: 1.1, gapSize: 1.1, transparent: true, opacity: .7
-        }));
-      ln.computeLineDistances(); g.add(ln);
+      const n = Math.max(14, Math.round(a.distanceTo(b) / 2.6));
+      const dotG = new V3.SphereGeometry(.42, 8, 6);
+      const dotM = new V3.MeshBasicMaterial({ color: 0xDCEFE6, transparent: true, opacity: .8 });
+      cv.getPoints(n).forEach((p, k) => {
+        if (k % 2) return;
+        const d = new V3.Mesh(dotG, dotM);
+        d.position.copy(p); g.add(d);
+      });
     }
     return g;
   }
@@ -3500,14 +3568,14 @@ const ISL3D = (() => {
     ren.domElement.style.cssText = "width:100%;height:100%;display:block;touch-action:none;cursor:grab";
 
     scn = new V3.Scene();
-    scn.background = new V3.Color(0x050F0D);
-    scn.fog = new V3.Fog(0x050F0D, 190, 380);
+    scn.background = new V3.Color(0x0D2A4A);
+    scn.fog = new V3.Fog(0x0D2A4A, 210, 430);
     cam = new V3.PerspectiveCamera(40, 960 / 560, .5, 600);
     ray = new V3.Raycaster();
 
-    scn.add(new V3.AmbientLight(0x6FDCA0, .34));
-    scn.add(new V3.HemisphereLight(0x8FE8C0, 0x08201A, .62));
-    const dl = new V3.DirectionalLight(0xE8FFF4, 1.05);
+    scn.add(new V3.AmbientLight(0xA9D6FF, .40));
+    scn.add(new V3.HemisphereLight(0xDCF2FF, 0x13253C, .70));
+    const dl = new V3.DirectionalLight(0xFFF6E2, 1.15);
     dl.position.set(42, 78, 34); scn.add(dl);
     const dl2 = new V3.DirectionalLight(0x3F8FB8, .35);
     dl2.position.set(-50, 24, -40); scn.add(dl2);
@@ -3539,7 +3607,7 @@ const ISL3D = (() => {
       } else hoverAt(e);
     });
     const up = e => {
-      if (down && moved < 6) clickAt(e);
+      if (down && moved < 9) clickAt(e);
       down = false; el.style.cursor = hovered >= 0 ? "pointer" : "grab";
     };
     el.addEventListener("pointerup", up);
@@ -3563,11 +3631,11 @@ const ISL3D = (() => {
     const i = hitIndex(e);
     if (i === hovered) return;
     hovered = i;
-    ren.domElement.style.cursor = i >= 0 && i <= unlockedN() - 1 ? "pointer" : "grab";
+    ren.domElement.style.cursor = i >= 0 ? "pointer" : "grab";
   }
   function clickAt(e) {
     const i = hitIndex(e);
-    if (i < 0 || i >= unlockedN()) return;
+    if (i < 0) return;
     flyTo(i, () => { if (window.onIslandPick) window.onIslandPick(i); });
   }
   function flyTo(i, done) {
@@ -3575,7 +3643,7 @@ const ISL3D = (() => {
     flying = {
       t: 0, dur: 620, done,
       fr: { r: sph.r, th: sph.th, ph: sph.ph, x: tgt.x, y: tgt.y, z: tgt.z },
-      to: { r: 34, th: sph.th, ph: .70, x: wx(s.x), y: 2.0, z: wz(s.y) }
+      to: { r: 46, th: sph.th, ph: .74, x: wx(s.x), y: 1.5, z: wz(s.y) }
     };
   }
   function home() {
@@ -3665,7 +3733,12 @@ const ISL3D = (() => {
       sph.r = f.r + (o.r - f.r) * e; sph.th = f.th + (o.th - f.th) * e;
       sph.ph = f.ph + (o.ph - f.ph) * e;
       tgt.set(f.x + (o.x - f.x) * e, f.y + (o.y - f.y) * e, f.z + (o.z - f.z) * e);
-      if (k >= 1) { const d = flying.done; flying = null; home(); d && d() }
+      if (k >= 1) {
+        const d = flying.done, o = flying.to;
+        want.r = o.r; want.th = sph.th; want.ph = o.ph;
+        want.tx = o.x; want.ty = o.y; want.tz = o.z;
+        idle = 0; flying = null; d && d();
+      }
     } else {
       idle += 1;
       if (idle > 260) want.th += .0012;
