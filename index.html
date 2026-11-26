@@ -1142,6 +1142,66 @@ body.stn .nav button#qhb[hidden]{display:none}
 @keyframes bellpulse{from{box-shadow:0 10px 34px #000A0899,0 0 0 4px #F2C14E1A}
  to{box-shadow:0 10px 34px #000A0899,0 0 0 13px #F2C14E00}}
 @media(max-width:1180px){#bellstop{font-size:17px;padding:12px 24px;top:10px}}
+
+/* 01 關卡二：六個符號排成一排，整個放大 */
+.sg.big.six{grid-template-columns:repeat(6,1fr);gap:10px}
+.sg.big.six .sy{padding:14px 4px 11px}
+.sg.big.six .sy .ic{font-size:clamp(50px,6.2vw,104px);margin:2px auto 8px}
+.sg.big.six .sy .nm{font-size:clamp(13px,1.45vw,21px);line-height:1.2}
+.sg.big.six .sy .no{font-size:clamp(34px,4.2vw,66px);margin-top:3px}
+@media(max-width:900px){.sg.big.six{grid-template-columns:repeat(3,1fr)}}
+/* 右欄的線索字放大 */
+.mis.railed .two .clues .clue .v{font-size:clamp(15px,1.72vw,26px);line-height:1.42}
+.mis.railed .two .clues .clue .k{font-size:clamp(14px,1.5vw,22px)}
+.mis.railed .two .ask{font-size:clamp(15px,1.68vw,25px);line-height:1.4}
+.mis.railed .plate .ics{font-size:clamp(34px,4.6vw,74px)}
+.mis.railed .plate .lab{font-size:clamp(12px,1.3vw,18px)}
+.mis.railed .plate .w{font-size:clamp(13px,1.45vw,20px)}
+.two.w1{grid-template-columns:.72fr 1.28fr}
+@media(max-width:900px){.two.w1{grid-template-columns:1fr}}
+h2.t .tsub{display:block;font-size:clamp(14px,1.6vw,24px);font-weight:700;
+ color:var(--gold);margin-top:5px;letter-spacing:0}
+.mis.railed .two.w1 .clues .clue{padding:9px 13px}
+
+/* 答案／驗收章提到最上面，做成一條醒目的橫幅 */
+.mis.railed .qwrap > .rev.hoist{margin:0 0 10px;padding:12px 20px;border-radius:14px;
+ background:linear-gradient(180deg,#2A2208,#1C1706);border:2px solid var(--gold)}
+.mis.railed .qwrap > .rev.hoist .lab{color:#C9A227;font-size:clamp(12px,1.25vw,16px);
+ letter-spacing:.14em;margin-bottom:2px}
+.mis.railed .qwrap > .rev.hoist .v{color:#FFE6AE;font-weight:900;
+ font-size:clamp(20px,2.5vw,40px);line-height:1.3}
+.mis.railed .qwrap > .astamp.hoist{margin:0 0 10px;padding:9px 20px;
+ display:flex;align-items:center;justify-content:center;gap:18px}
+.mis.railed .qwrap > .astamp.hoist .n{margin:0;font-size:clamp(13px,1.35vw,19px)}
+.mis.railed .qwrap > .astamp.hoist .d{font-size:clamp(28px,3vw,48px);line-height:1.05}
+.tpgr2 .tgc.bad{background:#2A1416;border-color:#7A3A33;color:#FFB9B0;font-size:11.5px}
+
+/* 01 關卡一：整頁一欄，字放到最大（後排也看得到）*/
+.mis.railed .clues.big3{margin-top:12px;display:flex;flex-direction:column;gap:10px;
+ flex:1 1 auto;min-height:0;justify-content:center}
+.mis.railed .clues.big3 .clue{padding:14px 22px;border-radius:16px;align-items:center;gap:18px}
+.mis.railed .clues.big3 .clue .k{flex:0 0 auto;width:1.9em;height:1.9em;line-height:1.9em;
+ text-align:center;border-radius:50%;background:#143327;color:#9BF0C4;
+ font-size:clamp(20px,2.5vw,38px);font-weight:900}
+.mis.railed .clues.big3 .clue .v{font-size:clamp(22px,3.3vw,54px);line-height:1.3;font-weight:700}
+.mis.railed .qwrap > .card:has(.big3){flex:1 1 auto;min-height:0;
+ display:flex;flex-direction:column}
+
+/* 01 關卡二：殘影 ＋ 三條線索排成一整列，字放大 */
+.mis.railed .card.w1row{display:grid;grid-template-columns:auto 1fr 1fr 1fr;
+ gap:12px;align-items:stretch;padding:13px}
+.mis.railed .card.w1row .plate{display:flex;flex-direction:column;justify-content:center;
+ padding:10px 16px;min-width:0}
+.mis.railed .card.w1row .plate .ics{font-size:clamp(30px,4vw,62px);line-height:1.1}
+.mis.railed .card.w1row .clue{display:flex;align-items:center;gap:12px;padding:12px 15px;
+ border-radius:14px;min-width:0}
+.mis.railed .card.w1row .clue .k{flex:0 0 auto;width:1.8em;height:1.8em;line-height:1.8em;
+ text-align:center;border-radius:50%;background:#143327;color:#9BF0C4;
+ font-size:clamp(14px,1.6vw,24px);font-weight:900}
+.mis.railed .card.w1row .clue .v{font-size:clamp(15px,1.85vw,29px);line-height:1.32;font-weight:600}
+@media(max-width:1000px){.mis.railed .card.w1row{grid-template-columns:1fr 1fr}}
+/* FINAL：四項動線排成兩欄 */
+.mis.railed .ord2 .clues{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 </style>
 </head>
 <body>
@@ -1648,7 +1708,7 @@ const ROLE=[["站長","決定順序、代表發言"],["工程師","畫圖、記�
  ["代表","上台輸入密碼、對外發言。每一關換人"],["觀察員","記錄這節課誰做了什麼"],["副工程師","幫忙畫和抄"]];
 function hstamp(k){
  const nm=k===1?"旅客":"符號", dg=D.hdg[k-1];
- return stOn()?`<div class="stamp" style="margin-top:14px"><div class="n">驗收章 ・ ${nm}</div><div class="d">${dg}</div></div>`
+ return stOn()?`<div class="stamp astamp" style="margin-top:14px"><div class="n">驗收章 ・ ${nm}</div><div class="d">${dg}</div></div>`
   :""}
 function pre(k){
  if(k===0)return `<div class="two"><div class="card">
@@ -1733,34 +1793,34 @@ function stamp(k){
  const t=D.tags.find(x=>x.level===k);
  const a=k===1?D.cipher:(k===4?D.boss:L1[k].ans);
  return `${rev?`<div class="rev"><div class="lab">答案</div><div class="v">${esc(a)}</div></div>`:""}${
-  stOn()?`<div class="stamp" style="margin-top:12px"><div class="n">驗收章 ・ ${esc(t?t.name:"")}</div><div class="d">${t?t.digit:""}</div></div>`
+  stOn()?`<div class="stamp astamp" style="margin-top:12px"><div class="n">驗收章 ・ ${esc(t?t.name:"")}</div><div class="d">${t?t.digit:""}</div></div>`
   :`<div class="warn" style="margin-top:12px">各組都拍完筆記本後，老師按「發驗收章」。答案最後一題一題對。</div>`}`}
-function w0(){return `<div class="two"><div class="card">
- <div class="eyebrow">指標村 / 01 ・ 圖像探索</div><h2 class="t">車站搜查</h2>
+function w0(){return `<div class="card">
+ <div class="eyebrow">指標村 / 01 ・ 圖像探索</div><h2 class="t">車站搜查
+  <span class="tsub">三段訊號，各在講一個設施。把名稱寫在自己的筆記本上。</span></h2>
  ${prop("打開信封","設施卡盤　6 個設施","把三段訊號對到卡盤上正確的那一格。")}
- <p class="lead">驗收中心傳來三段訊號，每一段在講一個設施。</p>
- <div class="clues" style="margin-top:10px">
-  <div class="clue"><span class="k">A</span><span class="v">我能幫旅客問路、求助。</span></div>
-  <div class="clue"><span class="k">B</span><span class="v">通過我，才算完成進站驗票。</span></div>
-  <div class="clue"><span class="k">C</span><span class="v">不用爬樓梯，就能上下樓層。</span></div></div></div>
- <div class="card"><div class="ask">在自己的筆記本寫下這三個設施的名稱。</div>${stamp(0)}</div></div>`}
+ <div class="clues big3">
+  <div class="clue"><span class="k">A</span><span class="v">我能幫旅客<b>問路、求助</b>。</span></div>
+  <div class="clue"><span class="k">B</span><span class="v">通過我，才算<b>完成進站驗票</b>。</span></div>
+  <div class="clue"><span class="k">C</span><span class="v"><b>不用爬樓梯</b>，就能上下樓層。</span></div>
+ </div></div>
+ ${stamp(0)}`}
 function w1(){const m=D.map,p=D.pick,[hi,lo]=D.hide;return `<div class="card">
- <div class="eyebrow">指標村 / 02 ・ 視覺密碼</div><h2 class="t">圖示解碼</h2>
+ <div class="eyebrow">指標村 / 02 ・ 視覺密碼</div><h2 class="t">圖示解碼
+ <span class="tsub">算出兩個「？」→ 三個圖示換成數字 → <b>由右往左</b>讀出三位數</span></h2>
  ${prop("打開信封","符號卡　A 到 F　六張","碼頭那六張再拿出來排好。數字只有螢幕有，兩個被磨掉了。")}
- <div class="sg big" style="margin-top:14px">${m.map(([ic,nm,no],i)=>
+ <div class="sg big six" style="margin-top:12px">${m.map(([ic,nm,no],i)=>
   `<div class="sy${i===hi||i===lo?" hid":""}"><div class="ic">${ic}</div><div class="nm">${esc(nm)}</div>
    <div class="no">${i===hi||i===lo?"？":no}</div></div>`).join("")}</div></div>
- <div class="two"><div class="card">
- <div class="plate" style="margin-top:0"><div class="lab">指標殘影（原始順序）</div>
-  <div class="ics">${p.map(k=>m[k][0]).join("")}</div>
-  <div class="w">⚠ 鏡像干擾：數字必須由右往左讀</div></div></div>
- <div class="card"><div class="eyebrow">兩個數字被磨掉了</div>
- <div class="clues" style="margin-top:13px">
-  <div class="clue"><span class="k">1</span><span class="v">六個數字<b>全部相加等於 ${D.sum6}</b>。</span></div>
-  <div class="clue"><span class="k">2</span><span class="v"><b>${esc(m[hi][1])}</b>的數字，比<b>${esc(m[lo][1])}</b>的數字<b>大 ${D.gap}</b>。</span></div>
-  <div class="clue"><span class="k">3</span><span class="v">六個數字都不一樣，而且都在 1 到 9 之間。</span></div></div>
- <div class="ask" style="margin-top:14px">先把兩個「？」算出來，再把三個圖示換成數字，<b>由右往左</b>讀出三位數密碼。</div>
- <div class="warn" style="margin-top:12px">不是從左到右照抄。</div>${stamp(1)}</div></div>`}
+ <div class="card w1row">
+  <div class="plate" style="margin:0"><div class="lab">指標殘影（原始順序）</div>
+   <div class="ics">${p.map(k=>m[k][0]).join("")}</div>
+   <div class="w">⚠ 由右往左讀</div></div>
+  <div class="clue"><span class="k">1</span><span class="v">六個數字<b>相加 = ${D.sum6}</b></span></div>
+  <div class="clue"><span class="k">2</span><span class="v"><b>${esc(m[hi][1])}</b> 比 <b>${esc(m[lo][1])}</b> <b>大 ${D.gap}</b></span></div>
+  <div class="clue"><span class="k">3</span><span class="v">六個數字<b>都不一樣</b>，都在 1～9</span></div>
+ </div>
+ ${stamp(1)}`}
 /* 站內動線圖：節點與通道 */
 const ND={
  in:   [120, 64, "入口", "B1"],
@@ -1838,7 +1898,7 @@ function w4(){const sw=D.tags.slice().sort((a,b)=>a.level-b.level);
  return `<div class="two"><div class="card"><div class="eyebrow">指標村 ・ FINAL</div><h2 class="t">驗收中心</h2>
  <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。請依<b>旅客實際進站的動線</b>重新排列。</p>
  ${stampRow(sw,1)}
- ${orderList(FLOW.map(f=>esc(f[1])),1)}</div>
+ <div class="ord2">${orderList(FLOW.map(f=>esc(f[1])),1)}</div></div>
  <div class="card"><div class="eyebrow">點亮指標村</div>
  <div class="lk" id="lk">${mask(4)}</div>
  <div class="pad">${[1,2,3,4,5,6,7,8,9,"清除",0,"輸入"].map(k=>`<button data-k="${k}" ${k==="輸入"?'class="pri"':""}>${k}</button>`).join("")}</div>
@@ -1928,7 +1988,7 @@ function jaSVG(hi, mark) {
 
 function fstamp(k) {
   const t = D.ftags[k];
-  return stOn() ? `<div class="stamp" style="margin-top:14px"><div class="n">驗收章 ・ ${esc(t.name)}</div>
+  return stOn() ? `<div class="stamp astamp" style="margin-top:14px"><div class="n">驗收章 ・ ${esc(t.name)}</div>
    <div class="d">${t.digit}</div></div>`
     : `<div class="warn" style="margin-top:14px">各組都拍完筆記本後，老師按「發驗收章」。答案最後一題一題對。</div>`;
 }
@@ -2056,7 +2116,7 @@ function x4() {
 function tagsOf(i) { return i === 1 ? D.tags : i === 2 ? D.ftags : D.sets[i].tags; }
 function gstamp(i, k) {
   const t = tagsOf(i)[k];
-  return stOn() ? `<div class="stamp" style="margin-top:14px"><div class="n">驗收章 ・ ${esc(t.name)}</div>
+  return stOn() ? `<div class="stamp astamp" style="margin-top:14px"><div class="n">驗收章 ・ ${esc(t.name)}</div>
    <div class="d">${t.digit}</div></div>`
     : `<div class="warn" style="margin-top:14px">各組都拍完筆記本後，老師按「發驗收章」。答案最後一題一題對。</div>`;
 }
@@ -2579,13 +2639,19 @@ function shrink(file, max, q) {
   });
 }
 
+const PHerr = {};
 async function pickPhoto(stn, grp) {
-  if (!API) { alert("還沒連線到雲端。請先到教師控制臺設定網址。"); return }
+  if (!API) { alert("還沒連線到雲端 —— 教師控制臺最下面要先貼上 Apps Script 網址，照片才上傳得了。"); return }
   const inp = document.createElement("input");
-  inp.type = "file"; inp.accept = "image/*"; inp.capture = "environment";
+  inp.type = "file"; inp.accept = "image/*";
+  // iPad／Safari：input 一定要掛進 DOM，change 才會穩定觸發
+  inp.style.cssText = "position:fixed;left:-9999px;width:1px;height:1px;opacity:0";
+  document.body.appendChild(inp);
+  const cleanup = () => { try { inp.remove() } catch (e) { } };
   inp.onchange = async () => {
-    const f = inp.files && inp.files[0]; if (!f) return;
-    const k = stn + "-" + grp; PHbusy[k] = 1; render();
+    const f = inp.files && inp.files[0];
+    if (!f) { cleanup(); return }
+    const k = stn + "-" + grp; PHbusy[k] = 1; PHerr[k] = ""; render();
     try {
       const big = await shrink(f, 1280, .72);
       const sml = await shrink(f, 300, .6);
@@ -2593,12 +2659,18 @@ async function pickPhoto(stn, grp) {
         action: "photo", cls: cur, st: stn, g: grp,
         b64: big.split(",")[1], thumb: sml
       });
-      if (!j.ok) throw new Error(j.err || "上傳失敗");
+      if (!j || !j.ok) throw new Error((j && j.err) || "伺服器沒有回覆 ok");
       PH.push({ id: j.id, cls: cur, st: stn, g: grp, ts: "剛剛", note: "", thumb: sml });
       if (typeof photoAward === "function") photoAward(grp);
-    } catch (e) { alert("上傳失敗：" + (e.message || e)) }
-    delete PHbusy[k]; render();
+    } catch (e) {
+      PHerr[k] = String((e && e.message) || e).slice(0, 60);
+    }
+    delete PHbusy[k]; cleanup(); render();
   };
+  // 使用者按了取消：Safari 不會發 change，用 focus 回來當作收尾
+  window.addEventListener("focus", () => setTimeout(() => {
+    if (!inp.files || !inp.files.length) cleanup();
+  }, 900), { once: true });
   inp.click();
 }
 
@@ -2855,9 +2927,18 @@ function render(){
      const P=pages(); if(si===0&&li+1>=P.length&&!me().h){CL[cur].h=1;save()} page(li+1)} }
   }
  }
- tp(); bindTimer(); paint(); bindPhotos(); fitRail(); fitQ();
+ tp(); bindTimer(); paint(); bindPhotos(); fitRail(); hoistAns(); fitQ();
  const wb=$("#wall"); if(wb){wb.classList.toggle("pri",wall);
   wb.onclick=()=>{view=wall?"map":"wall";stop();render();window.scrollTo(0,0)}}
+}
+/* 公布的答案與驗收章一律提到最上面，不會被右下角的按鍵蓋住 */
+function hoistAns(){
+ const q=document.querySelector(".mis.railed .qwrap"); if(!q)return;
+ const picks=[q.querySelector(".rev"), q.querySelector(".astamp")].filter(Boolean);
+ picks.reverse().forEach(e=>{
+  e.classList.add("hoist");
+  if(e.parentElement!==q||q.firstChild!==e) q.insertBefore(e,q.firstChild);
+ });
 }
 /* 自動縮到一個畫面：投影時不能讓老師去捲畫面 */
 let QZ=1;
@@ -2951,8 +3032,9 @@ function tp(){
      data-gi="${k}" value="${me().g[k]}"></div>
    <div class="tpgr"><button class="tgm" data-gm="${k}">−1</button>
     <button class="tgp" data-g5="${k}">＋5</button></div>
-   <div class="tpgr2"><button class="tgc${done?" on":""}" data-shot="${si}|${g}" ${busy?"disabled":""}
-     >${busy?"上傳中…":done?"✓ 已拍":"◉ 拍筆記本"}</button></div></div>`}).join("")}</div>
+   <div class="tpgr2"><button class="tgc${done?" on":""}${PHerr[si+"-"+g]?" bad":""}"
+     data-shot="${si}|${g}" ${busy?"disabled":""}
+     >${busy?"上傳中…":PHerr[si+"-"+g]?("✗ "+esc(PHerr[si+"-"+g])):done?"✓ 已拍":"◉ 拍筆記本"}</button></div></div>`}).join("")}</div>
  <div class="tptot">本班 <b>${score()}</b> 分　（各組 ${gsum()} ＋ 獎勵 ${me().b||0}）</div></div>
  <button id="ansT" class="${showAns?"pri":""}">${showAns?"隱藏答案":"顯示答案"}</button>
  <div class="ans" ${showAns?"":"hidden"}><b>${cur} 班專屬題目</b>
