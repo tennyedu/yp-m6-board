@@ -1179,11 +1179,11 @@ h2.t .tsub{display:block;font-size:clamp(14px,1.6vw,24px);font-weight:700;
 /* 01 關卡一：整頁一欄，字放到最大（後排也看得到）*/
 .mis.railed .clues.big3{margin-top:12px;display:flex;flex-direction:column;gap:10px;
  flex:1 1 auto;min-height:0;justify-content:center}
-.mis.railed .clues.big3 .clue{padding:14px 22px;border-radius:16px;align-items:center;gap:18px}
+.mis.railed .clues.big3 .clue{padding:11px 20px;border-radius:15px;align-items:center;gap:16px}
 .mis.railed .clues.big3 .clue .k{flex:0 0 auto;width:1.9em;height:1.9em;line-height:1.9em;
  text-align:center;border-radius:50%;background:#143327;color:#9BF0C4;
  font-size:clamp(20px,2.5vw,38px);font-weight:900}
-.mis.railed .clues.big3 .clue .v{font-size:clamp(22px,3.3vw,54px);line-height:1.3;font-weight:700}
+.mis.railed .clues.big3 .clue .v{font-size:clamp(22px,3.1vw,47px);line-height:1.26;font-weight:700}
 .mis.railed .qwrap > .card:has(.big3){flex:1 1 auto;min-height:0;
  display:flex;flex-direction:column}
 
@@ -1202,6 +1202,79 @@ h2.t .tsub{display:block;font-size:clamp(14px,1.6vw,24px);font-weight:700;
 @media(max-width:1000px){.mis.railed .card.w1row{grid-template-columns:1fr 1fr}}
 /* FINAL：四項動線排成兩欄 */
 .mis.railed .ord2 .clues{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* 01 關卡二：指標殘影放大（那三個就是答案的來源）*/
+.mis.railed .w1b{display:grid;grid-template-columns:.92fr 1.08fr;gap:12px;
+ flex:1 1 auto;min-height:0}
+.mis.railed .w1b .pl2{display:flex;flex-direction:column;justify-content:center;
+ gap:7px;padding:12px 14px;border-color:#4A7A62}
+.mis.railed .w1b .pl2 .lab{font-size:clamp(12px,1.3vw,18px);color:var(--dim);
+ font-weight:800;letter-spacing:.1em;text-align:center}
+.mis.railed .ics3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:end}
+.mis.railed .ics3 .i3{text-align:center}
+.mis.railed .ics3 .ic{font-size:clamp(44px,5.6vw,92px);line-height:1;margin-bottom:5px}
+.mis.railed .ics3 .ic svg,.mis.railed .ics3 .ic img{width:1em;height:1em;border-radius:.16em}
+.mis.railed .ics3 .slot{font-size:clamp(24px,3vw,48px);font-weight:900;color:var(--gold);
+ line-height:1;letter-spacing:.04em}
+.mis.railed .w1b .rl{text-align:center;font-weight:900;color:var(--gold);
+ font-size:clamp(14px,1.62vw,25px);letter-spacing:.04em}
+.mis.railed .w1b .w1c{display:flex;flex-direction:column;justify-content:center;gap:9px;padding:12px}
+.mis.railed .w1b .w1c .clue{display:flex;align-items:center;gap:13px;padding:11px 16px;border-radius:14px}
+.mis.railed .w1b .w1c .clue .k{flex:0 0 auto;width:1.8em;height:1.8em;line-height:1.8em;
+ text-align:center;border-radius:50%;background:#143327;color:#9BF0C4;
+ font-size:clamp(14px,1.6vw,24px);font-weight:900}
+.mis.railed .w1b .w1c .clue .v{font-size:clamp(16px,1.95vw,31px);line-height:1.32;font-weight:600}
+@media(max-width:900px){.mis.railed .w1b{grid-template-columns:1fr}}
+
+/* 關卡二：分頁後，每一塊都吃滿剩下的高度 */
+.mis.railed .qwrap > .card.c6{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:12px}
+.mis.railed .card.c6 .sg.big.six{flex:1 1 auto;min-height:0}
+.mis.railed .card.c6 .sg.big.six .sy{display:flex;flex-direction:column;justify-content:center}
+.mis.railed .card.c6 .sg.big.six .sy .ic{font-size:min(7.2vw,16vh,138px)}
+.mis.railed .qwrap > .w1b{flex:1 1 auto;min-height:0}
+.mis.railed .ics3 .ic{font-size:min(6.4vw,15vh,118px)}
+.mis.railed .qwrap > .card.hd1{flex:0 0 auto}
+
+/* ===== 核對列：每一關當場給分 ===== */
+.mis.railed .qwrap > .chk{flex:0 0 auto;display:flex;align-items:center;gap:12px;
+ margin-top:9px;padding:7px 10px;border:1.5px solid #2A5B4C;border-radius:14px;
+ background:#0A1C17;flex-wrap:wrap}
+.mis.railed .qwrap > .chk.open{border-color:var(--gold);background:#141007}
+.chk .chkt{font-family:var(--ff);font-weight:900;cursor:pointer;white-space:nowrap;
+ font-size:clamp(13px,1.45vw,19px);padding:9px 18px;border-radius:11px;
+ border:1.5px solid #4E9C76;background:#133B2B;color:#9BF0C4}
+.chk .chkt:hover{background:#1B533A}
+.chk.open .chkt{border-color:var(--gold);background:#3B2C0C;color:#FFE6AE}
+.chk .chkh{color:var(--dim);font-size:clamp(11.5px,1.25vw,16px);font-weight:600}
+.chk .chkg{display:flex;gap:9px;flex:1 1 auto;flex-wrap:wrap}
+.chk .cg{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:11px;
+ border:1px solid #3A5B46;background:#07160F;flex:1 1 0;min-width:0}
+.chk .cn{font-size:clamp(11px,1.2vw,15px);color:#9FC9B6;font-weight:800;white-space:nowrap}
+.chk .cv{font-size:clamp(17px,2vw,28px);font-weight:900;color:#FFD47A;
+ min-width:1.6em;text-align:center}
+.chk .cg button{font-family:var(--ff);font-weight:900;cursor:pointer;white-space:nowrap;
+ border-radius:9px;padding:7px 10px;font-size:clamp(12px,1.3vw,17px);border:1px solid}
+.chk .cg .cp{border-color:#4E9C76;background:#133B2B;color:#9BF0C4}
+.chk .cg .cp:hover{background:#1B533A}
+.chk .cg .cm{border-color:#7A3A33;background:#2A1416;color:#FFB9B0}
+.chk .cg .cm:hover{background:#3C1D1F}
+@media(max-width:1180px){.chk .chkh{display:none}.chk .cg{padding:4px 7px}}
+
+/* 自動縮放要看得到溢出：文字區塊可以長大、但不准縮到把字切掉
+   （拿掉 min-height:0，內容就是地板，超出時 fitQ 才看得見並整頁縮放）*/
+.mis.railed .qwrap > .card:has(.big3){min-height:auto}
+.mis.railed .clues.big3{min-height:auto}
+.mis.railed .qwrap > .card.c6{min-height:auto}
+.mis.railed .card.c6 .sg.big.six{min-height:auto}
+.mis.railed .qwrap > .w1b{min-height:auto}
+.mis.railed .w1b .w1c{min-height:auto}
+/* 核對列右邊讓開「教師控制臺」那顆浮動鍵 */
+@media(min-width:1181px){.mis.railed .qwrap > .chk{padding-right:128px}}
+.mis.railed .card.hd1{padding:11px 14px}
+.mis.railed .qline{margin-top:8px;color:var(--gold);font-weight:800;
+ font-size:clamp(15px,1.85vw,29px);line-height:1.3}
+/* FINAL：提示已經在標題下那一行，列表下面那句就不重複了 */
+.mis.railed .ord2 > .warn{display:none}
 </style>
 </head>
 <body>
@@ -1374,7 +1447,7 @@ const L2=[
  {n:"關卡四　只有一個出口",tip:"全站唯一出口在 1F 景平路",m:5,ans:"住天橋另一側、行動不便、推車、提重物、趕時間的人"},
  {n:"FINAL　點亮轉乘灣",tip:"依乘客經過的樓層順序輸入",m:6,ans:"B4 → 1F → 3F → 5F"}];
 const L1=[
- {n:"關卡一　車站搜查",tip:"三段訊號，各指一個設施",m:3,ans:"詢問處、驗票閘門、無障礙電梯"},
+ {n:"關卡一　車站搜查",tip:"三段訊號各指一個設施　・　名稱寫在筆記本上",m:3,ans:"詢問處、驗票閘門、無障礙電梯"},
  {n:"關卡二　圖示解碼",tip:"換成數字，由右往左讀",m:4,ans:""},
  {n:"關卡三　封鎖的通道",tip:"不走樓梯、避開封鎖",m:4,ans:"入口 → 大廳 → 詢問處 → 無障礙電梯 → 月台"},
  {n:"關卡四　被改掉的指標",tip:"先看正常版，再看被改掉的版",m:4,ans:"出口箭頭反向／無障礙廁所被改成「廁所」／樓梯配到電梯圖示／置物櫃被改成置物箱／哺集乳室被改成販賣機"},
@@ -1796,8 +1869,6 @@ function stamp(k){
   stOn()?`<div class="stamp astamp" style="margin-top:12px"><div class="n">驗收章 ・ ${esc(t?t.name:"")}</div><div class="d">${t?t.digit:""}</div></div>`
   :`<div class="warn" style="margin-top:12px">各組都拍完筆記本後，老師按「發驗收章」。答案最後一題一題對。</div>`}`}
 function w0(){return `<div class="card">
- <div class="eyebrow">指標村 / 01 ・ 圖像探索</div><h2 class="t">車站搜查
-  <span class="tsub">三段訊號，各在講一個設施。把名稱寫在自己的筆記本上。</span></h2>
  ${prop("打開信封","設施卡盤　6 個設施","把三段訊號對到卡盤上正確的那一格。")}
  <div class="clues big3">
   <div class="clue"><span class="k">A</span><span class="v">我能幫旅客<b>問路、求助</b>。</span></div>
@@ -1805,21 +1876,33 @@ function w0(){return `<div class="card">
   <div class="clue"><span class="k">C</span><span class="v"><b>不用爬樓梯</b>，就能上下樓層。</span></div>
  </div></div>
  ${stamp(0)}`}
-function w1(){const m=D.map,p=D.pick,[hi,lo]=D.hide;return `<div class="card">
- <div class="eyebrow">指標村 / 02 ・ 視覺密碼</div><h2 class="t">圖示解碼
- <span class="tsub">算出兩個「？」→ 三個圖示換成數字 → <b>由右往左</b>讀出三位數</span></h2>
- ${prop("打開信封","符號卡　A 到 F　六張","碼頭那六張再拿出來排好。數字只有螢幕有，兩個被磨掉了。")}
- <div class="sg big six" style="margin-top:12px">${m.map(([ic,nm,no],i)=>
+function w1(){const m=D.map,p=D.pick,[hi,lo]=D.hide;
+ const tb=[["0","① 六個符號"],["1","② 殘影 ＋ 線索"],["2","兩個一起看"]]
+  .map(([v,t])=>`<button class="vt ${+v===w1v?"on":""}" data-w1="${v}">${t}</button>`).join("");
+ const six=`<div class="card c6"><div class="sg big six">${m.map(([ic,nm,no],i)=>
   `<div class="sy${i===hi||i===lo?" hid":""}"><div class="ic">${ic}</div><div class="nm">${esc(nm)}</div>
-   <div class="no">${i===hi||i===lo?"？":no}</div></div>`).join("")}</div></div>
- <div class="card w1row">
-  <div class="plate" style="margin:0"><div class="lab">指標殘影（原始順序）</div>
-   <div class="ics">${p.map(k=>m[k][0]).join("")}</div>
-   <div class="w">⚠ 由右往左讀</div></div>
-  <div class="clue"><span class="k">1</span><span class="v">六個數字<b>相加 = ${D.sum6}</b></span></div>
-  <div class="clue"><span class="k">2</span><span class="v"><b>${esc(m[hi][1])}</b> 比 <b>${esc(m[lo][1])}</b> <b>大 ${D.gap}</b></span></div>
-  <div class="clue"><span class="k">3</span><span class="v">六個數字<b>都不一樣</b>，都在 1～9</span></div>
- </div>
+   <div class="no">${i===hi||i===lo?"？":no}</div></div>`).join("")}</div></div>`;
+ const dec=`<div class="w1b">
+  <div class="card pl2">
+   <div class="lab">指標殘影（原始順序）</div>
+   <div class="ics3">${p.map(k=>`<div class="i3"><div class="ic">${m[k][0]}</div>
+     <div class="slot">＿</div></div>`).join("")}</div>
+   <div class="rl">⬅　由右往左讀，才是密碼</div>
+  </div>
+  <div class="card w1c">
+   <div class="clue"><span class="k">1</span><span class="v">六個數字<b>相加 = ${D.sum6}</b></span></div>
+   <div class="clue"><span class="k">2</span><span class="v"><b>${esc(m[hi][1])}</b> 比 <b>${esc(m[lo][1])}</b> <b>大 ${D.gap}</b></span></div>
+   <div class="clue"><span class="k">3</span><span class="v">六個數字<b>都不一樣</b>，都在 1～9</span></div>
+  </div></div>`;
+ const Q=["先看這六張。<b>兩個數字被磨掉了</b>，等一下要把它算出來。",
+  `左邊三個就是<b style="color:var(--gold)">密碼的來源</b>。換成數字，<b>由右往左</b>讀。`,
+  "六個符號和殘影一起看，對答案用。"][w1v];
+ const body=w1v===0?six:(w1v===1?dec:six+dec);
+ return `<div class="card hd1">
+  ${prop("打開信封","符號卡　A 到 F　六張","碼頭那六張再拿出來排好。數字只有螢幕有，兩個被磨掉了。")}
+  <div class="qline">${Q}</div></div>
+ <div class="vtab">${tb}</div>
+ ${body}
  ${stamp(1)}`}
 /* 站內動線圖：節點與通道 */
 const ND={
@@ -1895,8 +1978,8 @@ function w3(){
  <div class="card" style="padding:13px">${body}</div>
  ${stamp(3)}`}
 function w4(){const sw=D.tags.slice().sort((a,b)=>a.level-b.level);
- return `<div class="two"><div class="card"><div class="eyebrow">指標村 ・ FINAL</div><h2 class="t">驗收中心</h2>
- <p class="lead">四枚驗收章都拿到了，但系統把順序打亂。請依<b>旅客實際進站的動線</b>重新排列。</p>
+ return `<div class="two"><div class="card"><div class="eyebrow">指標村 ・ FINAL</div><h2 class="t">驗收中心
+ <span class="tsub">不是照拿到章的先後 —— 照旅客<b>從進站到上車</b>會先走到哪裡，重新排。</span></h2>
  ${stampRow(sw,1)}
  <div class="ord2">${orderList(FLOW.map(f=>esc(f[1])),1)}</div></div>
  <div class="card"><div class="eyebrow">點亮指標村</div>
@@ -2867,9 +2950,12 @@ function render(){
      stroke="#6FDCA0" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="#6FDCA0" stroke-width="2"/></svg>
     <b>題目鎖住了</b><span>各組都拿到信封、準備好了，按一下打開</span>
     <button class="pri" id="qvb">打開題目</button></div></div>`
-   :""}</div></div>`;
+   :""}${chkBar()}</div></div>`;
+  {const t=$("#chkt"); if(t)t.onclick=()=>{chk=!chk;render()}}
   document.querySelectorAll("[data-w3]").forEach(b=>b.onclick=()=>{
    w3v=+b.dataset.w3; render()});
+  document.querySelectorAll("[data-w1]").forEach(b=>b.onclick=()=>{
+   w1v=+b.dataset.w1; render()});
   document.querySelectorAll(".strip [data-li]").forEach(b=>b.onclick=()=>{
    const k=+b.dataset.li; if(k===li)return; page(k); render()});
   const qv=$("#qvb"); if(qv)qv.onclick=()=>{shown=true;render()};
@@ -2965,7 +3051,7 @@ function fitQ(){
 let _fqt=0;
 addEventListener("resize",()=>{clearTimeout(_fqt);_fqt=setTimeout(()=>{if(view==="st")fitQ()},140)});
 function setT(){const P=pages();const m=(li<P.length)?(P[li].m||0):0;stop();T.set=Math.round(m*60);T.left=T.set;if(m)start()}
-function page(n){const P=pages();li=Math.max(0,Math.min(P.length,n));rev=false;stampOn=false;code="";shown=false;qn=0;w3v=0;setT();render();window.scrollTo(0,0)}
+function page(n){const P=pages();li=Math.max(0,Math.min(P.length,n));rev=false;stampOn=false;code="";shown=false;qn=0;w3v=0;w1v=0;setT();render();window.scrollTo(0,0)}
 function key(k){
  const H=si===0, TGT=H?D.hcode:si===1?D.boss:si===2?D.boss2:D.sets[si].boss, LEN=H?2:4;
  if(k==="清除")code="";
@@ -2979,7 +3065,20 @@ function key(k){
     :si===2?"密碼不對。再看一次那位乘客經過的樓層順序。":"密碼不對。再看一次旅客動線的順序。"}code=""}
  else if(code.length<LEN)code+=k;
  const l=$("#lk");if(l)l.textContent=mask(LEN)}
-let showAns=false, shown=false, qn=0, stampOn=false, w3v=0;
+let showAns=false, shown=false, qn=0, stampOn=false, w3v=0, w1v=0, chk=false;
+/* 核對列：每一關時間到，五組同時舉本子，老師掃一眼直接給分 */
+function chkBar(){
+ if(view!=="st")return "";
+ const g=me().g;
+ return `<div class="chk${chk?" open":""}">
+  <button id="chkt" class="chkt">${chk?"▾ 收起核對":"✓ 核對給分"}</button>
+  ${chk?`<div class="chkg">${Array.from({length:NG},(_,k)=>
+   `<div class="cg"><span class="cn">第 ${k+1} 組</span><span class="cv">${g[k]}</span>
+     <button class="cp" data-g5="${k}">＋5</button>
+     <button class="cm" data-gm="${k}">−1</button></div>`).join("")}</div>`:
+   `<span class="chkh">時間到 → 喊「本子舉起來」→ 五組同時亮 → 按一下給分</span>`}
+ </div>`;
+}
 function stOn(){return rev||stampOn}
 function sync(){   // 依 h/p 重算驗收章與闖關獎勵
  const o=CL[cur];
